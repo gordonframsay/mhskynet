@@ -2,12 +2,14 @@
 <h2>MH Skynet</h2>
 </div>
 
-    <div id="disqus_thread"></div>
+    <div id="disqus_thread" style="padding: 30px 30px"></div>
     <script type="text/javascript">
+
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'mhskynet'; // required: replace example with your forum shortname
         var disqus_identifier = 'home';
         var disqus_url = 'http://www.mhsky.net';
+        var disqus_disable_mobile = false;
 
         /* * * DON'T EDIT BELOW THIS LINE * * */
         (function() {
@@ -18,4 +20,48 @@
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
+
+<!--
+// This works for new comments posted (not received)
+            page: {
+                url: b,
+                title: b,
+                slug: b,
+                category_id: b,
+                identifier: b,
+                language: b,
+                api_key: b,
+                remote_auth_s3: b,
+                author_s3: b
+            },
+            experiment: {
+                enable_scroll_container: b,
+                force_auto_styles: b,
+                sort_order: b
+            },
+            discovery: {
+                disable_all: b,
+                disable_promoted: b,
+                sponsored_comment_id: b
+            },
+            strings: b,
+            sso: {},
+            callbacks: {
+                preData: [],
+                preInit: [],
+                onInit: [],
+                afterRender: [],
+                onReady: [],
+                onNewComment: [],
+                preReset: [],
+                onPaginate: [],
+                onIdentify: [],
+                beforeComment: []
+            }
+
+function disqus_config() {
+    this.callbacks.onNewComment = [function(comment) { 
+      alert(comment.id);
+    }];
+}
+-->
