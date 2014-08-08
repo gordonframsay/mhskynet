@@ -2,6 +2,7 @@ development: default
 production: default
 
 default: &default
+  host: ec2-54-197-238-239.compute-1.amazonaws.com
   database: d1crf21ngjrkvf
   user: nwzqyomwvocqjs
   password: aPEzNIkPFM1QbvOIA4fo-nnKcl
