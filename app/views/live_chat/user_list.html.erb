@@ -1,0 +1,5 @@
+<table width="100%">
+<% @authors.each do |e| -%>
+<tr><td><b><%= e.username %></b><% if (e.id == session[:user_id].to_i) %> <span class="glyphicon glyphicon-star"></span><% end %></td></tr>
+<% end -%>
+<table>

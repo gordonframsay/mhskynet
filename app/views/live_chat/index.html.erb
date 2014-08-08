@@ -1,0 +1,162 @@
+<form id="new_message_form">
+
+<div class="container-fluid">
+<div class="row">
+
+<div class="col-sm-3">
+ <div class="panel panel-default">
+  <div class="panel-heading">Users On Line
+  <span class="glyphicon glyphicon-star pull-right" id="chat_users_refresh"></span></div>
+  <div class="panel-body" id="our_users">
+    (loading...)
+  </div>
+ </div>
+</div>
+
+<div class="col-sm-9">
+ <div class="panel panel-default">
+  <div class="panel-heading">
+	<span class="glyphicon glyphicon-pause" id="feed_toggle_icon"></span> Chat Log
+        <div class="dropdown dropup pull-right">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="/live_chat/" id="pause_feed">Restart Feed</a></li>
+                <li><a id="pause_feed">Pause Feed</a></li>
+                <li><a href="/live_chat/logout">Log out</a></li>
+            </ul>
+        </div>
+	<div class="pull-right"><span class="glyphicon glyphicon-star" id="chat_refresh"></span>&nbsp;</div>
+  </div>
+  <div class="panel-body" id="our_messages" style="overflow: scroll; height: 500px;">
+    (loading...)
+  </div>
+  <div class="panel-footer">
+    <div class="input-group">
+      <input type="text" class="form-control" id="new_message">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit" >Post</button>
+      </span>
+    </div>
+  </div>
+ </div>
+</div>
+
+</div>
+</div>
+
+</form>
+
+<script>
+
+var users_activity_toggle = true;
+var activity_toggle = true;
+var messages_timer;
+var users_timer;
+var playing = true;
+
+function fetch_users(force_refresh) {
+ if (users_activity_toggle) {
+  $("#chat_users_refresh").removeClass("glyphicon-star");
+  $("#chat_users_refresh").addClass("glyphicon-star-empty");
+ } else {
+  $("#chat_users_refresh").removeClass("glyphicon-star-empty");
+  $("#chat_users_refresh").addClass("glyphicon-star");
+ }
+ users_activity_toggle = ! users_activity_toggle;
+ $.ajax({
+   url: "/live_chat/user_list?force_refresh="+force_refresh
+  })
+  .done(function(data) {
+   if (data != "f") {
+    $('#our_users').html(data);
+   }
+   users_timer = setTimeout("fetch_users(false)",10000);
+  })
+  .fail(function() {
+   $("#chat_users_refresh").removeClass("glyphicon-star");
+   $("#chat_users_refresh").removeClass("glyphicon-star-empty");
+   $("#chat_users_refresh").addClass("glyphicon-exclamation-sign");
+  });
+};
+
+function fetch_messages(force_refresh) {
+ if (activity_toggle) {
+  $("#chat_refresh").removeClass("glyphicon-star");
+  $("#chat_refresh").addClass("glyphicon-star-empty");
+ } else {
+  $("#chat_refresh").removeClass("glyphicon-star-empty");
+  $("#chat_refresh").addClass("glyphicon-star");
+ }
+ activity_toggle = ! activity_toggle;
+ $.ajax({
+   url: "/live_chat/comet?force_refresh="+force_refresh
+  })
+  .done(function(data) {
+   if (data != "f") {
+    $('#our_messages').html(data);
+    $('#our_messages').scrollTop($('#our_messages')[0].scrollHeight);
+   }
+   messages_timer = setTimeout("fetch_messages(false)",1000);
+  })
+  .fail(function() {
+   $("#chat_refresh").removeClass("glyphicon-star");
+   $("#chat_refresh").removeClass("glyphicon-star-empty");
+   $("#chat_refresh").addClass("glyphicon-exclamation-sign");
+   playing = false;
+  });
+};
+
+function push_message() {
+  new_message = $('#new_message').val();
+  $('#new_message').val("");
+  $.ajax({
+   url: "/live_chat/new_message?message="+new_message
+  });
+};
+
+$("a#pause_feed").click(function(e) {
+  if (playing == false) {
+   return true;
+  }
+  $("#feed_toggle_icon").removeClass("glyphicon-pause");
+  $("#feed_toggle_icon").addClass("glyphicon-play");
+  $("#chat_users_refresh").removeClass("glyphicon-star-empty");
+  $("#chat_users_refresh").removeClass("glyphicon-star");
+  $("#chat_refresh").removeClass("glyphicon-star-empty");
+  $("#chat_refresh").removeClass("glyphicon-star");
+  playing = false;
+  window.clearInterval(messages_timer);
+  window.clearInterval(users_timer);
+});
+
+$("#new_message_form").submit(function(e) {
+  push_message();
+  e.preventDefault();
+});
+
+$("span#feed_toggle_icon").click(function(e) {
+  if (playing == true) {
+   window.clearInterval(messages_timer);
+   window.clearInterval(users_timer);
+   $("#feed_toggle_icon").removeClass("glyphicon-pause");
+   $("#feed_toggle_icon").addClass("glyphicon-play");
+   $("#chat_users_refresh").removeClass("glyphicon-star-empty");
+   $("#chat_users_refresh").removeClass("glyphicon-star");
+   $("#chat_refresh").removeClass("glyphicon-star-empty");
+   $("#chat_refresh").removeClass("glyphicon-star");
+  } else {
+   fetch_messages(true);
+   fetch_users(true);
+   $("#feed_toggle_icon").removeClass("glyphicon-play");
+   $("#feed_toggle_icon").addClass("glyphicon-pause");
+  }
+  playing = ! playing;
+});
+
+$(document).ready(function() {
+ fetch_messages(true);
+ fetch_users(true);
+});
+
+</script>
+

@@ -1,0 +1,5 @@
+<table width="100%">
+<% @entries.each do |e| -%>
+<tr><td nowrap valign="top"><b><%= e.author.username %></b><% if (e.author_id == session[:user_id].to_i) %> <span class="glyphicon glyphicon-star"></span><% end %>&nbsp;</td><td><%= e.message %></td><td align="right" valign="top" nowrap>&nbsp;<small><%= e.created_at.in_time_zone("Pacific Time (US & Canada)").strftime("%l:%M:%S %p %Z") %></small></td></tr>
+<% end -%>
+<table>
