@@ -1,7 +1,16 @@
-development: default
-production: default
+development:
+  host: ec2-54-197-238-239.compute-1.amazonaws.com
+  database: d1crf21ngjrkvf
+  user: nwzqyomwvocqjs
+  password: aPEzNIkPFM1QbvOIA4fo-nnKcl
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: 5
 
-default: &default
+production:
+
   host: ec2-54-197-238-239.compute-1.amazonaws.com
   database: d1crf21ngjrkvf
   user: nwzqyomwvocqjs
