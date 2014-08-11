@@ -30,6 +30,9 @@ Loading...
   .fail(function() {
    alert("there was a problem!");
   });
+  if (guess == "") {
+   game_timer = setTimeout("refresh_game('')",1000);
+  }
  }
 
  jQuery( document ).ready(function( $ ) {
