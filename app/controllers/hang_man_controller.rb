@@ -13,9 +13,8 @@ class HangManController < ApplicationController
    if params[:id]
     @game = HangManGame.find(params[:id])
     if params[:guess]
-#render :inline => "bam" and return false
      if (@game.letters_guessed.match(params[:guess].upcase) || (params[:guess].length != 1) || ! ('A'..'Z').to_a.include?(params[:guess].upcase))
-      @error = "Bad guess.  Only one letter at a time, or already guessed."
+      @error = "Bad guess.  Only one letter at a time, or already guessed." unless (params[:guess] == "")
      else
       @game.letters_guessed += params[:guess].upcase
       @game.save!

@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-<h1>Hang Man</h1>
+<h1>Hang Man <%= @game.id.to_s if @game %></h1>
 
 <div name="hang_man" id="hang_man" style="width: 500px;height: 600px">
 Loading...
