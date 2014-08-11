@@ -1,0 +1,36 @@
+<% if @error -%>
+<h4><%= @error %></h4>
+<% end -%>
+<pre>
+    p 
+   /O\      
+ .*====*_______________.
+ |  /                  |
+ | /                   8
+ |                     8
+ |                    --
+ |                   | ' | -- Just kill me already
+ |                    ---  
+ |                     |
+ |                    /|\
+ |                   / |  \
+ |                  /  |   \
+ |                     |
+ |                     |
+ |
+ | 
+ |           
+
+<% @game.phrase.split('').to_a.each do |l| -%>
+<%= (l == " ")?"  ":((@game.letters_guessed.split('').include?(l))?(l+" "):"_ ") -%>
+<% end -%>
+
+
+  Hang the bastard!
+              \
+o . o . .oo..o .. ..ooo
+O o  o O o o O o o o O O    <- (angry mob)
+O  O O  O o  O O O o o  O
+
+No: <%= @letters_not_found.split('').join(' ') %>
+</pre>

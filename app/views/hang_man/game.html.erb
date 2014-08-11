@@ -1,0 +1,65 @@
+<h1>Hang Man</h1>
+
+
+<div name="hang_man" id="hang_man" style="width: 500px;height: 600px">
+Loading...
+</div>
+
+<div>
+<form id="new_guess_form">
+    <div class="input-group">
+      <input type="text" class="form-control" id="guess">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit" >Guess</button>
+      </span>
+    </div>
+</form>
+</div>
+
+
+<script>
+ function refresh_game(guess) {
+ $.ajax({
+   url: "/hang_man/game/<%= @game.id.to_s %>?guess="+guess
+  })
+  .done(function(data) {
+   if (data != "f") {
+    $('#hang_man').html(data);
+   }
+  })
+  .fail(function() {
+   alert("there was a problem!");
+  });
+ }
+
+ jQuery( document ).ready(function( $ ) {
+  refresh_game("");
+ });
+
+$("#new_guess_form").submit(function(e) {
+  refresh_game($("#guess").val());
+  e.preventDefault();
+});
+
+</script>
+
+
+    <div id="disqus_thread" style="padding: 0px 30px"></div>
+    <script type="text/javascript">
+
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'mhskynet'; // required: replace example with your forum shortname
+        var disqus_identifier = 'hangman<%= @game.id.to_s %>';
+        var disqus_url = 'http://www.mhsky.net/hang_man/game/<%= @game.id.to_s %>';
+        var disqus_disable_mobile = false;
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
