@@ -5,6 +5,7 @@ class HangManController < ApplicationController
    game = HangManGame.new(:phrase => params[:phrase].upcase, :letters_guessed => "")
    game.save!
    flash[:notice] = "New Game Started!"
+   session[:hang_man_creator] = true
    redirect_to '/hang_man/game/'+game.id.to_s
   end
  end
