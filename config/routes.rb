@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get ':controller(/:action)'
   post ':controller(/:action)'
 
+  get 'hang_man/game(/:id)' => 'hang_man#game'
+  post 'hang_man/game(/:id)' => 'hang_man#game'
 
 
   # The priority is based upon order of creation: first created -> highest priority.
