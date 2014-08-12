@@ -8,9 +8,6 @@ Phrase: <input name="phrase" />
 <input type="submit" />
 </form>
 
-</div>
-
-
 <h2>Active Games:</h3>
 
 <% @games.each do |g| %>
@@ -18,3 +15,5 @@ Phrase: <input name="phrase" />
 <p><a href="/hang_man/game/<%= g.id %>">Game <%= g.id %></a></p>
 
 <% end %>
+
+</div>
