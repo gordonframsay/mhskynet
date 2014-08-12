@@ -2,27 +2,15 @@
 <h4><%= @error %></h4>
 <% end -%>
 <pre>
-    p 
+    p <%= "*tweet!*" if (rand < 0.10) %>
    /O\      
  .*====*_______________.
  |  /                  |
  | /                   8
- |                     8
- |                    --
- |                   | ' | -- Just kill me already
- |                    ---  
- |                     |
- |                    /|\
- |                   / |  \
- |                  /  |   \
- |                     |
- |                     |
- |
- | 
- |           
+<%= render :partial => "hang_man/stages/stage_"+(((@letters_not_found.length + 1) < 8)?(@letters_not_found.length + 1):7).to_s %>
 
-<% @game.phrase.split('').to_a.each do |l| -%>
-<%= (l == " ")?"  ":((@game.letters_guessed.split('').include?(l))?(l+" "):"_ ") -%>
+<% @game.phrase.split('').to_a.each_with_index do |l,i| -%>
+<%= "    " if (i == 0) %><%= (l == " ")?"  ":((@game.letters_guessed.split('').include?(l))?(l+" "):"_ ") -%>
 <% end -%>
 
 

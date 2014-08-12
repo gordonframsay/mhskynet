@@ -9,3 +9,12 @@ Phrase: <input name="phrase" />
 </form>
 
 </div>
+
+
+<h2>Active Games:</h3>
+
+<% @games.each do |g| %>
+
+<p><a href="/hang_man/game/<%= g.id %>">Game <%= g.id %></a></p>
+
+<% end %>
