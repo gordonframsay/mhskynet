@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     return true
    end
    if (tmp = CachedIp.where(["address = ?", request.remote_ip]).first)
-    if ((Time.now - tmp.created_at) > IP_CACHE_TIMEOUT)  # NOTE: IP_CACHE_TIMEOUT is in seconds
+    if ((Time.now - tmp.created_at) > 3600)  # NOTE: IP_CACHE_TIMEOUT is in seconds
      tmp.destroy
     elsif (tmp.blocked?)
      flash[:notice] = "Warning:  In the future you could be blocked because of "+tmp.reason+"."
