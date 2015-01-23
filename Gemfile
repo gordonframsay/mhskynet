@@ -4,7 +4,9 @@ source 'https://rubygems.org'
 
 gem "pg"
 gem 'rails_12factor', group: :production
-
+gem "oauth2"
+gem "net-dns"
+gem 'web-console', '~> 2.0', group: :development
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
