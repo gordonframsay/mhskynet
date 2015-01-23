@@ -1,0 +1,31 @@
+<% if flash[:notice] || flash[:error] || flash[:login]  %>
+  
+  <div class="message row">
+
+    <% if flash[:notice] %>
+
+    <div class="alert alert-danger"><%= flash[:notice].html_safe %></div>
+
+      <% flash.discard(:notice) %>
+    
+    <% end %>
+  
+    <% if flash[:error] %>
+
+      <div class="alert alert-danger"><%= flash[:error].html_safe %></div>
+
+      <% flash.discard(:error) %>
+      
+    <% end %>
+    
+    <% if flash[:login] %>
+
+      <div class="alert alert-success"><%= flash[:login].html_safe %></div>
+
+      <% flash.discard(:login) %>
+      
+    <% end %>
+
+  </div>
+    
+<% end -%>
