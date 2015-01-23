@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     return true
    end
    if (tmp = CachedIp.where(["address = ?", request.remote_ip]).first)
-    if ((Time.now - tmp.created_at) > 3600)  # NOTE: IP_CACHE_TIMEOUT is in seconds
+    if ((Time.now - tmp.created_at) > IP_CACHE_TIMEOUT)  # NOTE: IP_CACHE_TIMEOUT is in seconds
      tmp.destroy
     elsif (tmp.blocked?)
      flash[:notice] = "Warning:  In the future you could be blocked because of "+tmp.reason+"."
@@ -37,19 +37,19 @@ class ApplicationController < ActionController::Base
    sorbs_result_table = {
 	"127.0.0.2" => "open HTTP Proxy",
 	"127.0.0.3" => "open SOCKS Proxy",
-	"127.0.0.4" => "SORBS misc",
+	"127.0.0.4" => "SORBS Misc",
 	"127.0.0.5" => "open SMTP Proxy",
 	"127.0.0.6" => "SORBS Spam Source",
-	"127.0.0.7" => "SORBS vulnerable web site",
-	"127.0.0.8" => "SORBS block",
-	"127.0.0.9" => "SORBS zombie",
-	"127.0.0.10" => "SORBS dul",
-	"127.0.0.11" => "SORBS badconf",
-	"127.0.0.12" => "SORBS nomail",
-	"127.0.0.14" => "SORBS noserver"
+	"127.0.0.7" => "SORBS Vulnerable Web Site",
+	"127.0.0.8" => "SORBS Block",
+	"127.0.0.9" => "SORBS Zombie",
+	"127.0.0.10" => nil, # dul
+	"127.0.0.11" => "SORBS Bad Config",
+	"127.0.0.12" => "SORBS No Mail",
+	"127.0.0.14" => nil # noserver
 	}
    sorbs_result_table.default = "SORBS (unknown)"
-   if sorbs_listing
+   if (sorbs_listing && sorbs_result_table[sorbs_listing.address.to_s])
     block_reason = "coming from "+sorbs_result_table[sorbs_listing.address.to_s]
    end
    block_reason = "coming from a Tor Exit Node" unless (Resolver(request.remote_ip.split('.').reverse.join('.')+".torexit.dan.me.uk").answer.empty?)
