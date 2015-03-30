@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     authenticate_or_request_with_http_basic("Restricted Area") do |username, password|
      ((username == "mh") && (password == MH_USER_PASS))
     end
-    render 'security/password_prompt'
+#    render 'security/password_prompt'
     return false
    end
    if (request.post? && (params[:forum_password] == FORUM_PASSWORD))
