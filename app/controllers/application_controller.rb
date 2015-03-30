@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
    return true if (params[:controller] == "admin")
    if (tmp = BlockedIp.where(["address = ?", request.remote_ip]).first)
     flash[:notice] = "Your IP has been blocked.  Please contact the site administrators to unblock."
+    authenticate_or_request_with_http_basic("Restricted Area") do |username, password|
+     ((username == "mh") && (password == MH_USER_PASS))
+    end
     render 'security/password_prompt'
     return false
    end
