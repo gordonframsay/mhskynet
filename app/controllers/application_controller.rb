@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   def before_filter_check_ip
    return true if (params[:controller] == "admin")
    if (tmp = BlockedIp.where(["address = ?", request.remote_ip]).first)
-    flash[:notice] = "Your IP has been blocked.  Please contact the site administrators to unblock."
+#    flash[:notice] = "Your IP has been blocked.  Please contact the site administrators to unblock."
     authenticate_or_request_with_http_basic("Restricted Area") do |username, password|
      ((username == "mh") && (password == MH_USER_PASS))
     end
@@ -25,8 +25,11 @@ class ApplicationController < ActionController::Base
     if ((Time.now - tmp.created_at) > 3600)  # NOTE: IP_CACHE_TIMEOUT is in seconds
      tmp.destroy
     elsif (tmp.blocked?)
-     flash[:notice] = "Warning:  In the future you could be blocked because of "+tmp.reason+"."
-     return true
+#     flash[:notice] = "Warning:  In the future you could be blocked because of "+tmp.reason+"."
+     authenticate_or_request_with_http_basic("Restricted Area") do |username, password|
+      ((username == "mh") && (password == MH_USER_PASS))
+     end
+     return false
 #     render 'security/password_prompt'
 #     return false
     else
