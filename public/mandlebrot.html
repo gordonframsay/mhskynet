@@ -18,6 +18,7 @@
    <p>Y: <input name="y" id="y" value="0.21065" /></p>
    <p>Zoom: <input name="zoom" id="zoom" value="200000" /></p>
    <p>Max Iterations: <input name="max_iter" id="max_iter" value="120" /></p>
+   <p>Antialias: <input name="antialias" id="antialias" value="2.0" /></p>
    <p><input type="button" onclick="draw_m();" value="Draw" /></p>
   </form>
 
@@ -84,26 +85,28 @@
    zoom = parseFloat(document.getElementById("zoom").value);
    center_x = parseFloat(document.getElementById("x").value);
    center_y = parseFloat(document.getElementById("y").value);
+   antialias = parseFloat(document.getElementById("antialias").value);
    width = window.innerWidth;
    height = window.innerHeight;
    var max_iter = parseInt(document.getElementById("max_iter").value);
 /* alert("zoom: "+zoom+", center_x: "+center_x+", center_y: "+center_y+", Max Iter: "+max_iter); */
    canvas.width = width;
    canvas.height = height;
-   for (var x = 0; x < width; x++) {
-    for (var y = 0; y < height; y++) {
+   for (var x = 0.0; x < width; x += (1.0 / antialias)) {
+    for (var y = 0.0; y < height; y += (1.0 / antialias)) {
      var dist = m_set_dist(((((x / width) * 3) - 1.5) / zoom) + center_x, ((((y / height) * 2) - 1) / zoom) + center_y, max_iter)
      var red_color = Math.abs(128 - (Math.round(dist * 70000 * zoom) % 255));
-     var green_color = (Math.round(dist * 100000 * zoom) % 255);
+     var green_color = 128 - (Math.round(dist * 100000 * zoom) % 255);
      var blue_color = (Math.round(dist * 80000 * zoom) % 255);
      if (dist > 0) {
       ctx.fillStyle = 'rgb('+red_color+','+green_color+','+blue_color+')';
      } else {
-      ctx.fillStyle = 'rgb(200,200,255)';
+      ctx.fillStyle = 'rgb(0,0,0)';
      }
-     ctx.fillRect(x, y, 1, 1);
+     ctx.fillRect(x, y, (1.0 / antialias), (1.0 / antialias));
     }
    }
+/*   alert("M width: "+((((((0.0 / width) * 3) - 1.5) / zoom) + center_x) - (((((width / width) * 3) - 1.5) / zoom) + center_x))); */
    var time_end = new Date().getTime();
    var time = time_end - time_start;
 /*   alert("Time to complete: "+(time)+"ms"); */
@@ -116,11 +119,18 @@
 /*    alert("X: "+x+", Y: "+y);
     alert("X prop: "+(x / width)); */
 /*    document.getElementById("x").value = (x / width) * (((center_x - 1.5) / zoom) - ((3 - 1.5 + center_x) / zoom)); */
-    left_edge = center_x - 1.5;
-    right_edge = 1.5 + center_x;
-    document.getElementById("x").value =  (((x / (width + 0.0)) * (right_edge - left_edge)) / zoom) + left_edge;
-
-/*    document.getElementById("y").value = (y / height) * ((((y / height) * 2) - 1 + center_y) / zoom); */
+    center_x = parseFloat(document.getElementById("x").value);
+    center_y = parseFloat(document.getElementById("y").value);
+    m_width = ((- 1.5 / zoom) + center_x) - ((1.5 / zoom) + center_x);
+    m_height = ((- 1.0 / zoom) + center_y) - ((1.0 / zoom) + center_y);
+    left_edge = center_x - (m_width / 2.0);
+    right_edge = (m_width / 2.0) + center_x;
+    top_edge = center_y - 1.0;
+    bottom_edge = 1.0 + center_y;
+    document.getElementById("x").value = left_edge - ((x / width) * m_width);
+    document.getElementById("y").value = top_edge - ((y / height) * m_height);
+/* (((x / width) * (right_edge - left_edge)) / zoom) + left_edge; */
+/*    document.getElementById("y").value =  (((y / height) * (bottom_edge - top_edge)) / zoom) + top_edge; */
 
  }, false);
 
