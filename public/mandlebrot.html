@@ -14,50 +14,50 @@
     <canvas></canvas>
   </body>
   <script>
-function m_set_dist_two(cx, cy) {
-   var xorbit = new Array();
-   var yorbit = new Array();
-var max_iter = 100;
-var dist = 0.0;
-var temp = 0.0;
-var x = 0.0;
-xorbit[0] = 0.0; 
-yorbit[0] = 0.0; 
-var huge = 1000.0;
-var yder = 0.0;
-var xder = 0.0;
-var x2 = 0.0;
-var y2 = 0.0;
-var y = 0.0;
-var x = 0.0;
-var iter = 1;
-    var overflow =  1.0e100;
-while ((iter < max_iter) && ((x2+y2) < huge)) {
- temp = x2 - y2 + cx;
- y = 2.0 * x * y + cy;
- x = temp;
- x2 = x*x;
- y2 = y*y;
- xorbit[iter] = x;
- yorbit[iter] = y;
- iter += 1;
-}
-var flag = false;
-if ( (x2+y2) > huge ) {
- var i = 0;
- while ( ( i < iter ) && (! flag) ) {
-   temp = 2.0 * (xorbit[i] * xder - yorbit[i] * yder + 1.0);
-   yder = 2.0 * (yorbit[i] * xder + xorbit[i] * yder);
-   xder = temp;
-   flag = Math.max(Math.abs(xder),Math.abs(yder)) > overflow;
-   i += 1;
+ function m_set_dist_two(cx, cy) {
+   var max_iter = 100;
+   var xorbit = new Array(max_iter + 1);
+   var yorbit = new Array(max_iter + 1);
+   var dist = 0.0;
+   var temp = 0.0;
+   var x = 0.0;
+   xorbit[0] = 0.0; 
+   yorbit[0] = 0.0; 
+   var huge = 1000.0;
+   var yder = 0.0;
+   var xder = 0.0;
+   var x2 = 0.0;
+   var y2 = 0.0;
+   var y = 0.0;
+   var x = 0.0;
+   var iter = 1;
+   var overflow =  1.0e100;
+   while ((iter < max_iter) && ((x2+y2) < huge)) {
+    temp = x2 - y2 + cx;
+    y = 2.0 * x * y + cy;
+    x = temp;
+    x2 = x*x;
+    y2 = y*y;
+    xorbit[iter] = x;
+    yorbit[iter] = y;
+    iter += 1;
+   }
+   var flag = false;
+   if ( (x2+y2) > huge ) {
+    var i = 0;
+    while ( ( i < iter ) && (! flag) ) {
+     temp = 2.0 * (xorbit[i] * xder - yorbit[i] * yder + 1.0);
+     yder = 2.0 * (yorbit[i] * xder + xorbit[i] * yder);
+     xder = temp;
+     flag = Math.max(Math.abs(xder),Math.abs(yder)) > overflow;
+     i += 1;
+    }
+    if (! flag) {
+     dist = Math.log(x2+y2)*Math.sqrt(x2+y2)/Math.sqrt(xder*xder+yder*yder);
+    }
+   }
+  return dist;
  }
- if (! flag) {
-    dist = Math.log(x2+y2)*Math.sqrt(x2+y2)/Math.sqrt(xder*xder+yder*yder);
- }
-}
-return dist;
-}
 
 
 
@@ -126,5 +126,6 @@ return dist;
   }
 
   draw_m();
+
   </script>
 </html>
