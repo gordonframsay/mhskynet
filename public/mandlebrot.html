@@ -11,11 +11,30 @@
     </style>
   </head>
   <body>
+
+  <form>
+   <p>Center:</p>
+   <p>X: <input name="x" id="x" value="-0.746" /></p>
+   <p>Y: <input name="y" id="y" value="0.21065" /></p>
+   <p>Zoom: <input name="zoom" id="zoom" value="200000" /></p>
+   <p>Max Iterations: <input name="max_iter" id="max_iter" value="120" /></p>
+   <p><input type="button" onclick="draw_m();" value="Draw" /></p>
+  </form>
+
     <canvas></canvas>
   </body>
   <script>
- function m_set_dist(cx, cy) {
-   var max_iter = 100;
+
+ var canvas = document.querySelector('canvas');
+ var elemLeft = canvas.offsetLeft;
+ var elemTop = canvas.offsetTop;
+ var center_x = parseFloat(document.getElementById("x").value);
+ var center_y = parseFloat(document.getElementById("y").value);
+ var zoom = parseFloat(document.getElementById("zoom").value);
+ var width = window.innerWidth;
+ var height = window.innerHeight;
+
+ function m_set_dist(cx, cy, max_iter) {
    var xorbit = new Array(max_iter + 1);
    var yorbit = new Array(max_iter + 1);
    var dist = 0.0;
@@ -60,27 +79,51 @@
  }
 
   function draw_m() {
-   var canvas = document.querySelector('canvas');
+   var time_start = new Date().getTime();
    var ctx = canvas.getContext('2d');
-   var width = 150; /* window.innerWidth; */
-   var height = 100; /* window.innerHeight */ 
+   zoom = parseFloat(document.getElementById("zoom").value);
+   center_x = parseFloat(document.getElementById("x").value);
+   center_y = parseFloat(document.getElementById("y").value);
+   width = window.innerWidth;
+   height = window.innerHeight;
+   var max_iter = parseInt(document.getElementById("max_iter").value);
+/* alert("zoom: "+zoom+", center_x: "+center_x+", center_y: "+center_y+", Max Iter: "+max_iter); */
    canvas.width = width;
    canvas.height = height;
    for (var x = 0; x < width; x++) {
     for (var y = 0; y < height; y++) {
-     var dist = m_set_dist(((x / width) * 3) - 2, (y / height) * 2 - 1)
-     var color = (Math.round(dist * 70000) % 255);
+     var dist = m_set_dist(((((x / width) * 3) - 1.5) / zoom) + center_x, ((((y / height) * 2) - 1) / zoom) + center_y, max_iter)
+     var red_color = Math.abs(128 - (Math.round(dist * 70000 * zoom) % 255));
+     var green_color = (Math.round(dist * 100000 * zoom) % 255);
+     var blue_color = (Math.round(dist * 80000 * zoom) % 255);
      if (dist > 0) {
-      ctx.fillStyle = 'rgb('+color+','+color+',0)';
+      ctx.fillStyle = 'rgb('+red_color+','+green_color+','+blue_color+')';
      } else {
       ctx.fillStyle = 'rgb(200,200,255)';
      }
      ctx.fillRect(x, y, 1, 1);
     }
    }
+   var time_end = new Date().getTime();
+   var time = time_end - time_start;
+/*   alert("Time to complete: "+(time)+"ms"); */
   }
 
-  draw_m();
+ canvas.addEventListener('click', function(event) {
+    var x = event.pageX - elemLeft,
+        y = event.pageY - elemTop;
+
+/*    alert("X: "+x+", Y: "+y);
+    alert("X prop: "+(x / width)); */
+/*    document.getElementById("x").value = (x / width) * (((center_x - 1.5) / zoom) - ((3 - 1.5 + center_x) / zoom)); */
+    left_edge = center_x - 1.5;
+    right_edge = 1.5 + center_x;
+    document.getElementById("x").value =  (((x / (width + 0.0)) * (right_edge - left_edge)) / zoom) + left_edge;
+
+/*    document.getElementById("y").value = (y / height) * ((((y / height) * 2) - 1 + center_y) / zoom); */
+
+ }, false);
+
 
   </script>
 </html>
