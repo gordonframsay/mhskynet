@@ -6,6 +6,37 @@
 <div style="padding: 0px 30px">
   <form>
    <p><a href="/mandelbrot?center_x=-0.8&center_y=0&zoom=1&max_iter=200&antialias=1">Zoom Out/Reset</a></p>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+  Help/Hints
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">The Mandelbrot</h4>
+      </div>
+      <div class="modal-body">
+
+        The Mandelbrot set is a fractal, meaning that it uses relatively simple math/algorithm to produce a picture with infinite detail.  Clicking on 
+the image will center the X/Y coordinates there.  Centering on a black edge and zooming in 100x times or so usually produces the most interesting 
+results.  Upping the Max Iterations will remove more black (reducing the uncertainty).  It isn't a bad idea to keep it under 500.  Upping the 
+antialiasing will smooth the image but increase the rendering time dramatically.  Antialiasing at more than 3 generally doesn't increase quality 
+significantly.  After adjusting settings, click the Draw button to refresh.  Some browsers might complain of stalled scripts, but click wait/continue to 
+keep the rendering going.
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
    <table>
     <tr>
      <td style="padding: 10px 15px">
@@ -140,16 +171,22 @@ function hslToRgb(h, s, l){
    zoom = parseFloat(document.getElementById("zoom").value);
    center_x = parseFloat(document.getElementById("x").value);
    center_y = parseFloat(document.getElementById("y").value);
-   antialias = parseFloat(document.getElementById("antialias").value);
+   antialias = parseInt(document.getElementById("antialias").value);
    width = window.innerWidth;
    height = window.innerHeight;
    var max_iter = parseInt(document.getElementById("max_iter").value);
 /* alert("zoom: "+zoom+", center_x: "+center_x+", center_y: "+center_y+", Max Iter: "+max_iter); */
    canvas.width = width;
    canvas.height = height;
-   for (var x = 0.0; x < width; x += (1.0 / antialias)) {
-    for (var y = 0.0; y < height; y += (1.0 / antialias)) {
-     var dist = m_set_dist(((((x / width) * 3) - 1.5) / zoom) + center_x, ((((y / height) * 2) - 1) / zoom) + center_y, max_iter)
+   for (var x = 0; x < width; x++) {
+    for (var y = 0; y < height; y++) {
+     var dist = 0.0
+     for (var x_antialias = 1; x_antialias <= antialias; x_antialias++) {
+      for (var y_antialias = 1; y_antialias <= antialias; y_antialias++) {
+       dist += m_set_dist((((((x + (x_antialias / (antialias + 1)) - 0.5) / width) * 3) - 1.5) / zoom) + center_x, (((((y + (y_antialias / (antialias + 1)) - 0.5) / height) * 2) - 1) / zoom) + center_y, max_iter)
+      }
+     }
+     dist = dist / (antialias * antialias);
 /*     var red_color = (Math.round((dist * 70000 * zoom) + 50) % 255);
      var green_color = (Math.round((dist * 60000 * zoom) + 100) % 255);
      var blue_color = (Math.round(dist * 80000 * zoom) % 255); */
@@ -162,7 +199,7 @@ function hslToRgb(h, s, l){
      } else {
       ctx.fillStyle = 'rgb(0,0,0)';
      }
-     ctx.fillRect(x, y, (1.0 / antialias), (1.0 / antialias));
+     ctx.fillRect(x, y, 1.0, 1.0);
     }
    }
 /*   alert("M width: "+((((((0.0 / width) * 3) - 1.5) / zoom) + center_x) - (((((width / width) * 3) - 1.5) / zoom) + center_x))); */
