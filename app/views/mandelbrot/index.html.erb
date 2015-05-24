@@ -22,12 +22,14 @@
       </div>
       <div class="modal-body">
 
-        The Mandelbrot set is a fractal, meaning that it uses relatively simple math/algorithm to produce a picture with infinite detail.  Clicking on 
+<p>The Mandelbrot set is a fractal, meaning that it uses relatively simple math/algorithm to produce a picture with infinite detail.  Clicking on 
 the image will center the X/Y coordinates there.  Centering on a black edge and zooming in 100x times or so usually produces the most interesting 
 results.  Upping the Max Iterations will remove more black (reducing the uncertainty).  It isn't a bad idea to keep it under 500.  Upping the 
 antialiasing will smooth the image but increase the rendering time dramatically.  Antialiasing at more than 3 generally doesn't increase quality 
 significantly.  After adjusting settings, click the Draw button to refresh.  Some browsers might complain of stalled scripts, but click wait/continue to 
-keep the rendering going.
+keep the rendering going.</p>
+
+<p><center><img src="/mandelbrot.jpg" /></center></p>
 
       </div>
       <div class="modal-footer">
@@ -175,7 +177,6 @@ function hslToRgb(h, s, l){
    width = window.innerWidth;
    height = window.innerHeight;
    var max_iter = parseInt(document.getElementById("max_iter").value);
-/* alert("zoom: "+zoom+", center_x: "+center_x+", center_y: "+center_y+", Max Iter: "+max_iter); */
    canvas.width = width;
    canvas.height = height;
    for (var x = 0; x < width; x++) {
@@ -187,9 +188,6 @@ function hslToRgb(h, s, l){
       }
      }
      dist = dist / (antialias * antialias);
-/*     var red_color = (Math.round((dist * 70000 * zoom) + 50) % 255);
-     var green_color = (Math.round((dist * 60000 * zoom) + 100) % 255);
-     var blue_color = (Math.round(dist * 80000 * zoom) % 255); */
      rgb_color = hslToRgb((dist * 300 * zoom) % 1, 0.5, 0.5)
      var red_color = rgb_color[0];
      var green_color = rgb_color[1];
@@ -202,41 +200,26 @@ function hslToRgb(h, s, l){
      ctx.fillRect(x, y, 1.0, 1.0);
     }
    }
-/*   alert("M width: "+((((((0.0 / width) * 3) - 1.5) / zoom) + center_x) - (((((width / width) * 3) - 1.5) / zoom) + center_x))); */
    var time_end = new Date().getTime();
    var time = time_end - time_start;
-/*   alert("Time to complete: "+(time)+"ms"); */
    document.getElementById("render_time").value = time+"ms";
    document.getElementById("spinner").style.display = "none";
    var stateObj = { center_x: center_x, center_y: center_y, zoom: zoom, max_iter: max_iter, antialias: antialias };
    window.history.pushState(stateObj, "Mandelbrot", "/mandelbrot?center_x="+center_x+"&center_y="+center_y+"&zoom="+zoom+"&max_iter="+max_iter+"&antialias="+antialias);
   }
 
-/* centers changes with multiple clicks... perhaps remember the first center until a rerender */
  canvas.addEventListener('click', function(event) {
     var x = event.pageX - elemLeft,
         y = event.pageY - elemTop;
 
-/*    alert("X: "+x+", Y: "+y);
-    alert("X prop: "+(x / width)); */
-/*    document.getElementById("x").value = (x / width) * (((center_x - 1.5) / zoom) - ((3 - 1.5 + center_x) / zoom)); */
-/*    center_x = parseFloat(document.getElementById("x").value);
-    center_y = parseFloat(document.getElementById("y").value); */
-/* alert("center_x: "+center_x+", center_y: "+center_y); */
-/* alert("zoom: "+zoom); */
     m_width = ((1.5 / zoom) + center_x) - ((- 1.5 / zoom) + center_x);
     m_height = ((1.0 / zoom) + center_y) - ((- 1.0 / zoom) + center_y);
-/* alert("m_width: "+m_width+", m_height: "+m_height); */
     left_edge = center_x - (m_width / 2.0);
     right_edge = (m_width / 2.0) + center_x;
-/* alert("left_edge: "+left_edge+", right_edge: "+right_edge); */
     top_edge = center_y - (m_height / 2.0);
     bottom_edge = (m_height / 2.0) + center_y;
-/* alert("top_edge: "+top_edge+", bottom_edge: "+bottom_edge); */
     document.getElementById("x").value = ((x / width) * m_width) + left_edge;
     document.getElementById("y").value = ((y / height) * m_height) + top_edge;
-/* (((x / width) * (right_edge - left_edge)) / zoom) + left_edge; */
-/*    document.getElementById("y").value =  (((y / height) * (bottom_edge - top_edge)) / zoom) + top_edge; */
 
  }, false);
 
