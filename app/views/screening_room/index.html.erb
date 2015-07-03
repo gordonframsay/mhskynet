@@ -13,23 +13,38 @@
 <% end %>
 
     <center>
-	<p>Click the play button at show time, or after to be synced up.</p>
-	<p><a href="<%= @movie_url %>" id="play_link" target="_blank"><img src="/play_button.png" /></a></p>
+        <div id="player"></div>
     </center>
 
-<script>
- var movie_play_time = <%= (Time.now - @movie_time).round %>;
+    <script>
+      var tag = document.createElement('script');
 
- function update_play_link() {
-  var yourElement = document.getElementById('play_link');
-  movie_play_time = movie_play_time + 1;
-  yourElement.setAttribute('href', '<%= @movie_url %>?t='+movie_play_time+'s');
- }
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-<% unless (@movie_time > Time.now) %>
-  setInterval(function () { update_play_link() }, 1000);
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '576',
+          width: '768',
+          videoId: '<%= @youtube_video_id %>',
+          events: {
+            'onReady': onPlayerReady
+          }
+        });
+      }
+
+      function onPlayerReady(event) {
+<% if (@movie_time > Time.now) %>
+        setTimeout(event.target.playVideo(), <%= (@movie_time - Time.now).round %>);
+<% else %>
+        event.target.seekTo(<%= (Time.now - @movie_time).round %>);
+        event.target.playVideo();
 <% end %>
-</script>
+      }
+
+    </script>
 
 
     <div id="disqus_thread" style="padding: 0px 30px"></div>
@@ -52,3 +67,10 @@
     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     <%= render :partial => 'shared/footer' %>
+
+
+<script>
+<% if params[:play_start] %>
+$( "#play_link" ).click();
+<% end %>
+</script>
