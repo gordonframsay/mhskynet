@@ -12,10 +12,18 @@
     <h3>Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i></h3>
 <% end %>
 
-	<div>
+       <a name="movie">
+	<table>
+	<tr>
+	<td valign="top">
         <div id="player" style="float: left;width: 780px;padding-top: 150px;"></div>
-        <div id="disqus_thread" style="float:right; width: 500px;"></div>
-	</div>
+	</td>
+	<td align="center">
+        <div id="disqus_thread" style="width: 500px; padding-left: 20px;"></div>
+	</td>
+	</tr>
+	</table>
+       </a>
 
     <script>
       var tag = document.createElement('script');
