@@ -12,9 +12,10 @@
     <h3>Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i></h3>
 <% end %>
 
-    <center>
-        <div id="player"></div>
-    </center>
+	<div>
+        <div id="player" style="float: left;width: 780px;padding-top: 150px;"></div>
+        <div id="disqus_thread" style="float:right; width: 500px;"></div>
+	</div>
 
     <script>
       var tag = document.createElement('script');
@@ -26,8 +27,8 @@
       var player;
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-          height: '576',
-          width: '768',
+          height: '780',
+          width: '750',
           videoId: '<%= @youtube_video_id %>',
           events: {
             'onReady': onPlayerReady
@@ -47,7 +48,6 @@
     </script>
 
 
-    <div id="disqus_thread" style="padding: 0px 30px"></div>
     <script type="text/javascript">
 
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
@@ -64,7 +64,6 @@
         })();
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     <%= render :partial => 'shared/footer' %>
 
