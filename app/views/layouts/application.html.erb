@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MH Skynet</title>
+  <title><%= @page_title %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -32,7 +32,7 @@
 
   <% if @meta_refresh_times %>
   <% @meta_refresh_times.each do |t| %>
-  <meta http-equiv="refresh" content="<%= t %>">
+  <meta http-equiv="refresh" content="<%= t %>" url="/screening_room?play_start=true" />
   <% end %>
   <% end %>
 </head>

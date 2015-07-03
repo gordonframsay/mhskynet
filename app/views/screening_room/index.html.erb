@@ -5,14 +5,17 @@
     </div>
 -->
 <center>
+    <div id="movie_play_status">
     Current Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
-    Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i>
+    Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e%l:%M %p") %> PST</i> (movie will start playing automatically)
 <% else %>
-    Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i>
+    Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
 <% end %>
+    </div>
 </center>
 
+      <center>
        <a name="movie">
 	<table>
 	<tr>
@@ -25,6 +28,7 @@
 	</tr>
 	</table>
        </a>
+      </center>
 
     <script>
       var tag = document.createElement('script');
@@ -47,6 +51,9 @@
 
 
       function movie_sign() {
+        document.title = "<%= "▶︎" +@page_title %>";
+        elem = document.getElementById("movie_play_status");
+        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
         player.playVideo()
       }
 

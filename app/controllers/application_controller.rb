@@ -4,8 +4,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :before_filter_check_ip
+  before_filter :app_defaults
 
  private
+
+  def app_defaults
+   @page_title = "MH Skynet"
+  end
 
   def before_filter_check_ip
    return true if (params[:controller] == "admin")
