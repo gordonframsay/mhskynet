@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
    root 'home#index'
    get 'suggestions' => 'suggestions#index'
+   get 'screening_room' => 'screening_room#index'
  
    get ':controller(/:action)'
    post ':controller(/:action)'

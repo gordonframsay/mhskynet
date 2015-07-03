@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
+# Uncomment this when pushing changes to this file to Heroku:
 ruby "2.1.0"
+
+# ruby "2.0.0"
 
 gem "pg"
 gem 'rails_12factor', group: :production
@@ -9,7 +12,7 @@ gem "net-dns"
 gem 'web-console', '~> 2.0', group: :development
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.4'
+gem 'rails', '4.1.9'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'  # SQLite isn't supported on Heroku
 # Use SCSS for stylesheets

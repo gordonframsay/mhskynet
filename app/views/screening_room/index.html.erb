@@ -1,16 +1,44 @@
     <%= render :partial => 'shared/navigation' %>
 
     <div style="padding: 0px 30px">
-	<h2>MH Skynet - Suggestions/Feedback</h2>
+	<h2>MH Skynet - Screening Room</h2>
     </div>
+
+    <h3>Current Movie: <i><%= @movie_title %></i></h3>
+
+<% if (@movie_time > Time.now) %>
+    <h3>Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i></h3>
+<% else %>
+    <h3>Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i></h3>
+<% end %>
+
+    <center>
+	<p>Click the play button at show time, or after to be synced up.</p>
+	<p><a href="<=% @movie_url %>" id="play_link" target="_blank"><img src="/play_button.png" /></a></p>
+    </center>
+
+<script>
+ var movie_play_time = <%= (Time.now - @movie_time).round %>;
+
+ function update_play_link() {
+  var yourElement = document.getElementById('play_link');
+  movie_play_time = movie_play_time + 1;
+  yourElement.setAttribute('href', '<%= @movie_url %>?t='+movie_play_time+'s');
+ }
+
+<% unless (@movie_time > Time.now) %>
+  setInterval(function () { update_play_link() }, 1000);
+<% end %>
+</script>
+
 
     <div id="disqus_thread" style="padding: 0px 30px"></div>
     <script type="text/javascript">
 
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
         var disqus_shortname = 'mhskynet'; // required: replace example with your forum shortname
-        var disqus_identifier = 'suggestions';
-        var disqus_url = 'http://www.mhsky.net/suggestions';
+        var disqus_identifier = 'the_screening_room';
+        var disqus_url = 'http://www.mhsky.net/screening_room';
         var disqus_disable_mobile = false;
 
         /* * * DON'T EDIT BELOW THIS LINE * * */
@@ -24,4 +52,3 @@
     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     <%= render :partial => 'shared/footer' %>
-  
