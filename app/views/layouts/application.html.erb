@@ -29,6 +29,12 @@
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+
+  <% if @meta_refresh_times %>
+  <% @meta_refresh_times.each do |t| %>
+  <meta http-equiv="refresh" content="<%= t %>">
+  <% end %>
+  <% end %>
 </head>
 <body>
 
