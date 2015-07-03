@@ -12,8 +12,7 @@
     Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
    </a>
    </div>
-<% end %>
-
+<% else %>
 <% if ((@movie_time + @movie_length) > Time.now) %>
    <div style="padding: 0px 30px">
    <a href="/screening_room">
@@ -21,6 +20,7 @@
     Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
    </a>
    </div>
+<% end %>
 <% end %>
 
 
