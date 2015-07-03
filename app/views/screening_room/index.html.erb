@@ -1,25 +1,26 @@
-    <%= render :partial => 'shared/navigation' %>
-
+    <%#= render :partial => 'shared/navigation' %>
+<!--
     <div style="padding: 0px 30px">
 	<h2>MH Skynet - Screening Room</h2>
     </div>
-
-    <h3>Current Movie: <i><%= @movie_title %></i></h3>
-
+-->
+<center>
+    Current Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
-    <h3>Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i></h3>
+    Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i>
 <% else %>
-    <h3>Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i></h3>
+    Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e, %Y %l:%M %p") %> PST</i>
 <% end %>
+</center>
 
        <a name="movie">
 	<table>
 	<tr>
 	<td valign="top">
-        <div id="player" style="float: left;width: 780px;padding-top: 150px;"></div>
+        <div id="player" style="float: left;width: 780px;padding-top: 100px;padding-left: 10px"></div>
 	</td>
 	<td align="center">
-        <div id="disqus_thread" style="width: 500px; padding-left: 20px;"></div>
+        <div id="disqus_thread" style="width: 500px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: 700px;"></div>
 	</td>
 	</tr>
 	</table>
@@ -73,7 +74,7 @@
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-    <%= render :partial => 'shared/footer' %>
+    <%#= render :partial => 'shared/footer' %>
 
 
 <script>
