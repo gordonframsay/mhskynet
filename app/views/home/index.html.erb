@@ -6,13 +6,24 @@
     </div>
 
 <% if (@movie_time > Time.now) %>
-    <div style="padding: 0px 30px">
+   <div style="padding: 0px 30px">
    <a href="/screening_room">
     Next Movie: <i><%= @movie_title %></i> - 
     Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
    </a>
    </div>
 <% end %>
+
+<% if ((@movie_time + @movie_length) > Time.now) %>
+   <div style="padding: 0px 30px">
+   <a href="/screening_room">
+    Now Playing: <i><%= @movie_title %></i> - 
+    Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
+   </a>
+   </div>
+<% end %>
+
+
     <div id="disqus_thread" style="padding: 0px 30px"></div>
     <script type="text/javascript">
 
