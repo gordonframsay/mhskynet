@@ -5,8 +5,17 @@ class ApplicationController < ActionController::Base
 
   before_filter :before_filter_check_ip
   before_filter :app_defaults
+  before_filter :movie_prep
 
  private
+
+  # TODO: This could come from a DB table
+  def movie_prep
+   @movie_title = "The Three Stooges 2 Hours Full Episodes"
+   @youtube_video_id = "hNB_edmuVEY"
+   @movie_length = (1 * 60 * 60) + (56 * 60) + 20
+   @movie_time = Time.gm(2015,07,03,21,30)
+  end
 
   def app_defaults
    @page_title = "MH Skynet"
