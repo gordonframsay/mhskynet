@@ -17,7 +17,7 @@
 	<table>
 	<tr>
 	<td valign="top">
-        <div id="player" style="float: left;width: 780px;padding-top: 100px;padding-left: 10px"></div>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;"></div>
 	</td>
 	<td align="center">
         <div id="disqus_thread" style="width: 500px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: 700px;"></div>
@@ -45,17 +45,21 @@
         });
       }
 
+
+      function movie_sign() {
+        player.playVideo()
+      }
+
       function onPlayerReady(event) {
-<% if (@movie_time > Time.now) %>
-        setTimeout(event.target.playVideo(), <%= (@movie_time - Time.now).round %>);
-<% else %>
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
         event.target.seekTo(<%= (Time.now - @movie_time).round %>);
         event.target.playVideo();
-<% end %>
+	<% end %>
       }
 
     </script>
-
 
     <script type="text/javascript">
 
