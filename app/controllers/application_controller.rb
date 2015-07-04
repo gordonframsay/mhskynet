@@ -12,10 +12,12 @@ class ApplicationController < ActionController::Base
   # TODO: This could come from a DB table
   def movie_prep
    m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
-   @movie_title = m.title
-   @youtube_video_id = m.identifier # TODO: Support more formats than just YouTube
-   @movie_length = m.duration
-   @movie_time = m.start_time
+   if m
+    @movie_title = m.title
+    @youtube_video_id = m.identifier # TODO: Support more formats than just YouTube
+    @movie_length = m.duration
+    @movie_time = m.start_time
+   end
   end
 
   def app_defaults
