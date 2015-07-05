@@ -60,7 +60,7 @@
         cookie: true // enable cookies to allow the server to access the session
     });
     var params = {html: "0"},
-     video = 'xwr14q',
+     video = '<%= @movie_identifier %>',
      player = DM.player($('#player').get(0), {video: video, width: '100%', height: '100%', params: params});
 
 $(player).bind( 'apiready play playing canplay canplaythrough loadedmetadata timeupdate progress seeking seeked volumechange durationchange pause ended error fullscreenchange qualitiesavailable qualitychange subtitlesavailable subtitlechange ad_start ad_timeupdate ad_play ad_pause ad_end', function(e)
@@ -110,9 +110,10 @@ $(player).bind( 'apiready play playing canplay canplaythrough loadedmetadata tim
         setTimeout(function(){ player.api("play", "1"); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
         player.api("play", "1");
+        player.api("seek", "<%= (Time.now - @movie_time).round %>");
 	<% end %>
     }
-    if (e.type == "playing") {
+    if (e.type == "ad_end") {
      player.api("seek", "<%= (Time.now - @movie_time).round %>");
     }
     if ($.inArray(e.type, ['play', 'playing', 'pause', 'ad_play', 'ad_pause']) !== -1) $('#status').html(e.type);
