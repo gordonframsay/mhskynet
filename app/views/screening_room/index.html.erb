@@ -1,9 +1,3 @@
-    <%#= render :partial => 'shared/navigation' %>
-<!--
-    <div style="padding: 0px 30px">
-	<h2>MH Skynet - Screening Room</h2>
-    </div>
--->
 <center>
     <div id="movie_play_status">
     Current Movie: <i><%= @movie_title %></i> - 
@@ -23,7 +17,21 @@
 	<table>
 	<tr>
 	<td valign="top">
+<% if (@movie_service == "youtube") %>
         <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;"></div>
+<% end %>
+<% if (@movie_service == "html5") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+	 <video src="/movies/<%= @movie_identifier %>" width="780" height="700" controls>
+	  Your browser does not support the <code>video</code> element.
+	 </video>
+<% end %>
+<% if (@movie_service == "vimeo") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+	<iframe src="//player.vimeo.com/video/<%= @movie_identifier %>?api=1&player_id=vimeoplayer" width="780" height="700" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	</div>
+<% end %>
+	</div>
 	</td>
 	<td align="center">
         <div id="disqus_thread" style="width: 500px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: 700px;"></div>
@@ -32,10 +40,33 @@
 	</table>
        </a>
       </center>
-
 <!--
      $("#resize_link").attr("href", "/screening_room?width="+$( window ).width())
 -->
+
+<% if (@movie_service == "html5") %>
+<script>
+      var v = document.getElementsByTagName("video")[0];
+
+      function movie_sign() {
+        document.title = "<%= "▶ ︎" +@page_title %>";
+        elem = document.getElementById("movie_play_status");
+        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
+        v.play();
+      }
+
+      $( document ).ready(function() {
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
+        v.play();
+        v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>;});
+	<% end %>
+      });
+</script>
+<% end %>
+
+<% if (@movie_service == "youtube") %>
     <script>
 
       var tag = document.createElement('script');
@@ -45,17 +76,17 @@
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
       var player;
+
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
           height: '700',
           width: '750',
-          videoId: '<%= @youtube_video_id %>',
+          videoId: '<%= @movie_identifier %>',
           events: {
             'onReady': onPlayerReady
           }
         });
       }
-
 
       function movie_sign() {
         document.title = "<%= "▶ ︎" +@page_title %>";
@@ -74,6 +105,112 @@
       }
 
     </script>
+<% end %>
+
+<% if (@movie_service == "vimeo") %>
+<div id="status" style="display:none"></div>
+
+<script>
+$(function() {
+    var player = $('iframe');
+    var playerOrigin = '*';
+    var status = $('#status');
+
+    // Listen for messages from the player
+    if (window.addEventListener) {
+        window.addEventListener('message', onMessageReceived, false);
+    }
+    else {
+        window.attachEvent('onmessage', onMessageReceived, false);
+    }
+
+    // Handle messages received from the player
+    function onMessageReceived(event) {
+        // Handle messages from the vimeo player only
+        if (!(/^https?:\/\/player.vimeo.com/).test(event.origin)) {
+            return false;
+        }
+        
+        if (playerOrigin === '*') {
+            playerOrigin = event.origin;
+        }
+        
+        var data = JSON.parse(event.data);
+        
+        switch (data.event) {
+            case 'ready':
+                onReady();
+                break;
+               
+            case 'playProgress':
+                onPlayProgress(data.data);
+                break;
+                
+            case 'pause':
+                onPause();
+                break;
+               
+            case 'finish':
+                onFinish();
+                break;
+        }
+    }
+
+    // Call the API when a button is pressed
+    $('button').on('click', function() {
+        post($(this).text().toLowerCase());
+    });
+
+    // Helper function for sending a message to the player
+    function post(action, value) {
+        var data = {
+          method: action
+        };
+        
+        if (value) {
+            data.value = value;
+        }
+        
+        var message = JSON.stringify(data);
+        player[0].contentWindow.postMessage(data, playerOrigin);
+    }
+
+    function onReady() {
+        status.text('ready');
+        
+        post('addEventListener', 'pause');
+        post('addEventListener', 'finish');
+        post('addEventListener', 'playProgress');
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
+        post('seekTo', '<%= (Time.now - @movie_time).round %>');
+        post('play', '');
+	<% end %>
+    }
+
+    function onPause() {
+        status.text('paused');
+    }
+
+    function onFinish() {
+        status.text('finished');
+    }
+
+    function onPlayProgress(data) {
+        status.text(data.seconds + 's played');
+    }
+
+      function movie_sign() {
+        document.title = "<%= "▶ ︎" +@page_title %>";
+        elem = document.getElementById("movie_play_status");
+        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
+        post('play', '');
+      }
+
+});	
+</script>
+<% end %>
 
     <script type="text/javascript">
 
@@ -92,11 +229,3 @@
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-    <%#= render :partial => 'shared/footer' %>
-
-
-<script>
-<% if params[:play_start] %>
-$( "#play_link" ).click();
-<% end %>
-</script>

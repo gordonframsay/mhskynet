@@ -9,14 +9,15 @@ class ApplicationController < ActionController::Base
 
  private
 
-  # TODO: This could come from a DB table
   def movie_prep
    m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
    if m
+    # TODO: What about live events?
     @movie_title = m.title
-    @youtube_video_id = m.identifier # TODO: Support more formats than just YouTube
+    @movie_identifier = m.identifier
     @movie_length = m.duration
     @movie_time = m.start_time
+    @movie_service = m.service
    end
   end
 
