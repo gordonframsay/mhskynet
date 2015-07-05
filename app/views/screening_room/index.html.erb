@@ -33,7 +33,6 @@
 <% end %>
 <% if (@movie_service == "dailymotion") %>
         <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
-	<iframe src="//www.dailymotion.com/embed/video/<%= @movie_identifier %>?api=postMessage" width="780" height="700" frameborder="0" allowfullscreen></iframe>
 	</div>
 <% end %>
 	</div>
@@ -49,108 +48,88 @@
      $("#resize_link").attr("href", "/screening_room?width="+$( window ).width())
 -->
 
+<div id="status" <%= 'style="display:none"' if (Rails.env.to_s == "development") %>>(status)</div>
+<div id="console" <%= 'style="display:none"' if (Rails.env.to_s == "development") %>>(console)</div>
+
 <% if (@movie_service == "dailymotion") %>
-<div id="status">(status)</div>
-
+<script src="http://api.dmcdn.net/all.js"></script>
 <script>
-$(function() {
-    var player = $('iframe');
-    var playerOrigin = '*';
-    var status = $('#status');
-
-    // Listen for messages from the player
-    if (window.addEventListener) {
-        window.addEventListener('message', onMessageReceived, false);
-    }
-    else {
-        window.attachEvent('onmessage', onMessageReceived, false);
-    }
-
-    // Handle messages received from the player
-    function onMessageReceived(event) {
-        // Handle messages from the dailymotion player only
-        if (!(/^https?:\/\/www.dailymotion.com/).test(event.origin)) {
-            return false;
-        }
-        
-        if (playerOrigin === '*') {
-            playerOrigin = event.origin;
-        }
-        
-        var data = JSON.parse(event.data);
-        
-        switch (data.event) {
-            case 'apiready':
-                onReady();
-                break;
-               
-            case 'timeupdate':
-                onPlayProgress(data.data);
-                break;
-                
-            case 'pause':
-                onPause();
-                break;
-               
-            case 'ended':
-                onFinish();
-                break;
-        }
-    }
-
-    // Call the API when a button is pressed
-    $('button').on('click', function() {
-        post($(this).text().toLowerCase());
+    DM.init({
+        apiKey: '72b58abe9bae676e0e96',
+        status: true, // check login status
+        cookie: true // enable cookies to allow the server to access the session
     });
+    var params = {html: "0"},
+     video = 'xwr14q',
+     player = DM.player($('#player').get(0), {video: video, width: '100%', height: '100%', params: params});
 
-    // Helper function for sending a message to the player
-    function post(action, value) {
-        var data = {
-          method: action
-        };
-        
-        if (value) {
-            data.value = value;
-        }
-        
-        var message = JSON.stringify(data);
-        player[0].contentWindow.postMessage(data, playerOrigin);
+$(player).bind( 'apiready play playing canplay canplaythrough loadedmetadata timeupdate progress seeking seeked volumechange durationchange pause ended error fullscreenchange qualitiesavailable qualitychange subtitlesavailable subtitlechange ad_start ad_timeupdate ad_play ad_pause ad_end', function(e)
+{
+    var data = {}, player = e.target;
+    switch (e.type)
+    {
+        case 'timeupdate':
+        case 'ad_timeupdate':
+        case 'seeking':
+        case 'seeked':
+            data['time'] = player.currentTime;
+            $('#progress').val(timeFormated(player.currentTime));
+            break;
+        case 'progress':
+            data['buffer'] = player.bufferedTime;
+            break;
+        case 'durationchange':
+            data['duration'] = player.duration;
+            $('#duration').val(timeFormated(player.duration));
+            break;
+        case 'fullscreenchange':
+            data['fullscreen'] = player.fullscreen;
+            break;
+        case 'volumechange':
+            data['volume'] = player.volume;
+            data['muted'] = player.muted;
+            break;
+        case 'qualitiesavailable':
+            data['qualities'] = player.qualities;
+            break;
+        case 'qualitychange':
+            data['quality'] = player.quality;
+            break;
+        case 'subtitlesavailable':
+            data['subtitles'] = player.subtitles;
+            break;
+        case 'subtitlechange':
+            data['subtitle'] = player.subtitle;
+            break;
+        case 'error':
+            data = player.error;
+            break;
     }
-
-    function onReady() {
-        status.text('ready');
-        
-        post('addEventListener', 'pause');
-        post('addEventListener', 'finish');
-        post('addEventListener', 'playProgress');
+    if (e.type == "apiready") {
 	<% if (@movie_time > Time.now) %>
-        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+        setTimeout(function(){ player.api("play", "1"); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
-        post('seek', '<%= (Time.now - @movie_time).round %>');
-        post('play', '');
+        player.api("play", "1");
 	<% end %>
     }
-
-    function onPause() {
-        status.text('paused');
+    if (e.type == "playing") {
+     player.api("seek", "<%= (Time.now - @movie_time).round %>");
     }
+    if ($.inArray(e.type, ['play', 'playing', 'pause', 'ad_play', 'ad_pause']) !== -1) $('#status').html(e.type);
+    var line = $('<li class=in>-&gt; ' + e.type + ' ' + JSON.stringify(data) + '</li>').prependTo('#console');
+    if ($.inArray(e.type, ['timeupdate', 'progress', 'ad_timeupdate']) !== -1) line.addClass('minor');
+    if (e.type == 'error') line.addClass('fatal');
+});
 
-    function onFinish() {
-        status.text('finished');
-    }
-
-    function onPlayProgress(data) {
-        status.text(data.seconds + 's played');
-    }
-
-      function movie_sign() {
-        document.title = "<%= "▶ ︎" +@page_title %>";
-        elem = document.getElementById("movie_play_status");
-        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
-        post('play', '');
-      }
-
-});	
+function timeFormated(seconds)
+{
+    if (isNaN(seconds) || !isFinite(seconds)) return '--:--';
+    seconds = Math.round(seconds);
+    var hour = (hour = Math.floor(seconds / 3600)) < 10 ? '0' + hour : hour,
+        min = (min = Math.floor(seconds / 60) % 60) < 10 ? '0' + min : min,
+        sec = (sec = seconds % 60) < 10 ? '0' + sec : sec;
+    return seconds < 3600 ? min + ':' + sec : hour + 'h' + min;
+}
 </script>
 <% end %>
 
@@ -218,8 +197,6 @@ $(function() {
 <% end %>
 
 <% if (@movie_service == "vimeo") %>
-<div id="status" style="display:none"></div>
-
 <script>
 $(function() {
     var player = $('iframe');
