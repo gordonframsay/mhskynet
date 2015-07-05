@@ -48,8 +48,8 @@
      $("#resize_link").attr("href", "/screening_room?width="+$( window ).width())
 -->
 
-<div id="status" <%= 'style="display:none"' unless (Rails.env.to_s == "development") %>>(status)</div>
-<div id="console" <%= 'style="display:none"' unless (Rails.env.to_s == "development") %>>(console)</div>
+<div id="status" >(status)</div>
+<div id="console" >(console)</div>
 
 <% if (@movie_service == "dailymotion") %>
 <script src="http://api.dmcdn.net/all.js"></script>
@@ -113,7 +113,7 @@ $(player).bind( 'apiready play playing canplay canplaythrough loadedmetadata tim
         player.api("seek", "<%= (Time.now - @movie_time).round %>");
 	<% end %>
     }
-    if (e.type == "ad_end") {
+    if (e.type == "playing") {
      player.api("seek", "<%= (Time.now - @movie_time).round %>");
     }
     if ($.inArray(e.type, ['play', 'playing', 'pause', 'ad_play', 'ad_pause']) !== -1) $('#status').html(e.type);
