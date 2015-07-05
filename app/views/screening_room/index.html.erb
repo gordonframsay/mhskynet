@@ -31,6 +31,11 @@
 	<iframe src="//player.vimeo.com/video/<%= @movie_identifier %>?api=1&player_id=vimeoplayer" width="780" height="700" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 	</div>
 <% end %>
+<% if (@movie_service == "dailymotion") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+	<iframe src="//www.dailymotion.com/embed/video/<%= @movie_identifier %>?api=postMessage" width="780" height="700" frameborder="0" allowfullscreen></iframe>
+	</div>
+<% end %>
 	</div>
 	</td>
 	<td align="center">
@@ -43,6 +48,111 @@
 <!--
      $("#resize_link").attr("href", "/screening_room?width="+$( window ).width())
 -->
+
+<% if (@movie_service == "dailymotion") %>
+<div id="status">(status)</div>
+
+<script>
+$(function() {
+    var player = $('iframe');
+    var playerOrigin = '*';
+    var status = $('#status');
+
+    // Listen for messages from the player
+    if (window.addEventListener) {
+        window.addEventListener('message', onMessageReceived, false);
+    }
+    else {
+        window.attachEvent('onmessage', onMessageReceived, false);
+    }
+
+    // Handle messages received from the player
+    function onMessageReceived(event) {
+        // Handle messages from the dailymotion player only
+        if (!(/^https?:\/\/www.dailymotion.com/).test(event.origin)) {
+            return false;
+        }
+        
+        if (playerOrigin === '*') {
+            playerOrigin = event.origin;
+        }
+        
+        var data = JSON.parse(event.data);
+        
+        switch (data.event) {
+            case 'apiready':
+                onReady();
+                break;
+               
+            case 'timeupdate':
+                onPlayProgress(data.data);
+                break;
+                
+            case 'pause':
+                onPause();
+                break;
+               
+            case 'ended':
+                onFinish();
+                break;
+        }
+    }
+
+    // Call the API when a button is pressed
+    $('button').on('click', function() {
+        post($(this).text().toLowerCase());
+    });
+
+    // Helper function for sending a message to the player
+    function post(action, value) {
+        var data = {
+          method: action
+        };
+        
+        if (value) {
+            data.value = value;
+        }
+        
+        var message = JSON.stringify(data);
+        player[0].contentWindow.postMessage(data, playerOrigin);
+    }
+
+    function onReady() {
+        status.text('ready');
+        
+        post('addEventListener', 'pause');
+        post('addEventListener', 'finish');
+        post('addEventListener', 'playProgress');
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
+        post('seek', '<%= (Time.now - @movie_time).round %>');
+        post('play', '');
+	<% end %>
+    }
+
+    function onPause() {
+        status.text('paused');
+    }
+
+    function onFinish() {
+        status.text('finished');
+    }
+
+    function onPlayProgress(data) {
+        status.text(data.seconds + 's played');
+    }
+
+      function movie_sign() {
+        document.title = "<%= "▶ ︎" +@page_title %>";
+        elem = document.getElementById("movie_play_status");
+        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
+        post('play', '');
+      }
+
+});	
+</script>
+<% end %>
 
 <% if (@movie_service == "html5") %>
 <script>
