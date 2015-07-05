@@ -48,8 +48,8 @@
      $("#resize_link").attr("href", "/screening_room?width="+$( window ).width())
 -->
 
-<div id="status" >(status)</div>
-<div id="console" >(console)</div>
+<div id="status" style="display:none">(status)</div>
+<div id="console" style="display:none">(console)</div>
 
 <% if (@movie_service == "dailymotion") %>
 <script src="http://api.dmcdn.net/all.js"></script>
@@ -106,21 +106,13 @@ $(player).bind( 'apiready play playing canplay canplaythrough loadedmetadata tim
             data = player.error;
             break;
     }
-    if (e.type == "apiready") {
+    if ((e.type == "apiready") || (e.type == "ad_end")) {
 	<% if (@movie_time > Time.now) %>
         setTimeout(function(){ player.api("play", "1"); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
         player.api("play", "1");
-        player.api("seek", "<%= (Time.now - @movie_time).round %>");
+        setTimeout(function(){ player.api("seek", "<%= (Time.now - @movie_time).round %>"); }, 2000);
 	<% end %>
-    }
-    if (e.type == "playing") {
-     if (seeked != true) {
-      player.api("seek", "<%= (Time.now - @movie_time).round %>");
-      seeked = true;
-     } else {
-      seeked = false;
-     }
     }
     if ($.inArray(e.type, ['play', 'playing', 'pause', 'ad_play', 'ad_pause']) !== -1) $('#status').html(e.type);
     var line = $('<li class=in>-&gt; ' + e.type + ' ' + JSON.stringify(data) + '</li>').prependTo('#console');
