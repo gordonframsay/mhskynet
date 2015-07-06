@@ -22,7 +22,7 @@
 <% end %>
 <% if (@movie_service == "html5") %>
         <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
-	 <video src="/movies/<%= @movie_identifier %>" width="780" height="700" controls>
+	 <video src="<%= @movie_identifier %>" width="780" height="700" controls>
 	  Your browser does not support the <code>video</code> element.
 	 </video>
 <% end %>
