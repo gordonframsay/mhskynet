@@ -6,4 +6,7 @@ class ScreeningRoomController < ApplicationController
   @meta_refresh_times = []
  end
 
+ def history
+ end
+
 end

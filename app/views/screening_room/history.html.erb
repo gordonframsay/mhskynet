@@ -1,0 +1,19 @@
+    <div style="padding: 0px 30px">
+        <h2>MH Skynet - Screening Room History</h2>
+    </div>
+
+    <style>
+    td { padding: 3px;}
+    </style>
+
+    <div style="padding: 0px 30px">
+    <table>
+    <% QueuedMovie.order("start_time desc").each do |m| %>
+    <tr>
+     <td><%= m.service.titleize if m.service %></td>
+     <td><%= link_to(m.title, m.url) %></td>
+     <td><%= m.start_time.in_time_zone("America/Los_Angeles").to_s %> PST</td>
+    </tr>
+    <% end %>
+    </table>
+    </div>
