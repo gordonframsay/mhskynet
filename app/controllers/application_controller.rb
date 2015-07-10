@@ -26,11 +26,11 @@ class ApplicationController < ActionController::Base
     @live_event = m.live_event?
    else
     @live_event = true
-    @movie_title = "Buzzoutroom.com MP3 stream (live event)"
-    @movie_identifier = "http://128k.buzzoutroom.com:8034/;"
+    @movie_title = "Brooks Falls - Katmai National Park, Alaska"
+    @movie_identifier = "M2mST8OFUNo"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
-    @movie_service = "html5"
+    @movie_service = "youtube"
    end
   end
 
