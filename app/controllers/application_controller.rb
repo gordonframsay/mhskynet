@@ -3,11 +3,16 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  before_filter :domain_check
   before_filter :before_filter_check_ip
   before_filter :app_defaults
   before_filter :movie_prep
 
  private
+
+  def domain_check
+   redirect_to 'http://www.mhsky.net/' and return false unless ((Rails.env.to_s != 'production') || (request.host == 'www.mhsky.net'))
+  end
 
   def movie_prep
    m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
