@@ -18,6 +18,14 @@ class ApplicationController < ActionController::Base
     @movie_length = m.duration
     @movie_time = m.start_time
     @movie_service = m.service
+    @live_event = m.live_event?
+   else
+    @live_event = true
+    @movie_title = "Buzzoutroom.com MP3 stream (live event)"
+    @movie_identifier = "http://128k.buzzoutroom.com:8034/"
+    @movie_length = 1000000
+    @movie_time = Time.gm(2015,7,10,20)
+    @movie_service = "html5"
    end
   end
 

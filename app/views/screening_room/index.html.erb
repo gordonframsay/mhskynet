@@ -148,7 +148,9 @@ function timeFormated(seconds)
         setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
         v.play();
+	<% unless @live_event %>
         v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>;});
+        <% end %>
 	<% end %>
       });
 </script>
