@@ -48,10 +48,10 @@ class ApplicationController < ActionController::Base
 #    render 'security/password_prompt'
     return false
    end
-   if (request.post? && (params[:forum_password] == FORUM_PASSWORD))
-    CachedIp.delete_all(:address => request.remote_ip)
-    return true
-   end
+#   if (request.post? && (params[:forum_password] == FORUM_PASSWORD))
+#    CachedIp.delete_all(:address => request.remote_ip)
+#    return true
+#   end
    if (tmp = CachedIp.where(["address = ?", request.remote_ip]).first)
     if ((Time.now - tmp.created_at) > 3600)  # NOTE: IP_CACHE_TIMEOUT is in seconds
      tmp.destroy
