@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     @live_event = m.live_event?
    else
     @live_event = true
-    @movie_title = "Brooks Falls - Katmai National Park, Alaska"
-    @movie_identifier = "M2mST8OFUNo"
+    @movie_title = "GTA RollerGirls - The Bubble Roller Derby"
+    @movie_identifier = "b8nOHtVTeMI"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
