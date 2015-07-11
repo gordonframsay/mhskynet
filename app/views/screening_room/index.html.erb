@@ -189,7 +189,9 @@ function timeFormated(seconds)
 	<% if (@movie_time > Time.now) %>
         setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
+	<% unless @live_event %>
         event.target.seekTo(<%= (Time.now - @movie_time).round %>);
+	<% end %>
         event.target.playVideo();
 	<% end %>
       }
@@ -317,4 +319,4 @@ $(function() {
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-<center><div><a href="/screening_room/history">Screening Room History</a> | <a href="/">Main Forum</a></div></center>
+<center><div><a href="/screening_room/schedule_movie">Schedule a Movie</a> | <a href="/screening_room/history">Screening Room History</a> | <a href="/">Main Forum</a></div></center>

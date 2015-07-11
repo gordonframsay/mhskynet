@@ -9,4 +9,18 @@ class ScreeningRoomController < ApplicationController
  def history
  end
 
+ def schedule_movie
+  @queued_movie = QueuedMovie.new
+  @queued_movie.start_time = Time.now
+  @queued_movie.service = "youtube"
+  if request.post?
+   @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
+   if @queued_movie.save
+    flash[:notice] = "Media Queued!"
+   else
+    flash[:notice] = @queued_movie.errors.full_messages.to_sentence
+   end
+  end
+ end
+
 end
