@@ -1,9 +1,7 @@
 source 'https://rubygems.org'
 
 # Uncomment this when pushing changes to this file to Heroku:
-ruby "2.1.0"
-
-# ruby "2.0.0"
+ruby "2.1.6"
 
 gem "pg"
 gem 'rails_12factor', group: :production
