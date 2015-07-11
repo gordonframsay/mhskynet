@@ -12,7 +12,7 @@ class QueuedMovie < ActiveRecord::Base
  validates_numericality_of :duration, :only_integer => true, :greater_than_or_equal_to => 0
  validates_numericality_of :live_event, :only_integer => true
 
- def service_options
+ def self.service_options
   return ["html5","youtube","vimeo","dailymotion"]
  end
 
