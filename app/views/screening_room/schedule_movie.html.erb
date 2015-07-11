@@ -1,0 +1,45 @@
+<%= form_for @queued_movie, :url => "/screening_room/schedule_movie" do |f| %>
+
+<div id="disqus_thread" style="padding: 0px 30px">
+<h3>Schedule A Movie</h3>
+
+<table>
+<tr>
+ <th>Identifier</th>
+ <td><%= f.text_field :identifier %> Identifier should be the movie ID, e.g. "M2mST8OFUNo" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
+</tr>
+<tr>
+ <th>Service</th>
+ <td><%= f.select :service, QueuedMovie.service_options %></td>
+</tr>
+<tr>
+ <th>Title</th>
+ <td><%= f.text_field :title %></td>
+</tr>
+<tr>
+ <th>Start Time (in GMT)</th>
+ <td><%= datetime_select("queued_movie", "start_time", include_seconds: false) %></td>
+</tr>
+<tr>
+ <th>Duration (in seconds)</th>
+ <td><%= f.text_field :duration %></td>
+</tr>
+<tr>
+ <th>Live Event?</th>
+ <td><%= f.check_box :live_event %> (This skips the seeking step when going to play)</td>
+</tr>
+</table>
+<input type="submit" value="Schedule New Movie" />
+<% end %>
+
+<%#
+ identifier        | character varying(255)      | 
+ service           | character varying(255)      | 
+ title             | character varying(255)      | 
+ preview_image_url | character varying(512)      | 
+ start_time        | timestamp without time zone | 
+ duration          | integer                     | 
+ live_event        | smallint                    | default 0
+%>
+
+</div>
