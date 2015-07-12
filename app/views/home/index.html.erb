@@ -5,24 +5,25 @@
 	<h2>MH Skynet</h2>
     </div>
 
-<% if (@movie_time > Time.now) %>
-   <div style="padding: 0px 30px">
-   <a href="/screening_room">
-    Next Movie: <i><%= @movie_title %></i> - 
-    Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
-   </a>
-   </div>
-<% else %>
-<% if ((@movie_time + @movie_length) > Time.now) %>
-   <div style="padding: 0px 30px">
-   <a href="/screening_room">
-    Now Playing: <i><%= @movie_title %></i> - 
-    Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
-   </a>
-   </div>
-<% end %>
-<% end %>
+   <div style="padding: 0px 30px" id="movie_status"><i>Loading...</i></div>
 
+   <script>
+     function update_movie_status(animate_on_update) {
+      $.get( "/screening_room/currently_playing", function( data ) {
+       if (animate_on_update && (data != $( "#movie_status" ).innerHTML)) {
+        $( "#movie_status" ).html( data );
+        $( "#movie_status" ).effect("highlight");
+       } else {
+        $( "#movie_status" ).html( data );
+       }
+      });
+     }
+
+     $( document ).ready(function() {
+      update_movie_status(false);
+      setInterval(function(){ update_movie_status(true); }, 60000);
+     });
+   </script>
 
     <div id="disqus_thread" style="padding: 0px 30px"></div>
     <script type="text/javascript">

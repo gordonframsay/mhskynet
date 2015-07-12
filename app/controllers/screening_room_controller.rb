@@ -23,4 +23,15 @@ class ScreeningRoomController < ApplicationController
   end
  end
 
+ # Simple status for AJAX
+ def currently_playing
+  if (@movie_time > Time.now)
+   render :text => "<a href=\"/screening_room\" >Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p")+" PST</i></a>"
+  else
+   if ((@movie_time + @movie_length) > Time.now)
+    render :text => "<a href=\"/screening_room\" >Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p")+" PST</i></a>"
+   end
+  end
+ end
+
 end
