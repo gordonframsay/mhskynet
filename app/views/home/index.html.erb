@@ -8,14 +8,17 @@
    <div style="padding: 0px 30px" id="movie_status"><i>Loading...</i></div>
 
    <script>
+     var last_movie_status = "";
+
      function update_movie_status(animate_on_update) {
       $.get( "/screening_room/currently_playing", function( data ) {
-       if (animate_on_update && (data != $( "#movie_status" ).innerHTML)) {
+       if (animate_on_update && (data != last_movie_status)) {
         $( "#movie_status" ).html( data );
         $( "#movie_status" ).effect("highlight");
        } else {
         $( "#movie_status" ).html( data );
        }
+       last_movie_status = data;
       });
      }
 
