@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     @live_event = m.live_event?
    else
     @live_event = true
-    @movie_title = "77th Valleyfield Regatta Sunday - Live Stream"
-    @movie_identifier = "Y59mPqj7FuE"
+    @movie_title = "Marvel LIVE! at San Diego Comic-Con 2015- Day 4"
+    @movie_identifier = "gGoE37a9dPw"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
