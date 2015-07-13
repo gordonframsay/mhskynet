@@ -18,6 +18,7 @@ class ScreeningRoomController < ApplicationController
   @seconds = (params[:seconds])?(params[:seconds].to_i):0
   if request.post?
    @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
+   @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
