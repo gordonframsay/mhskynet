@@ -21,8 +21,8 @@
  <td><%= datetime_select("queued_movie", "start_time", include_seconds: false) %></td>
 </tr>
 <tr>
- <th>Duration (in seconds)</th>
- <td><%= f.text_field :duration %></td>
+ <th>Duration</th>
+ <td><input name="hours" value="<%= @hours %>" /> hours, <input name="minutes" value="<%= @minutes %>" /> minutes, <input name="seconds" value="<%= @seconds %>" /> seconds</td>
 </tr>
 <tr>
  <th>Live Event?</th>

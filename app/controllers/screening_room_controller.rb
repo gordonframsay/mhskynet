@@ -13,8 +13,12 @@ class ScreeningRoomController < ApplicationController
   @queued_movie = QueuedMovie.new
   @queued_movie.start_time = Time.now
   @queued_movie.service = "youtube"
+  @hours = (params[:hours])?(params[:hours].to_i):0
+  @minutes = (params[:minutes])?(params[:minutes].to_i):0
+  @seconds = (params[:seconds])?(params[:seconds].to_i):0
   if request.post?
    @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
+   @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
    else
