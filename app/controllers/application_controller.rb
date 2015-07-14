@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     @live_event = m.live_event?
    else
     @live_event = true
-    @movie_title = "Ouija Board Session With Spirit Box Live"
-    @movie_identifier = "6ACAEDe3WU4"
+    @movie_title = "NASA TV Live HD"
+    @movie_identifier = "wyMOYHiatos"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
