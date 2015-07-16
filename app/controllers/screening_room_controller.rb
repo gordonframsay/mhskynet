@@ -6,6 +6,11 @@ class ScreeningRoomController < ApplicationController
   @meta_refresh_times = []
  end
 
+ def currently_playing_moviesign
+  movie_sign = ((@movie_time - Time.now - 60) * 1000).round
+  render :text => (movie_sign > 0)?(movie_sign.to_s):"0"
+ end
+
  def history
  end
 

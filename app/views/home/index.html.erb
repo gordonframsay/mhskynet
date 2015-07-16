@@ -9,6 +9,8 @@
 
    <script>
      var last_movie_status = "";
+     var movie_sign_time = 100000000;
+     var movie_sign_time_timeout;
 
      function update_movie_status(animate_on_update) {
       $.get( "/screening_room/currently_playing", function( data ) {
@@ -22,7 +24,23 @@
       });
      }
 
+    function movie_sign() {
+     $( "body" ).effect("highlight", {color: "#808080" }, 2000);
+    }
+
+    function update_movie_sign(clear_old_timeout) {
+     $.get( "/screening_room/currently_playing_moviesign", function( data ) {
+      if (clear_old_timeout) {
+       window.clearTimeout(movie_sign_time_timeout);
+      }
+      movie_sign_time_timeout = setTimeout(function(){movie_sign()},data)
+      movie_sign_time = data;
+     });
+    }
+
      $( document ).ready(function() {
+      update_movie_sign(false);
+      setInterval(function(){ update_movie_sign(true); }, 60000);
       update_movie_status(false);
       setInterval(function(){ update_movie_status(true); }, 60000);
      });
