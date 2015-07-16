@@ -7,7 +7,7 @@ class ScreeningRoomController < ApplicationController
  end
 
  def currently_playing_moviesign
-  movie_sign = ((@movie_time - Time.now - 60) * 1000).round
+  movie_sign = ((@movie_time - Time.now - 300) * 1000).round
   render :text => (movie_sign > 0)?(movie_sign.to_s):"0"
  end
 
