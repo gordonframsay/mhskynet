@@ -33,8 +33,10 @@
       if (clear_old_timeout) {
        window.clearTimeout(movie_sign_time_timeout);
       }
-      movie_sign_time_timeout = setTimeout(function(){movie_sign()},data)
-      movie_sign_time = data;
+      if (data > 0) {
+       movie_sign_time_timeout = setTimeout(function(){movie_sign()},data)
+       movie_sign_time = data;
+      }
      });
     }
 
