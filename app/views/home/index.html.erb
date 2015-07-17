@@ -24,7 +24,7 @@
       });
      }
 
-    function movie_sign() {
+    function home_movie_sign() {
      $( "body" ).effect("highlight", {color: "#808080" }, 2000);
     }
 
@@ -34,7 +34,7 @@
        window.clearTimeout(movie_sign_time_timeout);
       }
       if (data > 0) {
-       movie_sign_time_timeout = setTimeout(function(){movie_sign()},data)
+       movie_sign_time_timeout = setTimeout(function(){home_movie_sign()},data)
        movie_sign_time = data;
       }
      });
