@@ -12,9 +12,11 @@ class ScreeningRoomController < ApplicationController
  end
 
  def history
+  @page_title =  @page_title + " - Scheduled Movies"
  end
 
  def schedule_movie
+  @page_title =  @page_title + " - Schedule Movie"
   @queued_movie = QueuedMovie.new
   @queued_movie.start_time = Time.now
   @queued_movie.service = "youtube"
