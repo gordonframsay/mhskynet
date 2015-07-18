@@ -17,7 +17,7 @@
  <td><%= f.text_field :title %></td>
 </tr>
 <tr>
- <th>Start Time (in GMT)</th>
+ <th>Start Time</th>
  <td>
 	<%= select_tag(:start_year, options_for_select((Date.today.year..(Date.today.year + 2)), @start_year)) %> / 
 	<%= select_tag(:start_month, options_for_select((1..12).map {|x| [Date::MONTHNAMES[x], x] }, @start_month)) %> / 
