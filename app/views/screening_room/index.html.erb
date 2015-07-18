@@ -1,5 +1,8 @@
+
 <center>
-    <div id="movie_play_status">
+    <div style="float:left; width: 300px; padding-left: 10px;"><a href="https://www.disqus.com/home/discussion/mhskynet/mh_skynet_164"><span class="glyphicon glyphicon-phone-alt"></span> Mobile? Tap here for forum.</a> <a href="<%= @movie.url if @movie %>">Here for video.</a></div>
+    <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check">Time check.</div>
+    <div id="movie_play_status" style="width:700px">
     Current Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
     Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i> (movie will start playing automatically)
@@ -149,8 +152,9 @@ function timeFormated(seconds)
 	<% else %>
         v.play();
 	<% unless @live_event %>
-        v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>;});
+        v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>; });
         <% end %>
+        v.addEventListener("ended",function() { setTimeout(function(){ $('#next_movie_modal').modal(); }, 5000); });
 	<% end %>
       });
 </script>
@@ -160,6 +164,7 @@ function timeFormated(seconds)
     <script>
 
       var tag = document.createElement('script');
+      var time_check = 0;
 
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -173,16 +178,32 @@ function timeFormated(seconds)
           width: '750',
           videoId: '<%= @movie_identifier %>',
           events: {
-            'onReady': onPlayerReady
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
           }
         });
+      }
+
+      function update_time_check() {
+       time_check = time_check + 1;
+       seconds = Math.round(time_check % 60);
+       minutes = Math.round((time_check / 60) % (60));
+       hours = Math.round((time_check / (60 * 60)));
+       $("#time_check").text(hours+":"+minutes+":"+seconds);
       }
 
       function movie_sign() {
         document.title = "<%= "▶ ︎" +@page_title %>";
         elem = document.getElementById("movie_play_status");
         elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
-        player.playVideo()
+        setInterval(function () { update_time_check()}, 1000);
+        player.playVideo();
+      }
+
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+          setTimeout(function(){ $('#next_movie_modal').modal(); }, 5000);
+        }
       }
 
       function onPlayerReady(event) {
@@ -191,6 +212,8 @@ function timeFormated(seconds)
 	<% else %>
 	<% unless @live_event %>
         event.target.seekTo(<%= (Time.now - @movie_time).round %>);
+        time_check = <%= (Time.now - @movie_time).round %>;
+        update_time_check();
 	<% end %>
         event.target.playVideo();
 	<% end %>
@@ -320,3 +343,29 @@ $(function() {
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 <center><div><a href="/screening_room/schedule_movie">Schedule a Movie</a> | <a href="/screening_room/history">Screening Room History</a> | <a href="/">Main Forum</a></div></center>
+
+<div class="modal fade" id="next_movie_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">The Movie Has Ended</h4>
+      </div>
+      <div class="modal-body">
+        <p>This viewing has ended.  Would you like to see the next scheduled video?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="next_movie_button">Reload Page for Next Movie</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+ $( document ).ready(function() {
+  $('#next_movie_button').on('click', function (e) {
+   location.reload();
+  })
+ });
+</script>
