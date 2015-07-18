@@ -1,6 +1,6 @@
 
 <center>
-    <div style="float:left; width: 300px; padding-left: 10px;"><a href="https://www.disqus.com/home/discussion/mhskynet/mh_skynet_164"><span class="glyphicon glyphicon-phone-alt"></span> Mobile? Tap here for forum.</a> <a href="<%= @movie.url if @movie %>">Here for video.</a></div>
+    <div style="float:left; width: 300px; padding-left: 10px;"><a href="https://www.disqus.com/home/discussion/mhskynet/mh_skynet_164"><span class="glyphicon glyphicon-phone-alt"></span> Mobile? Tap here for forum.</a> <a href="<%= @movie.url(true) if @movie %>">Here for video.</a></div>
     <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check">Time check.</div>
     <div id="movie_play_status" style="width:700px">
     Current Movie: <i><%= @movie_title %></i> - 

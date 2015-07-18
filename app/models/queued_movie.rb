@@ -16,8 +16,12 @@ class QueuedMovie < ActiveRecord::Base
   return ["html5","youtube","vimeo","dailymotion"]
  end
 
- def url
-  return "//www.youtube.com/watch?v="+identifier if (service == "youtube")
+ def url(with_timestamp = false)
+  if with_timestamp
+   return "//www.youtube.com/watch?v="+identifier+"?t="+(Time.now - start_time).round+"s" if (service == "youtube")
+  else
+   return "//www.youtube.com/watch?v="+identifier if (service == "youtube")
+  end
   return "//player.vimeo.com/video/"+identifier if (service == "vimeo")
   return "//blrrm.tv/"+identifier if (service == "dailymotion")
   return identifier
