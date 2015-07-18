@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
    m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
    if m
     # TODO: What about live events?
+    @movie = m
     @movie_title = m.title
     @movie_identifier = m.identifier
     @movie_length = m.duration
@@ -26,8 +27,8 @@ class ApplicationController < ActionController::Base
     @live_event = m.live_event?
    else
     @live_event = true
-    @movie_title = "NASA TV Live HD"
-    @movie_identifier = "wyMOYHiatos"
+    @movie_title = "Testing"
+    @movie_identifier = "GcQqI9wmSyI"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
