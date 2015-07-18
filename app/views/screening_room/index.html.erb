@@ -1,7 +1,7 @@
 
 <center>
     <div style="float:left; width: 300px; padding-left: 10px;"><a href="https://www.disqus.com/home/discussion/mhskynet/mh_skynet_164"><span class="glyphicon glyphicon-phone-alt"></span> Mobile? Tap here for forum.</a> <a href="<%= @movie.url(true) if @movie %>">Here for video.</a></div>
-    <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check">Time check.</div>
+    <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check"></div>
     <div id="movie_play_status" style="width:700px">
     Current Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
@@ -184,12 +184,21 @@ function timeFormated(seconds)
         });
       }
 
+      function zero_pad(text) {
+       text = text + '';
+       if (text.length == 1) {
+        return "0"+text;
+       } else {
+        return text;
+       }
+      }
+
       function update_time_check() {
        time_check = time_check + 1;
-       seconds = Math.round(time_check % 60);
-       minutes = Math.round((time_check / 60) % (60));
-       hours = Math.round((time_check / (60 * 60)));
-       $("#time_check").text(hours+":"+minutes+":"+seconds);
+       seconds = zero_pad(Math.round(time_check % 60));
+       minutes = zero_pad(Math.round(((time_check - seconds) / 60) % (60)));
+       hours = Math.round(((time_check - seconds - (minutes * 60)) / (60 * 60)));
+       $("#time_check").text("Time Check: "+hours+":"+minutes+":"+seconds);
       }
 
       function movie_sign() {
@@ -213,6 +222,7 @@ function timeFormated(seconds)
 	<% unless @live_event %>
         event.target.seekTo(<%= (Time.now - @movie_time).round %>);
         time_check = <%= (Time.now - @movie_time).round %>;
+        setInterval(function () { update_time_check()}, 1000);
         update_time_check();
 	<% end %>
         event.target.playVideo();

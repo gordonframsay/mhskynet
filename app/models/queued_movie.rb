@@ -18,7 +18,7 @@ class QueuedMovie < ActiveRecord::Base
 
  def url(with_timestamp = false)
   if with_timestamp
-   return "//www.youtube.com/watch?v="+identifier+"?t="+(Time.now - start_time).round+"s" if (service == "youtube")
+   return "//www.youtube.com/watch?v="+identifier+"?t="+((Time.now - start_time).round.to_s)+"s" if (service == "youtube")
   else
    return "//www.youtube.com/watch?v="+identifier if (service == "youtube")
   end
