@@ -69,7 +69,11 @@ class ApplicationController < ActionController::Base
     end
    end
    block_reason = nil
-   sorbs_listing = Resolver(request.remote_ip.split('.').reverse.join('.')+".dnsbl.sorbs.net").answer.first
+   begin
+    sorbs_listing = Resolver(request.remote_ip.split('.').reverse.join('.')+".dnsbl.sorbs.net").answer.first
+   rescue
+    sorbs_listing = nil
+   end
 #   sorbs_listing = Resolver("153.157.15.24.dnsbl.sorbs.net").answer.first
    # TODO: This could be moved to an initializer or something to get it out of the contoller
    sorbs_result_table = {
@@ -90,7 +94,11 @@ class ApplicationController < ActionController::Base
    if (sorbs_listing && sorbs_result_table[sorbs_listing.address.to_s])
     block_reason = "coming from "+sorbs_result_table[sorbs_listing.address.to_s]
    end
-   block_reason = "coming from a Tor Exit Node" unless (Resolver(request.remote_ip.split('.').reverse.join('.')+".torexit.dan.me.uk").answer.empty?)
+   begin
+    block_reason = "coming from a Tor Exit Node" unless (Resolver(request.remote_ip.split('.').reverse.join('.')+".torexit.dan.me.uk").answer.empty?)
+   rescue
+    block_reason = nil
+   end
    if block_reason
     CachedIp.delete_all(:address => request.remote_ip)
     flash[:notice] = "Warning: In the future you could be blocked for "+block_reason+"."

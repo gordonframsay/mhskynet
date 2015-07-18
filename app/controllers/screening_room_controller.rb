@@ -23,12 +23,28 @@ class ScreeningRoomController < ApplicationController
   @hours = (params[:hours])?(params[:hours].to_i):0
   @minutes = (params[:minutes])?(params[:minutes].to_i):0
   @seconds = (params[:seconds])?(params[:seconds].to_i):0
+  @start_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
+  the_time = Time.now.in_time_zone(@start_time_zone)
+  if params[:start_time_zone]
+   @start_time_zone = params[:start_time_zone]
+   session[:user_time_zone] = @start_time_zone
+   start_time = params[:start_year]+"/"+params[:start_month]+"/"+params[:start_day]+" "+params[:start_hour]+":"+params[:start_minute]+" "+params[:start_am_pm]+" "+params[:start_time_zone]
+   the_time = Time.parse(start_time)
+  end
+  @start_year = the_time.year
+  @start_month = the_time.month
+  @start_day = the_time.day
+  @start_hour = the_time.strftime("%l").to_i
+  @start_minute = the_time.min
+  @start_am_pm = the_time.strftime("%p")
   if request.post?
    @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
+   @queued_movie.start_time = the_time.gmtime
    @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
+    redirect_to :action => "schedule_movie"
    else
     flash[:notice] = @queued_movie.errors.full_messages.to_sentence
    end

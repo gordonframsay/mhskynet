@@ -18,7 +18,15 @@
 </tr>
 <tr>
  <th>Start Time (in GMT)</th>
- <td><%= datetime_select("queued_movie", "start_time", include_seconds: false) %></td>
+ <td>
+	<%= select_tag(:start_year, options_for_select((Date.today.year..(Date.today.year + 2)), @start_year)) %> / 
+	<%= select_tag(:start_month, options_for_select((1..12).map {|x| [Date::MONTHNAMES[x], x] }, @start_month)) %> / 
+	<%= select_tag(:start_day, options_for_select(1..31, @start_day)) %> &nbsp; &nbsp; &nbsp; 
+	<%= select_tag(:start_hour, options_for_select(1..12, @start_hour)) %> : 
+	<%= select_tag(:start_minute, options_for_select(0..59, @start_minute)) %>  
+	<%= select_tag(:start_am_pm, options_for_select(["AM","PM"], @start_am_pm)) %>  
+	<%= select_tag(:start_time_zone, options_for_select(["Pacific Time (US & Canada)","Mountain Time (US & Canada)","Central Time (US & Canada)","Eastern Time (US & Canada)","Atlantic Time (Canada)","Newfoundland"], @start_time_zone)) %>  
+ </td>
 </tr>
 <tr>
  <th>Duration</th>
@@ -29,7 +37,8 @@
  <td><%= f.check_box :live_event %> (This skips the seeking step when going to play)</td>
 </tr>
 </table>
-<input type="submit" value="Schedule New Movie" />
+<p>&nbsp;</p>
+<p><input type="submit" value="Schedule New Movie" /></p>
 <% end %>
 
 <%#

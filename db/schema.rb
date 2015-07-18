@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2015012101) do
+ActiveRecord::Schema.define(version: 20150718223934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,5 +56,28 @@ ActiveRecord::Schema.define(version: 2015012101) do
   end
 
   add_index "messages", ["author_id"], name: "messages_author_id_index", using: :btree
+
+  create_table "queued_movies", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "identifier"
+    t.string   "service"
+    t.string   "title"
+    t.string   "preview_image_url", limit: 512
+    t.datetime "start_time"
+    t.integer  "duration"
+    t.integer  "live_event",        limit: 2,   default: 0
+    t.cidr     "source_ip"
+  end
+
+  create_table "sessions", force: true do |t|
+    t.string   "session_id", null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
+  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
 end
