@@ -17,6 +17,7 @@
      <th>Start Time</th>
      <th>Length</th>
      <th>Status</th>
+     <th>Notes</th>
     </tr>
     <% QueuedMovie.order("start_time desc").each do |m| %>
     <tr>
@@ -36,6 +37,7 @@
  	<% end %>
        <% end %>
       </td>
+      <td><%= m.notes if m.service %></td>
     </tr>
     <% end %>
     </table>

@@ -34,21 +34,15 @@
 </tr>
 <tr>
  <th>Live Event?</th>
- <td><%= f.check_box :live_event %> (This skips the seeking step when going to play)</td>
+ <td><%= f.check_box :live_event %> (This is unusual, don't check unless certain. This skips the seeking step when going to play)</td>
+</tr>
+<tr>
+ <th>Who Posted this and why?</th>
+ <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %> (Note, other information such as your IP address is already recorded. These notes will be public.)</td>
 </tr>
 </table>
 <p>&nbsp;</p>
 <p><input type="submit" value="Schedule New Movie" /></p>
 <% end %>
-
-<%#
- identifier        | character varying(255)      | 
- service           | character varying(255)      | 
- title             | character varying(255)      | 
- preview_image_url | character varying(512)      | 
- start_time        | timestamp without time zone | 
- duration          | integer                     | 
- live_event        | smallint                    | default 0
-%>
 
 </div>
