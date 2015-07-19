@@ -12,6 +12,7 @@ class ScreeningRoomController < ApplicationController
  end
 
  def history
+  @movie_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
   @page_title =  @page_title + " - Scheduled Movies"
  end
 
