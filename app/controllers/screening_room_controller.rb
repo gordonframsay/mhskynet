@@ -28,8 +28,8 @@ class ScreeningRoomController < ApplicationController
   if params[:start_time_zone]
    @start_time_zone = params[:start_time_zone]
    session[:user_time_zone] = @start_time_zone
-   start_time = params[:start_year]+"/"+params[:start_month]+"/"+params[:start_day]+" "+params[:start_hour]+":"+params[:start_minute]+" "+params[:start_am_pm]+" "+ActiveSupport::TimeZone.new(@start_time_zone).formatted_offset
-   the_time = Time.parse(start_time).in_time_zone(@start_time_zone)
+   time_without_zone = params[:start_year]+"/"+params[:start_month]+"/"+params[:start_day]+" "+params[:start_hour]+":"+params[:start_minute]+" "+params[:start_am_pm]
+   the_time = ActiveSupport::TimeZone.new(@start_time_zone).parse(time_without_zone)
   end
   @start_year = the_time.year
   @start_month = the_time.month
