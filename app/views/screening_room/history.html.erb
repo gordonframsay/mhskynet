@@ -86,7 +86,7 @@
      <td><%= link_to(m.title, m.url) %></td>
      <td><%= (m.live_event?)?"Yes":"No" %></td>
      <td><%= m.start_time.in_time_zone(@movie_time_zone).strftime("%A, %d %b %Y %l:%M %p %Z") %></td>
-     <td><%= distance_of_time_in_words(Time.now, Time.now + m.duration, {:include_seconds => true}) %></td>
+     <td><%= m.formatted_duration %></td>
      <td>
 	<% if ((m.start_time + m.duration) < Time.now) %>
 	Finished
