@@ -8,9 +8,17 @@ class QueuedMovie < ActiveRecord::Base
  validates_presence_of :duration
  validates_presence_of :identifier
  validates_presence_of :live_event
+ validates_presence_of :notes
  validates_inclusion_of :service, :in => ["html5","youtube","vimeo","dailymotion"]
  validates_numericality_of :duration, :only_integer => true, :greater_than_or_equal_to => 0
  validates_numericality_of :live_event, :only_integer => true
+
+ def formatted_duration
+  hours = duration / (60 * 60)
+  minutes = (duration / 60) % 60
+  seconds = duration % 60
+  return (hours.to_s)+":"+(minutes.to_s)+":"+(seconds.to_s)
+ end
 
  def self.service_options
   return ["html5","youtube","vimeo","dailymotion"]
