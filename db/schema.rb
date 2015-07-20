@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.integer  "duration"
     t.integer  "live_event",        limit: 2,   default: 0
     t.cidr     "source_ip"
+    t.text     "notes"
   end
 
   create_table "sessions", force: true do |t|
