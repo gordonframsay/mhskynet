@@ -9,6 +9,64 @@
     </style>
 
     <div style="padding: 0px 30px">
+
+<% movies  = QueuedMovie.where(["(start_time + (duration * '1 second'::interval)) > ? AND (start_time + (duration * '1 second'::interval)) < ?", Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
+   movies += QueuedMovie.where(["start_time >= ? AND start_time < ?", Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
+   movies += QueuedMovie.where(["start_time <= ? AND (start_time + (duration * '1 second'::interval)) >= ?", Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
+   movies.uniq!
+   movies.sort! {|x,y| x.start_time <=> y.start_time }
+%>
+<%= movies.map {|x| x.title }.to_sentence %>
+
+<%
+ scale = 90
+%>
+<div style="width: 1032px">
+<div style="float:left; max-width:200px;">Now</div>
+<div style="float:right; max-width:300px; text-align: right">24 hours from now</div>
+</div>
+<br />
+<div style="width: 1032px">
+
+<% time_line = Time.now
+   (1..24).each do |h| %>
+<div style="width:43px;float:left;"><%= (time_line + (60 * 60 * h)).hour %>:<%= (time_line + (60 * 60 * h)).min %></div>
+<% end %>
+</div>
+<br />
+<div id="time_line" style="border: 1px solid black; height: 22px; width:1032px; background-color: #606000;">
+<% 
+ cue_point = Time.now.gmtime
+ status = "gap"
+ movies.each_with_index do |m,i|
+  if ((cue_point >= m.start_time.gmtime) && (cue_point < (m.start_time.gmtime + m.duration))) # Playing
+   status = "playing"
+   next_cue = (m.start_time.gmtime + m.duration)
+  end
+  if (cue_point < m.start_time)
+   status = "coming up"
+   next_cue = m.start_time.gmtime
+  end
+  if (cue_point < m.start_time)
+   status = "coming up"
+   next_cue = m.start_time.gmtime
+  end
+  
+  next_cue = Time.now.gmtime + (24 * 60 * 60) if (next_cue > (Time.now.gmtime + (24 * 60 * 60)))
+   %>
+<% if (status == "coming up") %>
+<div style="float: left; width:<%= ((next_cue - cue_point) / scale).round %>px;height: 20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap length: <%= formatted_duration(((next_cue - cue_point) / scale).round) %> Starting at <%= cue_point.to_s %>" ></div>
+<% end %>
+<div data-toggle="tooltip" data-placement="top" title="<%= m.title+" "+m.formatted_duration %>" style="float: left; width:<%= ((m.duration) / scale).round %>px; background-color: <%= (status == "playing")?"#00FF00":"#FF0000;" %>;height: 20px;" ><%#= cue_point.to_s %><%#= i %><%#= m.title %><%#= next_cue.to_s %></div>
+<%
+  cue_point = next_cue
+ end
+ %>
+<% if (cue_point < (Time.now.gmtime + (24 * 60 * 60))) %>
+<div style="width: <%= (((Time.now.gmtime + (24 * 60 * 60)) - cue_point) / scale).round %>px;"></div>
+<% end %>
+</div>
+
     <table>
     <tr>
      <th>Servie</th>
@@ -42,3 +100,9 @@
     <% end %>
     </table>
     </div>
+
+<script>
+$( document ).ready(function() {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
