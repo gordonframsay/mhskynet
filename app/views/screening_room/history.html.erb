@@ -20,7 +20,7 @@
 <p>Times in <%= @movie_time_zone %><p>
 
 <%
- scale = 80.8
+ scale = 78.54545454
 %>
 <div style="width: 1102px">
 <div style="float:left; max-width:200px;">Now</div>
@@ -43,7 +43,7 @@
 <% 
  cue_point = Time.now.gmtime
  status = "gap"
- previous_movie = movies.first
+ previous_movie = nil
  movies.each_with_index do |m,i|
   if ((cue_point >= m.start_time.gmtime) && (cue_point < (m.start_time.gmtime + m.duration))) # Playing
    status = "playing"
@@ -56,11 +56,17 @@
   
   next_cue = Time.now.gmtime + (24 * 60 * 60) if (next_cue > (Time.now.gmtime + (24 * 60 * 60)))
    %>
-<% if (status == "coming up") %>
+<% if ((status == "coming up") && previous_movie) %>
 <div style="float: left; width: <%= ((next_cue - (previous_movie.start_time + previous_movie.duration)) / scale).round %>px;height: 20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap length: <%= formatted_duration((next_cue - cue_point).round) %> Starting at <%= cue_point.in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>" ></div>
 <% end %>
-<div data-toggle="tooltip" data-placement="top" title="<%= m.title+" "+m.formatted_duration %>" style="float: left; width:<%= ((m.duration) / scale).round %>px; background-color: <%= (status == "playing")?"#00FF00":"#FF0000;" %>;height: 20px;" ><%#= cue_point.to_s %><%#= i %><%#= m.title %><%#= next_cue.to_s %></div>
-<%
+<% if ((status == "coming up") && previous_movie.nil?) %>
+<div style="float: left; width: <%= ((next_cue - cue_point) / scale).round %>px;height: 20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap length: <%= formatted_duration((next_cue - cue_point).round) %> Starting at <%= cue_point.in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>" ></div>
+<% end %>
+<% if (status == "playing") %>
+<div data-toggle="tooltip" data-placement="top" title="<%= m.title+" "+m.formatted_duration %>" style="float: left; width:<%= ((next_cue - cue_point) / scale).round %>px; background-color: #00FF00; height: 20px;" ><%#= cue_point.to_s %><%#= i %><%#= m.title %><%#= next_cue.to_s %></div>
+<% else %>
+<div data-toggle="tooltip" data-placement="top" title="<%= m.title+" "+m.formatted_duration %>" style="float: left; width:<%= ((m.duration) / scale).round %>px; background-color: #FF0000; height: 20px;" ><%#= cue_point.to_s %><%#= i %><%#= m.title %><%#= next_cue.to_s %></div>
+<% end
   cue_point = next_cue
   previous_movie = m
  end
