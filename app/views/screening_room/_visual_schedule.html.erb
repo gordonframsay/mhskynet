@@ -46,7 +46,7 @@
   next_cue = Time.now.gmtime + (24 * 60 * 60) if (next_cue > (Time.now.gmtime + (24 * 60 * 60)))
    %>
 <% if ((status == "coming up") && previous_movie) %>
-<div style="float: left; width: <%= ((next_cue - (previous_movie.start_time + previous_movie.duration)) / scale).round %>px;height: 20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap length: <%= formatted_duration((next_cue - cue_point).round) %> Starting at <%= cue_point.in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>" ></div>
+<div style="float: left; width: <%= ((next_cue - (previous_movie.start_time + previous_movie.duration)) / scale).round %>px;height: 20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap length: <%= formatted_duration((next_cue - (previous_movie.start_time + previous_movie.duration)).round) %> Starting at <%= (previous_movie.start_time + previous_movie.duration).in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>" ></div>
 <% end %>
 <% if ((status == "coming up") && previous_movie.nil?) %>
 <div style="float: left; width: <%= ((next_cue - cue_point) / scale).round %>px;height: 20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap length: <%= formatted_duration((next_cue - cue_point).round) %> Starting at <%= cue_point.in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>" ></div>
