@@ -25,13 +25,13 @@
 <% end %>
 <% if (@movie_service == "html5") %>
         <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
-	 <video src="<%= @movie_identifier %>" width="780" height="700" controls>
+	 <video src="<%= @movie_identifier %>" width="780" height="650" controls>
 	  Your browser does not support the <code>video</code> element.
 	 </video>
 <% end %>
 <% if (@movie_service == "vimeo") %>
         <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
-	<iframe src="//player.vimeo.com/video/<%= @movie_identifier %>?api=1&player_id=vimeoplayer" width="780" height="700" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	<iframe src="//player.vimeo.com/video/<%= @movie_identifier %>?api=1&player_id=vimeoplayer" width="780" height="650" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 	</div>
 <% end %>
 <% if (@movie_service == "dailymotion") %>
@@ -41,7 +41,7 @@
 	</div>
 	</td>
 	<td align="center">
-        <div id="disqus_thread" style="width: 500px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: 700px;"></div>
+        <div id="disqus_thread" style="width: 500px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: 650px;"></div>
 	</td>
 	</tr>
 	</table>
@@ -174,7 +174,7 @@ function timeFormated(seconds)
 
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-          height: '700',
+          height: '650',
           width: '750',
           videoId: '<%= @movie_identifier %>',
           events: {
