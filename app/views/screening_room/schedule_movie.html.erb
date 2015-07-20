@@ -1,7 +1,13 @@
 <%= form_for @queued_movie, :url => "/screening_room/schedule_movie" do |f| %>
 
-<div id="disqus_thread" style="padding: 0px 30px">
+<div style="padding: 0px 30px">
+
 <h3>Schedule A Movie</h3>
+
+<%= render :partial => 'visual_schedule' %>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 <table>
 <tr>
@@ -25,7 +31,7 @@
 	<%= select_tag(:start_hour, options_for_select(1..12, @start_hour)) %> : 
 	<%= select_tag(:start_minute, options_for_select(0..59, @start_minute)) %>  
 	<%= select_tag(:start_am_pm, options_for_select(["AM","PM"], @start_am_pm)) %>  
-	<%= select_tag(:start_time_zone, options_for_select(["Pacific Time (US & Canada)","Mountain Time (US & Canada)","Central Time (US & Canada)","Eastern Time (US & Canada)","Atlantic Time (Canada)","Newfoundland"], @start_time_zone)) %>  
+	<%= select_tag(:start_time_zone, options_for_select(available_time_zones, @start_time_zone)) %>  
  </td>
 </tr>
 <tr>
@@ -38,7 +44,7 @@
 </tr>
 <tr>
  <th>Who Posted this and why?</th>
- <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %> (Note, other information such as your IP address is already recorded. These notes will be public.)</td>
+ <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %> (Note, other information such as your IP address is already recorded, but only these notes will be public.)</td>
 </tr>
 </table>
 <p>&nbsp;</p>
@@ -46,3 +52,5 @@
 <% end %>
 
 </div>
+
+<%= render :partial => 'screening_room_nav' %>

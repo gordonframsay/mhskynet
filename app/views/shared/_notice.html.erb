@@ -4,7 +4,7 @@
 
     <% if flash[:notice] %>
 
-    <div class="alert alert-danger"><%= flash[:notice].html_safe %></div>
+    <div class="alert alert-danger" style="padding-left: 50px"><%= flash[:notice].html_safe %></div>
 
       <% flash.discard(:notice) %>
     
@@ -12,7 +12,7 @@
   
     <% if flash[:error] %>
 
-      <div class="alert alert-danger"><%= flash[:error].html_safe %></div>
+      <div class="alert alert-danger" style="padding-left: 50px"><%= flash[:error].html_safe %></div>
 
       <% flash.discard(:error) %>
       
@@ -20,7 +20,7 @@
     
     <% if flash[:login] %>
 
-      <div class="alert alert-success"><%= flash[:login].html_safe %></div>
+      <div class="alert alert-success" style="padding-left: 50px"><%= flash[:login].html_safe %></div>
 
       <% flash.discard(:login) %>
       

@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def movie_prep
+   @movie_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
    m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
    if m
     # TODO: What about live events?

@@ -5,9 +5,9 @@
     <div id="movie_play_status" style="width:700px">
     Current Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
-    Starts At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i> (movie will start playing automatically)
+    Starts At: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i> (movie will start playing automatically)
 <% else %>
-    Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>
+    Started At: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i>
 <% end %>
     </div>
 <!--
@@ -352,7 +352,7 @@ $(function() {
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-<center><div><a href="/screening_room/schedule_movie">Schedule a Movie</a> | <a href="/screening_room/history">Screening Room History</a> | <a href="/">Main Forum</a></div></center>
+<%= render :partial => 'screening_room_nav' %>
 
 <div class="modal fade" id="next_movie_modal">
   <div class="modal-dialog">

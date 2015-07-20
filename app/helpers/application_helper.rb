@@ -30,12 +30,15 @@ module ApplicationHelper
 	</script>").html_safe
  end
 
+ def available_time_zones
+  return"Pacific Time (US & Canada)","Mountain Time (US & Canada)","Central Time (US & Canada)","Eastern Time (US & Canada)","Atlantic Time (Canada)","Newfoundland"
+ end
 
  def formatted_duration(duration)
   hours = duration / (60 * 60)
   minutes = (duration / 60) % 60
   seconds = duration % 60
-  return (hours.to_s)+":"+(minutes.to_s)+":"+(seconds.to_s)
+  return (hours.to_s)+":"+(minutes.to_s.rjust(2,"0"))+":"+(seconds.to_s.rjust(2,"0"))
  end
 
 end

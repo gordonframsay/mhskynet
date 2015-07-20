@@ -1,0 +1,21 @@
+<%= form_tag %>
+
+<div style="padding: 0px 30px">
+
+<h3>Set Your Default Timezone</h3>
+
+<table>
+<tr>
+ <th>Time Zone:</th>
+ <td>
+	<%= select_tag(:time_zone, options_for_select(available_time_zones, @movie_time_zone)) %>  
+ </td>
+</tr>
+</table>
+<p>&nbsp;</p>
+<p><input type="submit" value="Save" /></p>
+</form>
+
+</div>
+
+<%= render :partial => 'screening_room_nav' %>

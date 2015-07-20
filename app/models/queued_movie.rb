@@ -17,7 +17,7 @@ class QueuedMovie < ActiveRecord::Base
   hours = duration / (60 * 60)
   minutes = (duration / 60) % 60
   seconds = duration % 60
-  return (hours.to_s)+":"+(minutes.to_s)+":"+(seconds.to_s)
+  return (hours.to_s)+":"+(minutes.to_s.rjust(2,"0"))+":"+(seconds.to_s.rjust(2,"0"))
  end
 
  def self.service_options

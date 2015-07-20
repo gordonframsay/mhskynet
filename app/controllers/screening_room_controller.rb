@@ -6,13 +6,20 @@ class ScreeningRoomController < ApplicationController
   @meta_refresh_times = []
  end
 
+ def change_time_zone
+  if request.post?
+   session[:user_time_zone] = params[:time_zone]
+   flash[:notice] = "Time zone set to "+params[:time_zone]
+   redirect_to '/'
+  end
+ end
+
  def currently_playing_moviesign
   movie_sign = ((@movie_time - Time.now - 300) * 1000).round
   render :text => (movie_sign > 0)?(movie_sign.to_s):"0"
  end
 
  def history
-  @movie_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
   @page_title =  @page_title + " - Scheduled Movies"
  end
 
@@ -24,7 +31,6 @@ class ScreeningRoomController < ApplicationController
   @hours = (params[:hours])?(params[:hours].to_i):0
   @minutes = (params[:minutes])?(params[:minutes].to_i):0
   @seconds = (params[:seconds])?(params[:seconds].to_i):0
-  @start_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
   the_time = Time.now.in_time_zone(@start_time_zone)
   if params[:start_time_zone]
    @start_time_zone = params[:start_time_zone]
@@ -55,10 +61,10 @@ class ScreeningRoomController < ApplicationController
  # Simple status for AJAX
  def currently_playing
   if (@movie_time > Time.now)
-   render :text => "<a href=\"/screening_room\" >Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p")+" PST</i></a>"
+   render :text => "<a href=\"/screening_room\" >Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
   else
    if ((@movie_time + @movie_length) > Time.now)
-    render :text => "<a href=\"/screening_room\" >Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p")+" PST</i></a>"
+    render :text => "<a href=\"/screening_room\" >Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
    end
   end
  end
