@@ -72,6 +72,7 @@ GEM
       multi_xml (~> 0.5)
       rack (~> 1.2)
     pg (0.18.2)
+    puma (2.12.2)
     rack (1.5.5)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -144,6 +145,7 @@ DEPENDENCIES
   net-dns
   oauth2
   pg
+  puma
   rails (= 4.1.9)
   rails_12factor
   sass-rails (~> 4.0.3)
