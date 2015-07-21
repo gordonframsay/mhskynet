@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
 	"127.0.0.4" => "SORBS Misc",
 	"127.0.0.5" => "open SMTP Proxy",
 	"127.0.0.6" => "SORBS Spam Source",
-	"127.0.0.7" => "SORBS Vulnerable Web Site",
+	"127.0.0.7" => nil, # Vulnerable Web Site
 	"127.0.0.8" => "SORBS Block",
 	"127.0.0.9" => "SORBS Zombie",
 	"127.0.0.10" => nil, # dul
