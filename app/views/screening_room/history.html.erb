@@ -21,6 +21,7 @@
      <th>Length</th>
      <th>Status</th>
      <th>Notes</th>
+     <th>Modify</th>
     </tr>
     <% QueuedMovie.order("start_time desc").each do |m| %>
     <tr>
@@ -41,6 +42,14 @@
        <% end %>
       </td>
       <td><%= m.notes if m.service %></td>
+      <td>
+	<% if (m.start_time > Time.now) %>
+	<div class="btn-group" role="group" aria-label="modify">
+	  <a class="btn btn-warning" href="/screening_room/edit/<%= m.id %>">Edit</a>
+	  <a class="btn btn-danger" href="/screening_room/delete/<%= m.id %>">Delete</a>
+	</div>
+	<% end %>
+      </td>
     </tr>
     <% end %>
     </table>

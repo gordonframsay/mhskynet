@@ -23,20 +23,37 @@ class ScreeningRoomController < ApplicationController
   @page_title =  @page_title + " - Scheduled Movies"
  end
 
+ def delete
+  @queued_movie = QueuedMovie.find(params[:id])
+  @queued_movie.destroy
+  flash[:notice] = "Movie removed from the schedule."
+  redirect_to :action => :history
+ end
+
  def schedule_movie
   @page_title =  @page_title + " - Schedule Movie"
-  @queued_movie = QueuedMovie.new
-  @queued_movie.start_time = Time.now
-  @queued_movie.service = "youtube"
-  @hours = (params[:hours])?(params[:hours].to_i):0
-  @minutes = (params[:minutes])?(params[:minutes].to_i):0
-  @seconds = (params[:seconds])?(params[:seconds].to_i):0
-  the_time = Time.now.in_time_zone(@start_time_zone)
+  if (params[:id])
+   @queued_movie = QueuedMovie.find(params[:id])
+  else
+   @queued_movie = QueuedMovie.new
+   @queued_movie.start_time = ActiveSupport::TimeZone.new(@movie_time_zone).now
+   @queued_movie.service = "youtube"
+  end
+  if (@queued_movie.duration)
+   @hours = @queued_movie.duration / (60 * 60)
+   @minutes = (@queued_movie.duration / 60) % 60
+   @seconds = @queued_movie.duration % 60
+  else
+   @hours = (params[:hours])?(params[:hours].to_i):0
+   @minutes = (params[:minutes])?(params[:minutes].to_i):0
+   @seconds = (params[:seconds])?(params[:seconds].to_i):0
+  end
+  the_time = @queued_movie.start_time.in_time_zone(@movie_time_zone)
   if params[:start_time_zone]
-   @start_time_zone = params[:start_time_zone]
-   session[:user_time_zone] = @start_time_zone
+   @movie_time_zone = params[:start_time_zone]
+   session[:user_time_zone] = @movie_time_zone
    time_without_zone = params[:start_year]+"/"+params[:start_month]+"/"+params[:start_day]+" "+params[:start_hour]+":"+params[:start_minute]+" "+params[:start_am_pm]
-   the_time = ActiveSupport::TimeZone.new(@start_time_zone).parse(time_without_zone)
+   the_time = ActiveSupport::TimeZone.new(@movie_time_zone).parse(time_without_zone)
   end
   @start_year = the_time.year
   @start_month = the_time.month
@@ -45,7 +62,12 @@ class ScreeningRoomController < ApplicationController
   @start_minute = the_time.min
   @start_am_pm = the_time.strftime("%p")
   if request.post?
-   @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
+   if params[:id]
+    @queued_movie = QueuedMovie.find(params[:id])
+    @queued_movie.update(params[:queued_movie].permit!)
+   else
+    @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
+   end
    @queued_movie.start_time = the_time.gmtime
    @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
@@ -56,6 +78,12 @@ class ScreeningRoomController < ApplicationController
     flash[:notice] = @queued_movie.errors.full_messages.to_sentence
    end
   end
+ end
+
+ def edit
+  schedule_movie
+  @queued_movie = QueuedMovie.find(params[:id])
+  render :action => :schedule_movie
  end
 
  # Simple status for AJAX
