@@ -52,17 +52,17 @@ private
  def movies_can_not_overlap
   if new_record?
    if (start_time.present? && duration.present?)
-    finish_time = start_time + duration
-    errors.add(:start_time, "can't overlap with another event (1)") and return unless QueuedMovie.where(["start_time >= ? AND start_time + (duration * interval '1 second') <= ?", start_time, start_time]).empty?
-    errors.add(:start_time, "can't overlap with another event (2)") and return unless QueuedMovie.where(["start_time >= ? AND start_time + (duration * interval '1 second') <= ?", finish_time, finish_time]).empty?
-    errors.add(:start_time, "can't overlap with another event (3)") and return unless QueuedMovie.where(["start_time <= ? AND start_time + (duration * interval '1 second') >= ?", start_time, finish_time]).empty?
+    finish_time = start_time.gmtime + duration
+    errors.add(:start_time, "can't overlap with another event (1)") and return unless QueuedMovie.where(["start_time >= ? AND start_time <= ?", start_time.gmtime, finish_time.gmtime]).empty?
+    errors.add(:start_time, "can't overlap with another event (2)") and return unless QueuedMovie.where(["start_time + (duration * interval '1 second') >= ? AND start_time + (duration * interval '1 second') <= ?", start_time.gmtime, finish_time]).empty?
+    errors.add(:start_time, "can't overlap with another event (3)") and return unless QueuedMovie.where(["start_time <= ? AND start_time + (duration * interval '1 second') >= ?", start_time.gmtime, finish_time]).empty?
    end
   else
    if (start_time.present? && duration.present?)
     finish_time = start_time + duration
-    errors.add(:start_time, "can't overlap with another event (1)") and return unless QueuedMovie.where(["start_time >= ? AND start_time + (duration * interval '1 second') <= ? AND id != ?", start_time, start_time, id]).empty?
-    errors.add(:start_time, "can't overlap with another event (2)") and return unless QueuedMovie.where(["start_time >= ? AND start_time + (duration * interval '1 second') <= ? AND id != ?", finish_time, finish_time, id]).empty?
-    errors.add(:start_time, "can't overlap with another event (3)") and return unless QueuedMovie.where(["start_time <= ? AND start_time + (duration * interval '1 second') >= ? AND id != ?", start_time, finish_time, id]).empty?
+    errors.add(:start_time, "can't overlap with another event (1)") and return unless QueuedMovie.where(["start_time >= ? AND start_time <= ? AND id != ?", start_time.gmtime, finish_time.gmtime, id]).empty?
+    errors.add(:start_time, "can't overlap with another event (2)") and return unless QueuedMovie.where(["start_time + (duration * interval '1 second') >= ? AND start_time + (duration * interval '1 second') <= ? AND id != ?", start_time.gmtime, finish_time, id]).empty?
+    errors.add(:start_time, "can't overlap with another event (3)") and return unless QueuedMovie.where(["start_time <= ? AND start_time + (duration * interval '1 second') >= ? AND id != ?", start_time.gmtime, finish_time, id]).empty?
    end
   end
  end
