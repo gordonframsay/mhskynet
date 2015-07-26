@@ -1,0 +1,34 @@
+    <div style="padding: 0px 30px">
+	<h2>MH Skynet - Contributed Songs</h2>
+    </div>
+
+    <style>
+    td,th { padding: 2px; }
+    </style>
+
+    <div style="padding: 0px 30px">
+
+<table>
+ <tr>
+  <th>Identifier</th>
+ </tr>
+ <% @songs.each do |s| %>
+ <tr>
+  <td><a href="<%= s.url %>" target="_blank" ><%= s.identifier %></a></td>
+  <td><div id="movie_details"></div></td>
+ </tr>
+ <% end %>
+</table>
+
+</div>
+
+<script>
+    function get_movie_data(movie_id) {
+     $.get( "https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBFSdS8dvEv_N3KEw4IxHXHHIFOIW-3XYY&part=snippet&id=e5ep8jp2zkQ", function( data ) {
+      alert(data);
+     });
+    }
+
+get_movie_data("e5ep8jp2zkQ");
+
+</script>
