@@ -1,5 +1,9 @@
 class MhRadioController < ApplicationController
 
+ def google_test
+  @google_domain_api_key = get_config("google_api_key")
+ end
+
  def index
   @page_title = "▶︎ " + @page_title+ " - Radio"
   if request.post?
@@ -24,6 +28,7 @@ class MhRadioController < ApplicationController
  end
 
  def submitted_songs
+  @google_domain_api_key = get_config("google_api_key")
   @page_title =  @page_title + " - Submitted Songs"
   @user_session_id = session.id
   @songs = RadioSong.order("id desc")
