@@ -21,12 +21,15 @@ class ScreeningRoomController < ApplicationController
 
  def history
   @page_title =  @page_title + " - Scheduled Movies"
+  @user_session_id = session.id
  end
 
  def delete
   @queued_movie = QueuedMovie.find(params[:id])
-  @queued_movie.destroy
-  flash[:notice] = "Movie removed from the schedule."
+  if (@superuser || (@queued_movie.session_id == @user_session_id))
+   @queued_movie.destroy
+   flash[:notice] = "Movie removed from the schedule."
+  end
   redirect_to :action => :history
  end
 
@@ -34,6 +37,11 @@ class ScreeningRoomController < ApplicationController
   @page_title =  @page_title + " - Schedule Movie"
   if (params[:id])
    @queued_movie = QueuedMovie.find(params[:id])
+   unless (@superuser || (@queued_movie.session_id == @user_session_id))
+    flash[:notice] = "Only admins or the original scheduler can edit this scheduled movie!"
+    redirect_to '/'
+    return false
+   end
   else
    @queued_movie = QueuedMovie.new
    @queued_movie.start_time = ActiveSupport::TimeZone.new(@movie_time_zone).now
@@ -71,6 +79,7 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.start_time = the_time.gmtime
    @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
+   @queued_movie.session_id = session.id if session.id
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
     redirect_to :action => "schedule_movie"

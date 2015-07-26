@@ -4,11 +4,17 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :domain_check
-  before_filter :before_filter_check_ip
   before_filter :app_defaults
+  before_filter :before_filter_check_ip
   before_filter :movie_prep
 
  private
+
+  def get_config(key_name)
+   site_default = SiteDefault.where(["key_name = ?", key_name]).first
+   raise "Key not found: "+key_name unless site_default
+   return site_default.key_value # TODO: handle various value types.. e.g. integers, etc.
+  end
 
   def domain_check
    redirect_to 'http://www.mhsky.net/' and return false unless ((Rails.env.to_s != 'production') || (request.host == 'www.mhsky.net'))
@@ -18,7 +24,6 @@ class ApplicationController < ActionController::Base
    @movie_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
    m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
    if m
-    # TODO: What about live events?
     @movie = m
     @movie_title = m.title
     @movie_identifier = m.identifier
@@ -38,10 +43,12 @@ class ApplicationController < ActionController::Base
 
   def app_defaults
    @page_title = "MH Skynet"
+   @superuser = session[:superuser]
+   Session.clean_up
   end
 
   def before_filter_check_ip
-   return true if (params[:controller] == "admin")
+   return true if ((params[:controller] == "admin") || @superuser)
    if (tmp = BlockedIp.where(["address = ?", request.remote_ip]).first)
 #    flash[:notice] = "Your IP has been blocked.  Please contact the site administrators to unblock."
     authenticate_or_request_with_http_basic("Restricted Area") do |username, password|
@@ -107,7 +114,7 @@ class ApplicationController < ActionController::Base
 #    render 'security/password_prompt'
 #    return false
    else
-    CachedIp.new(:address => request.remote_ip, :reason => "(none)", :blocked => 0).save!
+#    CachedIp.new(:address => request.remote_ip, :reason => "(none)", :blocked => 0).save!
    end
    return true
   end

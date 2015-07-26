@@ -62,8 +62,8 @@
   previous_movie = m
  end
  %>
-<% if (cue_point < (Time.now.gmtime + (24 * 60 * 60))) %>
-<div style="height:20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap Starting at <%= cue_point.in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>"></div>
+<% if (previous_movie && (cue_point < (Time.now.gmtime + (24 * 60 * 60)))) %>
+<div style="height:20px; background-color: #FFFFFF;" data-toggle="tooltip" data-placement="top" title="Gap Starting at <%= (cue_point + previous_movie.duration).in_time_zone(@movie_time_zone).strftime("%l:%M %p %Z") %>"></div>
 <% end %>
 </div>
 
