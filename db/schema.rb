@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.integer  "live_event",        limit: 2,   default: 0
     t.cidr     "source_ip"
     t.text     "notes"
+    t.string   "session_id"
   end
 
   create_table "sessions", force: true do |t|
@@ -80,5 +81,14 @@ ActiveRecord::Schema.define(version: 20150718223934) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
+  create_table "site_defaults", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "key_name"
+    t.text     "description"
+    t.string   "key_value"
+    t.string   "key_type"
+  end
 
 end
