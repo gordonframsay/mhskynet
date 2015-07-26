@@ -72,6 +72,15 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.string   "session_id"
   end
 
+  create_table "radio_songs", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "identifier"
+    t.string   "service",    default: "youtube"
+    t.string   "session_id"
+    t.cidr     "source_ip"
+  end
+
   create_table "sessions", force: true do |t|
     t.string   "session_id", null: false
     t.text     "data"

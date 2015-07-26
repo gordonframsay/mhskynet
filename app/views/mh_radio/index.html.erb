@@ -1,0 +1,336 @@
+
+    <%= render :partial => 'shared/navigation' %>
+
+    <div style="padding: 0px 30px">
+        <h2>MH Skynet - Radio</h2>
+    </div>
+
+<!--
+<center>
+    <div style="float:left; width: 300px; padding-left: 10px;"><span class="glyphicon glyphicon-phone-alt"></span> Mobile? <a href="https://www.disqus.com/home/discussion/mhskynet/mh_skynet_164">Tap here for forum.</a> <a href="<%= @song.url if @song %>">Here for video.</a></div>
+    <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check"></div>
+    <div id="song_play_status" style="width:700px">
+    </div>
+       <a id="resize_link">Resize</a>
+</center>
+-->
+      <center>
+       <a name="song">
+	<table>
+	<tr>
+	<td valign="top">
+<% if (@song.service == "youtube") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;"></div>
+<% end %>
+<% if (@song.service == "html5") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+	 <video src="<%= @song.identifier %>" width="780" height="550" controls>
+	  Your browser does not support the <code>video</code> element.
+	 </video>
+<% end %>
+<% if (@song.service == "vimeo") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+	<iframe src="//player.vimeo.com/video/<%= @song.identifier %>?api=1&player_id=vimeoplayer" width="780" height="550" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	</div>
+<% end %>
+<% if (@song.service == "dailymotion") %>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+	</div>
+<% end %>
+	</div>
+	</td>
+	<td align="center">
+        <div id="disqus_thread" style="width: 500px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: 550px;"></div>
+	</td>
+	</tr>
+	</table>
+       </a>
+      </center>
+<!--
+     $("#resize_link").attr("href", "/screening_room?width="+$( window ).width())
+-->
+
+<div id="status" style="display:none">(status)</div>
+<div id="console" style="display:none">(console)</div>
+
+<% if (@song.service == "dailymotion") %>
+<script src="http://api.dmcdn.net/all.js"></script>
+<script>
+    DM.init({
+        apiKey: '72b58abe9bae676e0e96',
+        status: true, // check login status
+        cookie: true // enable cookies to allow the server to access the session
+    });
+    var params = {html: "0"},
+     video = '<%= @song.identifier %>',
+     player = DM.player($('#player').get(0), {video: video, width: '100%', height: '100%', params: params});
+    var seeked = false;
+
+$(player).bind( 'apiready play playing canplay canplaythrough loadedmetadata timeupdate progress seeking seeked volumechange durationchange pause ended error fullscreenchange qualitiesavailable qualitychange subtitlesavailable subtitlechange ad_start ad_timeupdate ad_play ad_pause ad_end', function(e)
+{
+    var data = {}, player = e.target;
+    switch (e.type)
+    {
+        case 'timeupdate':
+        case 'ad_timeupdate':
+        case 'seeking':
+        case 'seeked':
+            data['time'] = player.currentTime;
+            $('#progress').val(timeFormated(player.currentTime));
+            break;
+        case 'progress':
+            data['buffer'] = player.bufferedTime;
+            break;
+        case 'durationchange':
+            data['duration'] = player.duration;
+            $('#duration').val(timeFormated(player.duration));
+            break;
+        case 'fullscreenchange':
+            data['fullscreen'] = player.fullscreen;
+            break;
+        case 'volumechange':
+            data['volume'] = player.volume;
+            data['muted'] = player.muted;
+            break;
+        case 'qualitiesavailable':
+            data['qualities'] = player.qualities;
+            break;
+        case 'qualitychange':
+            data['quality'] = player.quality;
+            break;
+        case 'subtitlesavailable':
+            data['subtitles'] = player.subtitles;
+            break;
+        case 'subtitlechange':
+            data['subtitle'] = player.subtitle;
+            break;
+        case 'error':
+            data = player.error;
+            break;
+    }
+    if ((e.type == "apiready") || (e.type == "ad_end")) {
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ player.api("play", "1"); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
+        player.api("play", "1");
+        setTimeout(function(){ player.api("seek", "<%= (Time.now - @movie_time).round %>"); }, 2000);
+	<% end %>
+    }
+    if ($.inArray(e.type, ['play', 'playing', 'pause', 'ad_play', 'ad_pause']) !== -1) $('#status').html(e.type);
+    var line = $('<li class=in>-&gt; ' + e.type + ' ' + JSON.stringify(data) + '</li>').prependTo('#console');
+    if ($.inArray(e.type, ['timeupdate', 'progress', 'ad_timeupdate']) !== -1) line.addClass('minor');
+    if (e.type == 'error') line.addClass('fatal');
+});
+
+function timeFormated(seconds)
+{
+    if (isNaN(seconds) || !isFinite(seconds)) return '--:--';
+    seconds = Math.round(seconds);
+    var hour = (hour = Math.floor(seconds / 3600)) < 10 ? '0' + hour : hour,
+        min = (min = Math.floor(seconds / 60) % 60) < 10 ? '0' + min : min,
+        sec = (sec = seconds % 60) < 10 ? '0' + sec : sec;
+    return seconds < 3600 ? min + ':' + sec : hour + 'h' + min;
+}
+</script>
+<% end %>
+
+<% if (@song.service == "html5") %>
+<script>
+      var v = document.getElementsByTagName("video")[0];
+
+      function movie_sign() {
+        document.title = "<%= "▶ ︎" +@page_title %>";
+        elem = document.getElementById("movie_play_status");
+        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
+        v.play();
+      }
+
+      $( document ).ready(function() {
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
+        v.play();
+	<% unless @live_event %>
+        v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>; });
+        <% end %>
+        v.addEventListener("ended",function() { setTimeout(function(){ $('#next_movie_modal').modal(); }, 5000); });
+	<% end %>
+      });
+</script>
+<% end %>
+
+<% if (@song.service == "youtube") %>
+    <script>
+
+      var tag = document.createElement('script');
+      var time_check = 0;
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      var player;
+
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '550',
+          width: '750',
+          videoId: '<%= @song.identifier %>',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      function zero_pad(text) {
+       text = text + '';
+       if (text.length == 1) {
+        return "0"+text;
+       } else {
+        return text;
+       }
+      }
+
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+         location.reload();
+        }
+      }
+
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+    </script>
+<% end %>
+
+<% if (@song.service == "vimeo") %>
+<script>
+$(function() {
+    var player = $('iframe');
+    var playerOrigin = '*';
+    var status = $('#status');
+
+    // Listen for messages from the player
+    if (window.addEventListener) {
+        window.addEventListener('message', onMessageReceived, false);
+    }
+    else {
+        window.attachEvent('onmessage', onMessageReceived, false);
+    }
+
+    // Handle messages received from the player
+    function onMessageReceived(event) {
+        // Handle messages from the vimeo player only
+        if (!(/^https?:\/\/player.vimeo.com/).test(event.origin)) {
+            return false;
+        }
+        
+        if (playerOrigin === '*') {
+            playerOrigin = event.origin;
+        }
+        
+        var data = JSON.parse(event.data);
+        
+        switch (data.event) {
+            case 'ready':
+                onReady();
+                break;
+               
+            case 'playProgress':
+                onPlayProgress(data.data);
+                break;
+                
+            case 'pause':
+                onPause();
+                break;
+               
+            case 'finish':
+                onFinish();
+                break;
+        }
+    }
+
+    // Call the API when a button is pressed
+    $('button').on('click', function() {
+        post($(this).text().toLowerCase());
+    });
+
+    // Helper function for sending a message to the player
+    function post(action, value) {
+        var data = {
+          method: action
+        };
+        
+        if (value) {
+            data.value = value;
+        }
+        
+        var message = JSON.stringify(data);
+        player[0].contentWindow.postMessage(data, playerOrigin);
+    }
+
+    function onReady() {
+        status.text('ready');
+        
+        post('addEventListener', 'pause');
+        post('addEventListener', 'finish');
+        post('addEventListener', 'playProgress');
+	<% if (@movie_time > Time.now) %>
+        setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
+	<% else %>
+        post('seekTo', '<%= (Time.now - @movie_time).round %>');
+        post('play', '');
+	<% end %>
+    }
+
+    function onPause() {
+        status.text('paused');
+    }
+
+    function onFinish() {
+        status.text('finished');
+    }
+
+    function onPlayProgress(data) {
+        status.text(data.seconds + 's played');
+    }
+
+      function movie_sign() {
+        document.title = "<%= "▶ ︎" +@page_title %>";
+        elem = document.getElementById("movie_play_status");
+        elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
+        post('play', '');
+      }
+
+});	
+</script>
+<% end %>
+
+    <script type="text/javascript">
+
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'mhskynet'; // required: replace example with your forum shortname
+        var disqus_identifier = 'mh_radio';
+        var disqus_url = 'http://www.mhsky.net/mh_radio';
+        var disqus_disable_mobile = false;
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<center>
+<h3>Add a song:</h3>
+<%= form_tag %>
+
+<p>Youtube Identifier: <input name="identifier" /></p>
+
+<p><input type="submit" /></p>
+</form>
+</center>
