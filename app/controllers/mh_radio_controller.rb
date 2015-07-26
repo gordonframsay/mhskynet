@@ -10,17 +10,23 @@ class MhRadioController < ApplicationController
    if @song.save
     flash[:notice] = "Song added!!"
    else
-    flash[:notice] = @queued_movie.errors.full_messages.to_sentence
+    flash[:notice] = @song.errors.full_messages.to_sentence
     redirect_to :action => :index
    end
   else
-   @song = RadioSong.select("random(),*").order("random").first # TODO: let's later make this a bit more intelligent.. shuffle instead of random
+   if session[:last_song_played]
+    @song = RadioSong.select("random(),*").where(["id != ?", session[:last_song_played]]).order("random").first # TODO: let's later make this a bit more intelligent.. shuffle instead of random
+   else
+    @song = RadioSong.select("random(),*").order("random").first # TODO: let's later make this a bit more intelligent.. shuffle instead of random
+   end
   end
+  session[:last_song_played] = @song.id
  end
 
  def submitted_songs
   @page_title =  @page_title + " - Submitted Songs"
   @user_session_id = session.id
+  @songs = RadioSong.order("id desc")
  end
 
  def delete

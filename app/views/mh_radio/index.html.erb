@@ -328,9 +328,12 @@ $(function() {
 <center>
 <h3>Add a song:</h3>
 <%= form_tag %>
-
-<p>Youtube Identifier: <input name="identifier" /></p>
-
-<p><input type="submit" /></p>
+<table>
+ <tr>
+  <td>Youtube Identifier: <input name="identifier" /></td>
+  <td><input type="submit" value="Submit Video" /></td>
+ </tr>
+</table>
 </form>
+<p><a href="/mh_radio/submitted_songs">Submitted Videos</a></p>
 </center>
