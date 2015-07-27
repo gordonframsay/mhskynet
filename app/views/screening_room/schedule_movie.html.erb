@@ -80,6 +80,7 @@
       timeregex = /PT(\d+)M(\d+)S/g;
       time_str = data.items[0].contentDetails.duration;
       if (matches = timeregex.exec(time_str)) {
+       $("#hours").val("0");
        $("#minutes").val(matches[1]);
        $("#seconds").val(matches[2]);
       }
