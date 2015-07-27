@@ -43,7 +43,7 @@
       </td>
       <td><%= m.notes if m.service %></td>
       <td>
-	<% if ((m.start_time > Time.now) && (@superuser || (m.session_id == @user_session_id))) %>
+	<% if (((m.start_time > Time.now) || ((m.start_time + m.duration) < Time.now)) && (@superuser || (m.session_id == @user_session_id))) %>
 	<div class="btn-group" role="group" aria-label="modify">
 	  <a class="btn btn-warning" href="/screening_room/edit/<%= m.id %>">Edit</a>
 	  <a class="btn btn-danger" href="/screening_room/delete/<%= m.id %>">Delete</a>
