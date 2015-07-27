@@ -5,7 +5,7 @@
 <script>
 
 $( document ).ready(function() {
- $.get( "https://www.googleapis.com/youtube/v3/videos?key=<%= @google_domain_api_key.html_safe %>&part=snippet&id=e5ep8jp2zkQ", function( data ) {
+ $.get( "https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBFSdS8dvEv_N3KEw4IxHXHHIFOIW-3XYY&part=fileDetails&id=jMXXnLSRdBE"", function( data ) {
   $( ".result" ).html( data );
   alert( "Load was performed." );
  });
