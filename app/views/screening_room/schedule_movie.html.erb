@@ -19,16 +19,16 @@
 
 <table>
 <tr>
- <th>Identifier</th>
- <td><%= f.text_field :identifier %> Identifier should be the movie ID, e.g. "M2mST8OFUNo" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
-</tr>
-<tr>
  <th>Service</th>
  <td><%= f.select :service, QueuedMovie.service_options %></td>
 </tr>
 <tr>
+ <th>Identifier</th>
+ <td><%= f.text_field :identifier %> <div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div><br />Identifier should be the movie ID, e.g. "M2mST8OFUNo" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
+</tr>
+<tr>
  <th>Title</th>
- <td><%= f.text_field :title %></td>
+ <td><%= f.text_field :title, {size: 100} %></td>
 </tr>
 <tr>
  <th>Start Time</th>
@@ -44,7 +44,7 @@
 </tr>
 <tr>
  <th>Duration</th>
- <td><input name="hours" value="<%= @hours %>" /> hours, <input name="minutes" value="<%= @minutes %>" /> minutes, <input name="seconds" value="<%= @seconds %>" /> seconds</td>
+ <td><input name="hours" id="hours" value="<%= @hours %>" size="4" /> hours, <input name="minutes" id="minutes" value="<%= @minutes %>" size="4" /> minutes, <input name="seconds" id="seconds" value="<%= @seconds %>" size="4" /> seconds</td>
 </tr>
 <tr>
  <th>Live Event?</th>
@@ -67,3 +67,35 @@
 </div>
 
 <%= render :partial => 'screening_room_nav' %>
+
+<script>
+    function get_youtube_movie_data(movie_id) {
+     $.get( "https://www.googleapis.com/youtube/v3/videos?key=<%= @google_domain_api_key %>&part=snippet&id="+movie_id, function( data ) {
+      $( "#queued_movie_title" ).val( data.items[0].snippet.title );
+     });
+     $.get( "https://www.googleapis.com/youtube/v3/videos?key=<%= @google_domain_api_key %>&part=contentDetails&id="+movie_id, function( data ) {
+      timeregex = /PT(\d+)M(\d+)S/g;
+      time_str = data.items[0].contentDetails.duration;
+      if (matches = timeregex.exec(time_str)) {
+       $("#minutes").val(matches[1]);
+       $("#seconds").val(matches[2]);
+      }
+      timeregex = /PT(\d+)H(\d+)M(\d+)S/g;
+      time_str = data.items[0].contentDetails.duration;
+      if (matches = timeregex.exec(time_str)) {
+       $("#hours").val(matches[1]);
+       $("#minutes").val(matches[2]);
+       $("#seconds").val(matches[3]);
+      }
+     });
+    }
+
+$( document ).ready(function() {
+ $( "#queued_movie_identifier" ).change(function() {
+  if (($("#queued_movie_service").val() == "youtube") && ($("#queued_movie_identifier").val().length == 11)) {
+   get_youtube_movie_data($("#queued_movie_identifier").val());
+  }
+ });
+});
+
+</script>

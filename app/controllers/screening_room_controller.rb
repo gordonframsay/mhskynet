@@ -34,6 +34,7 @@ class ScreeningRoomController < ApplicationController
  end
 
  def schedule_movie
+  @google_domain_api_key = get_config("google_api_key")
   @page_title =  @page_title + " - Schedule Movie"
   if (params[:id])
    @queued_movie = QueuedMovie.find(params[:id])
