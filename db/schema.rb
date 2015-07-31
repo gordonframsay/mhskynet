@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.cidr     "source_ip"
     t.text     "notes"
     t.string   "session_id"
+    t.integer  "screening_room",                default: 1
   end
 
   create_table "radio_songs", force: true do |t|

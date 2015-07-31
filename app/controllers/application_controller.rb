@@ -21,8 +21,9 @@ class ApplicationController < ActionController::Base
   end
 
   def movie_prep
+   @screening_room = (params[:screening_room])?(params[:screening_room].to_i):1
    @movie_time_zone = (session[:user_time_zone])?(session[:user_time_zone]):"Pacific Time (US & Canada)"
-   m = QueuedMovie.order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
+   m = QueuedMovie.where(["screening_room = ?", @screening_room]).order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
    if m
     @movie = m
     @movie_title = m.title

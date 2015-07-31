@@ -20,13 +20,21 @@
 <div id="preview_image"></div>
 
 <table>
+<% if @superuser %>
+<tr>
+ <th>Screning Room #</th>
+ <td><%= f.select :screening_room, [1..10].to_a %></td>
+</tr>
+<% else %>
+<input type="hidden" name="queued_movie[screening_room]" value="<%= @screening_room %>" />
+<% end %>
 <tr>
  <th>Service</th>
  <td><%= f.select :service, QueuedMovie.service_options %></td>
 </tr>
 <tr>
  <th>Identifier</th>
- <td><%= f.text_field :identifier %> <div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div><br />Identifier should be the movie ID, e.g. "M2mST8OFUNo" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
+ <td><%= f.text_field :identifier %> <div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div><br />Identifier should be the movie ID. Example: "bS5P_LAqiVg" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
 </tr>
 <tr>
  <th>Title</th>
@@ -97,7 +105,9 @@
 $( document ).ready(function() {
  $( "#queued_movie_identifier" ).change(function() {
   if (($("#queued_movie_service").val() == "youtube") && ($("#queued_movie_identifier").val().length == 11)) {
+   $("#spinner").show();
    get_youtube_movie_data($("#queued_movie_identifier").val());
+   $("#spinner").hide();
   }
  });
 });

@@ -30,7 +30,7 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.destroy
    flash[:notice] = "Movie removed from the schedule."
   end
-  redirect_to :action => :history
+  redirect_to '/screening_room/history/'+@screening_room.to_s
  end
 
  def schedule_movie
@@ -38,7 +38,7 @@ class ScreeningRoomController < ApplicationController
   @page_title =  @page_title + " - Schedule Movie"
   if (params[:id])
    @queued_movie = QueuedMovie.find(params[:id])
-   unless (@superuser || (@queued_movie.session_id == @user_session_id))
+   unless (@superuser || (@queued_movie.session_id == @user_session_id)) # TODO: Make sure this works right.
     flash[:notice] = "Only admins or the original scheduler can edit this scheduled movie!"
     redirect_to '/'
     return false
@@ -74,6 +74,7 @@ class ScreeningRoomController < ApplicationController
    if params[:id]
     @queued_movie = QueuedMovie.find(params[:id])
     @queued_movie.update(params[:queued_movie].permit!)
+    # TODO: make sure duration changes/time save, too
    else
     @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
    end
@@ -83,7 +84,7 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.session_id = session.id if session.id
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
-    redirect_to :action => "schedule_movie"
+    redirect_to "/screening_room/schedule_movie"+@screening_room.to_s
    else
     flash[:notice] = @queued_movie.errors.full_messages.to_sentence
    end

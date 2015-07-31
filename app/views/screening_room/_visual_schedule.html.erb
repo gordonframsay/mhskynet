@@ -1,7 +1,7 @@
 
-<% movies  = QueuedMovie.where(["(start_time + (duration * '1 second'::interval)) > ? AND (start_time + (duration * '1 second'::interval)) < ?", Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
-   movies += QueuedMovie.where(["start_time >= ? AND start_time < ?", Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
-   movies += QueuedMovie.where(["start_time <= ? AND (start_time + (duration * '1 second'::interval)) >= ?", Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
+<% movies  = QueuedMovie.where(["screening_room = ? AND (start_time + (duration * '1 second'::interval)) > ? AND (start_time + (duration * '1 second'::interval)) < ?", @screening_room, Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
+   movies += QueuedMovie.where(["screening_room = ? AND start_time >= ? AND start_time < ?", @screening_room, Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
+   movies += QueuedMovie.where(["screening_room = ? AND start_time <= ? AND (start_time + (duration * '1 second'::interval)) >= ?", @screening_room, Time.now.gmtime, Time.now.gmtime + (24 * 60 * 60)])
    movies.uniq!
    movies.sort! {|x,y| x.start_time <=> y.start_time }
 %>

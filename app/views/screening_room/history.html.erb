@@ -23,7 +23,7 @@
      <th>Notes</th>
      <th>Modify</th>
     </tr>
-    <% QueuedMovie.order("start_time desc").each do |m| %>
+    <% QueuedMovie.where(["screening_room = ?", @screening_room]).order("start_time desc").each do |m| %>
     <tr>
      <td><%= m.service.titleize if m.service %></td>
      <td><%= link_to(m.title, m.url) %></td>
