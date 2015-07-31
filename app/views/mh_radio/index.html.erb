@@ -326,8 +326,11 @@ $(function() {
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 <center>
-<h3>Add a song:</h3>
+<table>
+<tr>
+<td>
 <%= form_tag %>
+Add a song:
 <table>
  <tr>
   <td>Youtube Identifier: <input name="identifier" /></td>
@@ -336,4 +339,14 @@ $(function() {
 </table>
 </form>
 <p><a href="/mh_radio/submitted_songs">Submitted Videos</a></p>
+</td>
+<td>
+<%= form_tag %>
+<input type="hidden" name="current_song" value="<%= @song.id %>" />
+&nbsp;<input type="submit" value="Skip Song" />&nbsp;
+<input type="submit" value="Skip Song and Don't Play Again" name="do_not_play" />
+</form>
+</td>
+</tr>
+</table>
 </center>

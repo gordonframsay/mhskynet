@@ -8,22 +8,30 @@
 
     <div style="padding: 0px 30px">
 
+<%= form_tag %>
+
 <table>
  <tr>
   <th>Identifier</th>
   <th>Title</td>
   <th>Thumb</td>
+  <th>Play?</td>
  </tr>
  <% @songs.each do |s| %>
  <tr>
   <td><a href="<%= s.url %>" target="_blank" ><%= s.identifier %></a></td>
-  <td><div id="title_<%= s.identifier %>"></div></td>
-  <td><div id="thumb_<%= s.identifier %>"></div></td>
+  <td><div id="title_<%= s.identifier %>">Loading...</div></td>
+  <td><div id="thumb_<%= s.identifier %>">Loading...</div></td>
+  <td align="center"><input type="checkbox" name="play_list[<%= s.id %>]" value="1" <%= "checked=\"checked\"" if @play_list.include?(s.id) %> /></td>
  </tr>
  <% end %>
 </table>
 
-</div>
+<input type="submit" value="Save Playlist" />
+
+</form>
+
+    </div>
 
 <script>
     function get_movie_data(movie_id) {
