@@ -75,10 +75,10 @@ class ScreeningRoomController < ApplicationController
    if params[:id]
     @queued_movie = QueuedMovie.find(params[:id])
     @queued_movie.update(params[:queued_movie].permit!)
-    # TODO: make sure duration changes/time save, too
    else
     @queued_movie = QueuedMovie.new(params[:queued_movie].permit!)
    end
+   @screening_room = @queued_movie.screening_room
    @queued_movie.start_time = the_time.gmtime
    @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds

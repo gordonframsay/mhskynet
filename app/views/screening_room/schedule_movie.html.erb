@@ -20,14 +20,10 @@
 <div id="preview_image"></div>
 
 <table>
-<% if @superuser %>
 <tr>
  <th>Screning Room #</th>
  <td><%= f.select :screening_room, (1..10).to_a %></td>
 </tr>
-<% else %>
-<input type="hidden" name="queued_movie[screening_room]" value="<%= @screening_room %>" />
-<% end %>
 <tr>
  <th>Service</th>
  <td><%= f.select :service, QueuedMovie.service_options %></td>
