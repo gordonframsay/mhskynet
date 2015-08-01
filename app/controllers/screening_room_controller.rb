@@ -26,7 +26,7 @@ class ScreeningRoomController < ApplicationController
 
  def delete
   @queued_movie = QueuedMovie.find(params[:id])
-  if (@superuser || (@queued_movie.session_id == @user_session_id))
+  if (@superuser || (@queued_movie.session_id == session.id))
    @queued_movie.destroy
    flash[:notice] = "Movie removed from the schedule."
   end
@@ -38,7 +38,7 @@ class ScreeningRoomController < ApplicationController
   @page_title =  @page_title + " - Schedule Movie"
   if (params[:id])
    @queued_movie = QueuedMovie.find(params[:id])
-   unless (@superuser || (@queued_movie.session_id == @user_session_id)) # TODO: Make sure this works right.
+   unless (@superuser || (@queued_movie.session_id == session.id)) # TODO: Make sure this works right.
     flash[:notice] = "Only admins or the original scheduler can edit this scheduled movie!"
     redirect_to '/'
     return false
@@ -49,7 +49,7 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.start_time = ActiveSupport::TimeZone.new(@movie_time_zone).now
    @queued_movie.service = "youtube"
   end
-  if (@queued_movie.duration)
+  if ((@queued_movie.duration) && ! params[:hours])
    @hours = @queued_movie.duration / (60 * 60)
    @minutes = (@queued_movie.duration / 60) % 60
    @seconds = @queued_movie.duration % 60
@@ -82,18 +82,19 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.start_time = the_time.gmtime
    @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
-   @queued_movie.session_id = session.id if session.id
+   @queued_movie.session_id = session.id
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
-    redirect_to "/screening_room/schedule_movie/"+@screening_room.to_s
+    redirect_to "/screening_room/history/"+@screening_room.to_s
    else
     flash[:notice] = @queued_movie.errors.full_messages.to_sentence
    end
   end
+  return true
  end
 
  def edit
-  schedule_movie
+  return false unless schedule_movie
   @queued_movie = QueuedMovie.find(params[:id])
   render :action => :schedule_movie
  end
