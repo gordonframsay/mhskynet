@@ -45,6 +45,7 @@ class ScreeningRoomController < ApplicationController
    end
   else
    @queued_movie = QueuedMovie.new
+   @queued_movie.screening_room = @screening_room
    @queued_movie.start_time = ActiveSupport::TimeZone.new(@movie_time_zone).now
    @queued_movie.service = "youtube"
   end
@@ -84,7 +85,7 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.session_id = session.id if session.id
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
-    redirect_to "/screening_room/schedule_movie"+@screening_room.to_s
+    redirect_to "/screening_room/schedule_movie/"+@screening_room.to_s
    else
     flash[:notice] = @queued_movie.errors.full_messages.to_sentence
    end

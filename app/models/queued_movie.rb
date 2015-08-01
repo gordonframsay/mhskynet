@@ -1,6 +1,6 @@
 class QueuedMovie < ActiveRecord::Base
 
- validate :start_time_cannot_be_in_the_past, :movies_can_not_overlap, :youtube_identifier_length, :duration_non_live_events, :vimeo_id_numbers_only
+ validate :start_time_cannot_be_in_the_past, :movies_can_not_overlap, :youtube_identifier_length, :duration_non_live_events, :vimeo_id_numbers_only, :html5_should_begin_with_http
 
  validates_presence_of :service
  validates_presence_of :title
@@ -73,6 +73,10 @@ private
   if (new_record? && start_time.present? && (start_time < Time.now))
    errors.add(:start_time, "can't be in the past") 
   end
+ end
+
+ def html5_should_begin_with_http
+  errors.add(:identifier, "HTML5 media needs to begin with http... to be an absolute link.") if ((service == "html5") && (! identifier.match(/^[hH][tT][tT][pP]/)))
  end
 
 end
