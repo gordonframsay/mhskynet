@@ -1,0 +1,29 @@
+<div class="modal fade" id="media_help_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Help on Identifiers</h4>
+      </div>
+      <div class="modal-body">
+        <p>The identifier of media varies depending on the media source.</p>
+	<p>For Youtube, the identifier is the 11 character code that comes after the "v=" in the Youtube URL for the video:</p>
+	<p><img src="/youtube_identifier.jpg" /></p>
+	<p>If the video is part of a playlist, be sure to not include the "&..." part that goes after the identifier.</p>
+	<p>For HTML5 player videos, it should be the full URL starting with HTTP://....</p>
+	<p>If you are sharing media through Google Drive, upload the file and then share it publicly:</p>
+	<p><img src="/google_drive_sharing.jpg" /></p>
+	<p>Get the file ID which is a long crazy thing that is <strong>between and does not include slashes</strong>.  For example: "0B04V_7dhNkEed3pwNDFuZ1BXQUE"</p>
+	<p>The streamable version of the file for our purposes is "http://www.googledrive.com/host/FILE_ID_HERE", for example: 
+	<a href="http://www.googledrive.com/host/0B04V_7dhNkEed3pwNDFuZ1BXQUE" target="_blank">http://www.googledrive.com/host/0B04V_7dhNkEed3pwNDFuZ1BXQUE</a>.</p>
+	<p>Test it before adding it to the Screening Room. Simply going to the movie URL should have it play <strong>in the browser window</strong> if it works. (Click the link above for an example.)</p>
+	<p>The simplest way to encode HTML5 compatible media is to use <a href="https://handbrake.fr" target="_blank">HandBrake</a> with 'Normal' profile and the 
+	'Web Optimized' checkbox checked to make a MP4 file suitable for the Screening Room.</p>
+	<p>Other supported formats are Vimeo and Daily Motion.  Use their video identifier which is a jumble of characters very similar to how Youtube works.</p>
+      </div>
+      <div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

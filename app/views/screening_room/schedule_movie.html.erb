@@ -30,7 +30,9 @@
 </tr>
 <tr>
  <th>Identifier</th>
- <td><%= f.text_field :identifier %> <div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div><br />Identifier should be the movie ID. Example: "bS5P_LAqiVg" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
+ <td><%= f.text_field :identifier %> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="identifier_help"></span>
+<div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div>
+<br />Identifier should be the movie ID. Example: "bS5P_LAqiVg" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
 </tr>
 <tr>
  <th>Title</th>
@@ -74,6 +76,8 @@
 
 <%= render :partial => 'screening_room_nav' %>
 
+<%= render :partial => "shared/media_help" %>
+
 <script>
     function get_youtube_movie_data(movie_id) {
      $.get( "https://www.googleapis.com/youtube/v3/videos?key=<%= @google_domain_api_key %>&part=snippet&id="+movie_id, function( data ) {
@@ -99,6 +103,9 @@
     }
 
 $( document ).ready(function() {
+ $( "#identifier_help" ).click(function() {
+  $('#media_help_modal').modal();
+ });
  $( "#queued_movie_identifier" ).change(function() {
   if (($("#queued_movie_service").val() == "youtube") && ($("#queued_movie_identifier").val().length == 11)) {
    $("#spinner").show();
@@ -109,3 +116,4 @@ $( document ).ready(function() {
 });
 
 </script>
+
