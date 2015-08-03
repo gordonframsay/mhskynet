@@ -25,6 +25,7 @@
      <th>Modify</th>
     </tr>
     <% QueuedMovie.where(["screening_room = ?", @screening_room]).order("start_time desc").each do |m| %>
+    <% next if ((m.start_time + m.duration) < Time.now) %><%# Hide past movies for now %>
     <tr>
      <td><%= m.service.titleize if m.service %></td>
      <td><%= link_to(m.title, m.url) %></td>
