@@ -4,6 +4,21 @@ class ScreeningRoomController < ApplicationController
   @page_title =  @page_title + " - "  + @movie_title
   @page_title = "▶︎ " + @page_title if (@movie_time < Time.now)
   @meta_refresh_times = []
+  @movie_width = (session[:movie_width])?(session[:movie_width]):780
+  @movie_height = (session[:movie_height])?(session[:movie_height]):650
+  @forum_width =  (session[:forum_width])?(session[:forum_width]):500
+ end
+
+ def set_sizes
+  if request.post?
+   session[:movie_width] = params[:movie_width].to_i
+   session[:movie_height] = params[:movie_height].to_i
+   session[:forum_width] = params[:forum_width].to_i
+   flash[:notice] = "Sizing saved!"
+  end
+  @movie_width = (session[:movie_width])?(session[:movie_width]):780
+  @movie_height = (session[:movie_height])?(session[:movie_height]):650
+  @forum_width =  (session[:forum_width])?(session[:forum_width]):500
  end
 
  def change_time_zone

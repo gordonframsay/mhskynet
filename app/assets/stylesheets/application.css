@@ -13,3 +13,22 @@
  *= require_tree .
  *= require_self
  */
+
+#queued_movies {
+	height: 600px;
+	overflow: scroll;
+}
+
+.form_table td {
+	padding: 3px 3px;
+}
+
+.form_table th {
+	vertical-align: top;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.field_with_errors {
+	width: 300px;
+}

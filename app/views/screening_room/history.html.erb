@@ -1,7 +1,7 @@
     <%= render :partial => 'shared/navigation' %>
 
     <div style="padding: 0px 30px">
-        <h2>MH Skynet - Scheduled Movies</h2>
+        <h2>MH Skynet - Queued Movies</h2>
     </div>
 
     <style>
@@ -12,6 +12,7 @@
 
     <%= render :partial => 'visual_schedule' %>
 
+    <div id="queued_movies">
     <table>
     <tr>
      <th>Servie</th>
@@ -53,6 +54,8 @@
     </tr>
     <% end %>
     </table>
+
+    </div>
     </div>
 
 <%= render :partial => 'screening_room_nav' %>

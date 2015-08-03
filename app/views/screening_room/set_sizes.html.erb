@@ -1,0 +1,57 @@
+    <%= render :partial => 'shared/navigation' %>
+
+    <div style="padding: 0px 30px">
+        <h2>MH Skynet - Queued Movies</h2>
+    </div>
+
+    <style>
+    td,th { padding: 2px; }
+    </style>
+
+    <div style="padding: 0px 30px">
+
+    <%= render :partial => 'visual_schedule' %>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<%= form_tag %>
+<center>
+<table>
+<tr>
+<th>Movie Width:</th>
+<td><input name="movie_width" id="movie_width" value="<%= @movie_width %>" /> Default: 780</td>
+</tr>
+<tr>
+<th>Forum Width:</th>
+<td><input name="forum_width" id="forum_width" value="<%= @forum_width %>" /> Default: 500</td>
+</tr>
+<tr>
+<th>Movie/Forum Height:</th>
+<td><input name="movie_height" id="movie_height" value="<%= @movie_height %>" /> Default: 650</td>
+</tr>
+<tr>
+<td colspan="2" align="center">
+<input type="submit" value="Save Prefs" />
+</td>
+</tr>
+</table>
+<p>&nbsp;</p>
+<p><a id="calculate_sizing">Try to guess best sizing based on current Window size (with the movie being 3/5ths the width and the forum 2/5ths)</a></p>
+</center>
+
+    </div>
+
+<script>
+$( document ).ready(function() {
+ $( "#calculate_sizing" ).click(function() {
+  var width = $( window ).width();
+  var height = $( window ).height();
+  $( "#movie_height" ).val(height - 75);
+  $( "#movie_width" ).val(Math.round((width - 80) * (3.0/5.0)));
+  $( "#forum_width" ).val(Math.round((width - 80) * (2.0/5.0)));
+ });
+});
+
+
+</script>

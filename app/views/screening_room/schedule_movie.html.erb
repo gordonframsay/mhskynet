@@ -19,7 +19,7 @@
 
 <div id="preview_image"></div>
 
-<table>
+<table class="form_table">
 <tr>
  <th>Screning Room #</th>
  <td><%= f.select :screening_room, (1..10).to_a %></td>
@@ -31,8 +31,7 @@
 <tr>
  <th>Identifier</th>
  <td><%= f.text_field :identifier %> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="identifier_help"></span>
-<div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div>
-<br />Identifier should be the movie ID. Example: "bS5P_LAqiVg" for YouTube, DailyMotion and Vimeo.  HTML5 media should be full URLs.</td>
+     <div id="spinner" style="display: none"><img src="/basic_spinner.gif" /></div></td>
 </tr>
 <tr>
  <th>Title</th>
@@ -41,6 +40,7 @@
 <tr>
  <th>Start Time</th>
  <td>
+	<% unless @queued_movie.errors[:start_time].empty? %><div class='alert alert-danger field_with_errors'><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> Fix the entry below before proceeding.</div><% end %>
 	<%= select_tag(:start_year, options_for_select((Date.today.year..(Date.today.year + 2)), @start_year)) %> / 
 	<%= select_tag(:start_month, options_for_select((1..12).map {|x| [Date::MONTHNAMES[x], x] }, @start_month)) %> / 
 	<%= select_tag(:start_day, options_for_select(1..31, @start_day)) %> &nbsp; &nbsp; &nbsp; 
@@ -52,7 +52,9 @@
 </tr>
 <tr>
  <th>Duration</th>
- <td><input name="hours" id="hours" value="<%= @hours %>" size="4" /> hours, <input name="minutes" id="minutes" value="<%= @minutes %>" size="4" /> minutes, <input name="seconds" id="seconds" value="<%= @seconds %>" size="4" /> seconds</td>
+ <td>
+	<% unless @queued_movie.errors[:duration].empty? %><div class='alert alert-danger field_with_errors'><span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> Fix the entry below before proceeding.</div><% end %>
+	<input name="hours" id="hours" value="<%= @hours %>" size="4" /> hours, <input name="minutes" id="minutes" value="<%= @minutes %>" size="4" /> minutes, <input name="seconds" id="seconds" value="<%= @seconds %>" size="4" /> seconds</td>
 </tr>
 <tr>
  <th>Live Event?</th>
@@ -60,7 +62,8 @@
 </tr>
 <tr>
  <th>Who Posted this and why?</th>
- <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %> (Note, other information such as your IP address is already recorded, but only these notes will be public.)</td>
+ <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %><br />
+	(Note, other information such as your IP address is already recorded, but only these notes will be public.)</td>
 </tr>
 </table>
 <p>&nbsp;</p>
