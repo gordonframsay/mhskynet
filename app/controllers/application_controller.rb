@@ -34,8 +34,8 @@ class ApplicationController < ActionController::Base
     @live_event = m.live_event?
    else
     @live_event = true
-    @movie_title = "Testing"
-    @movie_identifier = "GcQqI9wmSyI"
+    @movie_title = "Live Coral Reef Cam | California Academy of Sciences "
+    @movie_identifier = "we06A47TwcE"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
