@@ -1,5 +1,7 @@
 class ScreeningRoomController < ApplicationController
 
+ before_filter :protect_screening_room
+
  def index
   @page_title =  @page_title + " - "  + @movie_title
   @page_title = "▶︎ " + @page_title if (@movie_time < Time.now)
@@ -122,6 +124,16 @@ class ScreeningRoomController < ApplicationController
    if ((@movie_time + @movie_length) > Time.now)
     render :text => "<a href=\"/screening_room\" >Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
    end
+  end
+ end
+
+ private
+
+ def protect_screening_room
+  if (@screening_room == 9)
+    authenticate_or_request_with_http_basic("Screening Room #"+@screening_room.to_s) do |username, password|
+      ((username == "mh") && (password == get_config("screening_room_9_password")))
+    end
   end
  end
 
