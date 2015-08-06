@@ -325,20 +325,23 @@ $(function() {
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+<p>&nbsp;</p>
+
 <center>
-<table>
+<table width="1000">
 <tr>
+<td valign="center">
+<a href="/mh_radio/submitted_songs">Submitted Videos</a>
+</td>
 <td>
 <%= form_tag %>
-Add a song:
 <table>
  <tr>
-  <td>Youtube Identifier: <input name="identifier" /></td>
-  <td><input type="submit" value="Submit Video" /></td>
+  <td>Add Youtube Identifier: <input name="identifier" /> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="identifier_help"></span></td>
+  <td>&nbsp;&nbsp;<input type="submit" value="Submit Video" /></td>
  </tr>
 </table>
 </form>
-<p><a href="/mh_radio/submitted_songs">Submitted Videos</a></p>
 </td>
 <td>
 <%= form_tag %>
@@ -350,3 +353,15 @@ Add a song:
 </tr>
 </table>
 </center>
+
+<%= render :partial => "shared/media_help" %>
+
+<script>
+$( document ).ready(function() {
+ $( "#identifier_help" ).click(function() {
+  $('#media_help_modal').modal();
+ });
+});
+</script>
+
+
