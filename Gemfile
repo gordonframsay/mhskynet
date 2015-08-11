@@ -2,16 +2,19 @@ source 'https://rubygems.org'
 
 # Uncomment this when pushing changes to this file to Heroku:
 ruby "2.1.6"
+gem 'puma'
+
+
 
 gem "pg"
 gem 'rails_12factor', group: :production
 gem "oauth2"
 gem "net-dns"
 gem 'web-console', '~> 2.0', group: :development
+gem 'jwt'
 
+gem 'google-api-client'
 gem "activerecord-session_store"
-
-gem 'puma'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.9'

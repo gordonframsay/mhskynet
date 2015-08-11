@@ -30,8 +30,14 @@ module ApplicationHelper
 	</script>").html_safe
  end
 
+  def get_config(key_name)
+   site_default = SiteDefault.where(["key_name = ?", key_name]).first
+   raise "Key not found: "+key_name unless site_default
+   return site_default.key_value # TODO: handle various value types.. e.g. integers, etc.
+  end
+
  def available_time_zones
-  return"Pacific Time (US & Canada)","Mountain Time (US & Canada)","Central Time (US & Canada)","Eastern Time (US & Canada)","Atlantic Time (Canada)","Newfoundland"
+  return ["Pacific Time (US & Canada)","Mountain Time (US & Canada)","Central Time (US & Canada)","Eastern Time (US & Canada)","Atlantic Time (Canada)","Newfoundland"]
  end
 
  def formatted_duration(duration)

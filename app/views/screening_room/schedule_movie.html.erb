@@ -6,6 +6,27 @@
 
 <div style="padding: 0px 30px">
 
+
+
+  <script>
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+        document.location = "/screening_room/google_logout";
+      });
+    }
+
+    function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
+  </script>
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+  <a href="#" onclick="signOut();">Sign out</a>
+
 <% if @queued_movie.new_record? %>
 <h3>Schedule A Movie</h3>
 <% else %>

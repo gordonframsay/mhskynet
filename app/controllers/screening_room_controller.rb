@@ -1,10 +1,26 @@
 class ScreeningRoomController < ApplicationController
 
- before_filter :protect_screening_room
+ require 'jwt'
 
- def google_signin_test
+ before_filter :protect_screening_room
+ before_filter :validate_google_log_in, :only => :schedule_movie
+
+ def google_sign_in
  end
 
+ def google_logout
+  flash[:notice] = "You are logged out of Google Sign-In."
+  session[:google_id_token] = nil
+  session[:decoded_google_id_token] = nil
+  redirect_to "/"
+ end
+
+ def google_login_completion
+  session[:google_id_token] = params[:id_token]
+  logger.error("Google ID Token: "+params[:id_token])
+  render :text => "OK"
+  return false
+ end
 
  def index
   @page_title =  @page_title + " - "  + @movie_title
@@ -66,6 +82,7 @@ class ScreeningRoomController < ApplicationController
    end
   else
    @queued_movie = QueuedMovie.new
+   @queued_movie.notes = session[:decoded_google_id_token]["name"]
    @queued_movie.screening_room = @screening_room
    @queued_movie.start_time = ActiveSupport::TimeZone.new(@movie_time_zone).now
    @queued_movie.service = "youtube"
@@ -104,6 +121,7 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.source_ip = request.remote_ip
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
    @queued_movie.session_id = session.id
+   @queued_movie.marshalled_google_user_token = Marshal.dump(session[:decoded_google_id_token])
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
     redirect_to "/screening_room/history/"+@screening_room.to_s
@@ -139,6 +157,23 @@ class ScreeningRoomController < ApplicationController
       ((username == "mh") && (password == get_config("screening_room_9_password")))
     end
   end
+ end
+
+ def validate_google_log_in
+  if session[:google_id_token]
+   decoded_token = JWT.decode session[:google_id_token], nil, false
+   logger.error("Decoded Google ID Token: "+(decoded_token.inspect))
+   if ((decoded_token.first["iss"] == "accounts.google.com") && (decoded_token.first["aud"] == get_config("google_api_client_id")) && (Time.at(decoded_token.first["exp"]) > Time.now))  # Validity test
+    session[:decoded_google_id_token] = decoded_token.first
+    flash[:notice] = "Logged in as "+(decoded_token.first["name"])+"."
+    return true
+   end
+  end
+  session[:google_id_token] = nil
+  session[:decoded_google_id_token] = nil
+  flash[:notice] = "Please log-in to continue."
+  render :action => 'google_sign_in'
+  return false
  end
 
 end

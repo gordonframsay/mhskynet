@@ -63,14 +63,15 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.string   "identifier"
     t.string   "service"
     t.string   "title"
-    t.string   "preview_image_url", limit: 512
+    t.string   "preview_image_url",            limit: 512
     t.datetime "start_time"
     t.integer  "duration"
-    t.integer  "live_event",        limit: 2,   default: 0
+    t.integer  "live_event",                   limit: 2,   default: 0
     t.cidr     "source_ip"
     t.text     "notes"
     t.string   "session_id"
-    t.integer  "screening_room",                default: 1
+    t.integer  "screening_room",                           default: 1
+    t.binary   "marshalled_google_user_token"
   end
 
   create_table "radio_songs", force: true do |t|
