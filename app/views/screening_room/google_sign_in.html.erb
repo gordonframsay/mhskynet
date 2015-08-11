@@ -1,0 +1,45 @@
+<%#
+"ID: ####"
+"Name: Full Name
+"Image URL: undefined"
+"Email: xxxxxx@gmail.com"
+"ID Token: big_thingy"
+%>
+
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log("Name: " + profile.getName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+	var jqxhr = $.ajax( "/screening_room/google_login_completion?id_token="+id_token )
+	  .done(function() {
+	    // alert( "success" );
+	    document.location = '/screening_room/schedule_movie/<%= @screening_room %>';
+	  })
+	  .fail(function() {
+	    alert( "error" );
+	  })
+	  .always(function() {
+	    // alert( "complete" );
+	  });
+      };
+
+    </script>
+
+<center>
+<table>
+<tr>
+<td height="200" valign="bottom" align="center">
+<p>Proceed with Google Login to continue</p>
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+</td>
+</tr>
+</table>
+</center>
