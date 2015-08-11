@@ -2,6 +2,11 @@ class ScreeningRoomController < ApplicationController
 
  before_filter :protect_screening_room
 
+ def google_signin_test
+  render :layout => false
+ end
+
+
  def index
   @page_title =  @page_title + " - "  + @movie_title
   @page_title = "▶︎ " + @page_title if (@movie_time < Time.now)
