@@ -7,7 +7,6 @@
 <div style="padding: 0px 30px">
 
 
-
   <script>
     function signOut() {
       var auth2 = gapi.auth2.getAuthInstance();
@@ -23,9 +22,8 @@
       });
     }
   </script>
-<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 
-  <a href="#" onclick="signOut();">Sign out</a>
+  <p><a href="#" id="google_sign_out" onclick="signOut();"><img src="/google_sign_out.png" height="38" /></a></p>
 
 <% if @queued_movie.new_record? %>
 <h3>Schedule A Movie</h3>
