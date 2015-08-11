@@ -1,11 +1,11 @@
-<html lang="en">
-  <head>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="730163291834-82oq0mcu3nlqkss11an85vp2vkqcs2ok.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-  </head>
-  <body>
-    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+<%#
+"ID: ####"
+"Name: Full Name
+"Image URL: undefined"
+"Email: xxxxxx@gmail.com"
+"ID Token: big_thingy"
+%>
+
     <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
@@ -19,6 +19,10 @@
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       };
+
     </script>
-  </body>
-</html>
+
+<center>
+<p>Proceed with Google Login to continue</p>
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+</center>

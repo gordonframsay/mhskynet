@@ -3,7 +3,6 @@ class ScreeningRoomController < ApplicationController
  before_filter :protect_screening_room
 
  def google_signin_test
-  render :layout => false
  end
 
 
