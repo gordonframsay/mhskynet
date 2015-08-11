@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
   before_filter :before_filter_check_ip
   before_filter :movie_prep
 
+ # For testing with Google APIs
+ def oauth2callback
+  logger.warn(params.inspect)
+  render :text => "nothing"
+ end
+
  private
 
   def get_config(key_name)

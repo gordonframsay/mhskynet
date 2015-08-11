@@ -5,12 +5,6 @@ class MhRadioController < ApplicationController
   @google_domain_api_key = get_config("google_api_key")
  end
 
- # For testing with Google APIs
- def oauth2callback
-  logger.warn(params.inspect)
-  render :text => "nothing"
- end
-
  def index
   @page_title = "▶︎ " + @page_title+ " - Radio"
   if (request.post? && params[:identifier])
