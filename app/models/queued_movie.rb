@@ -37,6 +37,11 @@ class QueuedMovie < ActiveRecord::Base
   return identifier
  end
 
+ def unmarshalled_google_user_token
+  return nil unless marshalled_google_user_token
+  return Marshal.load(marshalled_google_user_token)
+ end
+
 private
 
  def vimeo_id_numbers_only

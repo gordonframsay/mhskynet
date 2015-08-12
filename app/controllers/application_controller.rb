@@ -56,6 +56,9 @@ class ApplicationController < ActionController::Base
 
   def before_filter_check_ip
    return true if ((params[:controller] == "admin") || @superuser)
+   logger.error("Visit from "+(request.remote_ip.to_s)+" - "+(session.id.to_s)+" "+request.user_agent)
+   session[:source_ip] = request.remote_ip.to_s
+   session[:user_agent] = request.user_agent 
    if (session[:poisoned_session] || (tmp = BlockedIp.where(["address = ?", request.remote_ip]).first))
     result = authenticate_or_request_with_http_basic("Restricted Area") do |username, password|
      ((username == "mh") && (password == get_config("site_password")))
@@ -64,7 +67,7 @@ class ApplicationController < ActionController::Base
      session[:poisoned_session] = false
      flash[:notice] = "Logged in."
     else
-     logger.error("Blocked user: on IP ban list")
+     logger.error("Blocked user: on IP ban list - "+(request.remote_ip.to_s)+" "+(session.id.to_s))
      session[:poisoned_session] = true
     end
     return false
