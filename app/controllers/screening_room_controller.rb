@@ -161,7 +161,13 @@ class ScreeningRoomController < ApplicationController
 
  def validate_google_log_in
   if session[:google_id_token]
-   decoded_token = JWT.decode session[:google_id_token], nil, false
+   begin
+    decoded_token = JWT.decode session[:google_id_token], nil, false
+   rescue
+    flash[:notice] = ($!).to_s+", please try to log-in again."
+    render :action => 'google_sign_in'
+    return false
+   end
    logger.error("Decoded Google ID Token: "+(decoded_token.inspect))
    if ((decoded_token.first["iss"] == "accounts.google.com") && (decoded_token.first["aud"] == get_config("google_api_client_id")) && (Time.at(decoded_token.first["exp"]) > Time.now))  # Validity test
     session[:decoded_google_id_token] = decoded_token.first
