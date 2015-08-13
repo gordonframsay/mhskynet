@@ -1,0 +1,32 @@
+<div style="padding: 0px 30px">
+
+<h3>Admin</h3>
+
+<style>
+ td {
+	padding: 2px 10px;
+}
+
+</style>
+
+<p><a href="/admin/new_blocked_ip">New Blocked IP</a></p>
+
+<table>
+<tr>
+<th>Created</th>
+<th>IP Address</th>
+<th>Reason</th>
+<td></td>
+</tr>
+<% @blocked_ips.each do |b| %>
+<tr>
+<td><%= b.created_at.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></td>
+<td><%= b.address.to_s %></td>
+<td><%= b.reason %></td>
+<td><a href="/admin/delete_blocked_ip/<%= b.id %>">Delete</a></td>
+</tr>
+<% end %>
+</table>
+
+
+</div>
