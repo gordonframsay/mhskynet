@@ -6,7 +6,7 @@ class AdminController < ApplicationController
  end
 
  def blocked_ips
-  @blocked_ips = BlockedIp.all
+  @blocked_ips = BlockedIp.all.order("created_at")
  end
 
  def new_blocked_ip
