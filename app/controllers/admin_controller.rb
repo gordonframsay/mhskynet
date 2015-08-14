@@ -11,6 +11,7 @@ class AdminController < ApplicationController
  # Makes it so if this user returns with this session, they need to log-in
  def poison_session
   s = Session.find(params[:id])
+  s.persistent = 1
   session_data = Marshal.load(Base64.decode64(s.data))
   session_data[:poisoned_session] = true
   s.data = Base64.encode64(Marshal.dump(session_data))
