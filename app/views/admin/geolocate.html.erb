@@ -1,0 +1,38 @@
+<div style="padding: 0px 30px">
+
+<h3>Geolocate</h3>
+
+<style>
+ td {
+        padding: 2px 10px;
+}
+
+</style>
+
+
+<% f = Freegeoip.new; f.city = ""; f.state = ""
+ all_sessions = Session.all.map {|s| session_data = s.decoded_session_data; f.find(session_data["source_ip"]) if session_data["source_ip"]; [s.id, s.updated_at, session_data["source_ip"], f.state, f.city, session_data["user_agent"]] }
+ all_sessions.sort! {|x,y| (x[4]+" "+x[3]) <=> (y[4]+" "+y[3]) } %>
+<table>
+<tr>
+<th>Session ID</th>
+<th>Last Visit</th>
+<th>IP Address</th>
+<th>State, City</th>
+<th>User Agent</th>
+<th>&nbsp;</th>
+<% all_sessions.each do |s| %>
+<tr>
+<td><%= s[0] %></td>
+<td><%= s[1].in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></td>
+<td><%= s[2] %></td>
+<td><%= s[3] %>, <%= s[4] %></td>
+<td><%= s[5] %></td>
+<td><a href="/admin/poison_session/<%= s[0] %>" target="_blank" >Poison</a></td>
+</tr>
+<% end %>
+</tr>
+</table>
+
+
+</div>

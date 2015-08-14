@@ -5,6 +5,20 @@ class AdminController < ApplicationController
  def index
  end
 
+ def geolocate
+ end
+
+ # Makes it so if this user returns with this session, they need to log-in
+ def poison_session
+  s = Session.find(params[:id])
+  session_data = Marshal.load(Base64.decode64(s.data))
+  session_data[:poisoned_session] = true
+  s.data = Base64.encode64(Marshal.dump(session_data))
+  s.save!
+  flash[:notice] = "Session poisoned."
+  redirect_to :action => 'index'
+ end
+
  def blocked_ips
   @blocked_ips = BlockedIp.all.order("created_at")
  end
