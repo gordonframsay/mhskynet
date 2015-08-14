@@ -18,7 +18,7 @@ class Freegeoip
  attr_accessor :metro_code
 
 
- def clear
+ def clear_fields
   @ip_address = @country_abbr = @country = @state_abbr = @state = @city = @zipcode = @time_zone = @lat = @long = @metro_code = ""
  end
 
