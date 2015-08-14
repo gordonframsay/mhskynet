@@ -10,8 +10,16 @@
 </style>
 
 
-<% f = Freegeoip.new; f.city = ""; f.state = ""
- all_sessions = Session.all.map {|s| session_data = s.decoded_session_data; f.find(session_data["source_ip"]) if session_data["source_ip"]; [s.id, s.updated_at, session_data["source_ip"], f.state, f.city, session_data["user_agent"]] }
+<% f = Freegeoip.new
+ all_sessions = Session.all.map { |s|
+  session_data = s.decoded_session_data
+  if session_data["source_ip"]
+   f.find(session_data["source_ip"])
+  else
+   f.clear
+  end
+  [s.id, s.updated_at, session_data["source_ip"], f.state, f.city, session_data["user_agent"], (session_data["poisoned_session"])?"Yes":"No"] 
+ }
  all_sessions.sort! {|x,y| (x[4]+" "+x[3]) <=> (y[4]+" "+y[3]) } %>
 <table>
 <tr>
@@ -20,6 +28,7 @@
 <th>IP Address</th>
 <th>State, City</th>
 <th>User Agent</th>
+<th>Poisoned?</th>
 <th>&nbsp;</th>
 <% all_sessions.each do |s| %>
 <tr>
@@ -28,6 +37,7 @@
 <td><%= s[2] %></td>
 <td><%= s[3] %>, <%= s[4] %></td>
 <td><%= s[5] %></td>
+<td><%= s[6] %></td>
 <td><a href="/admin/poison_session/<%= s[0] %>" target="_blank" >Poison</a></td>
 </tr>
 <% end %>

@@ -18,6 +18,10 @@ class Freegeoip
  attr_accessor :metro_code
 
 
+ def clear
+  @ip_address = @country_abbr = @country = @state_abbr = @state = @city = @zipcode = @time_zone = @lat = @long = @metro_code = ""
+ end
+
  def find(address) # address is just the string of the IP address, e.g "1.2.3.4"
   if (tmp = Rails.cache.read("free_geoip_"+address))
    @ip_address, @country_abbr, @country, @state_abbr, @state, @city, @zipcode, @time_zone, @lat, @long, @metro_code = tmp
