@@ -6,7 +6,6 @@
  td {
         padding: 2px 10px;
 }
-
 </style>
 
 
@@ -16,17 +15,18 @@
   if session_data["source_ip"]
    f.find(session_data["source_ip"])
   else
-   f.clear
+   f.clear_fields
   end
-  [s.id, s.updated_at, session_data["source_ip"], f.state, f.city, session_data["user_agent"], (session_data["poisoned_session"])?"Yes":"No"] 
+  [s.id, s.updated_at, session_data["source_ip"], f.state, f.city, f.country, session_data["user_agent"], (session_data["poisoned_session"])?"Yes":"No"] 
  }
- all_sessions.sort! {|x,y| (x[4]+" "+x[3]) <=> (y[4]+" "+y[3]) } %>
+ all_sessions.sort! {|x,y| (x[4]+" "+x[3]+x[5]) <=> (y[4]+" "+y[3]+x[5]) } %>
 <table>
 <tr>
 <th>Session ID</th>
 <th>Last Visit</th>
 <th>IP Address</th>
 <th>State, City</th>
+<th>Country</th>
 <th>User Agent</th>
 <th>Poisoned?</th>
 <th>&nbsp;</th>
@@ -38,6 +38,7 @@
 <td><%= s[3] %>, <%= s[4] %></td>
 <td><%= s[5] %></td>
 <td><%= s[6] %></td>
+<td><%= s[7] %></td>
 <td><a href="/admin/poison_session/<%= s[0] %>" target="_blank" >Poison</a></td>
 </tr>
 <% end %>
