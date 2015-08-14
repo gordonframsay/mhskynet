@@ -12,6 +12,8 @@ gem "oauth2"
 gem "net-dns"
 gem 'web-console', '~> 2.0', group: :development
 gem 'jwt'
+gem 'geocoder'
+gem 'curb'
 
 gem 'google-api-client'
 gem "activerecord-session_store"
