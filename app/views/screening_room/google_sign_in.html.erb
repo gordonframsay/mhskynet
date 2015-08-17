@@ -6,16 +6,37 @@
 "ID Token: big_thingy"
 %>
 
+<center>
+<table>
+<tr>
+<td height="300" width="800" valign="bottom" align="center">
+<p>Proceed with Google Sign-In to continue</p>
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+<p>&nbsp;</p>
+<p><strong>This currently may not work in Internet Explorer!<br />Chrome, Firefox and Safari are known to work (non-mobile varieties anyway).</strong></p>
+<p>&nbsp;</p>
+<p>Why are we using <a href="https://developers.google.com/identity/" target="_blank" >Google Sign-In</a>?  Google Sign-In is easier and more secure than asking MH users to create new accounts with username/passwords that have to be verified individually. 
+The sort of information provided to MH is the same as what is sent if you sent an email from Gmail: name, email address, profile image and your user ID. It lets the site know that you 
+really are that Google user and helps to let MH remember your preferences/settings across multiple devices that are logged into the same Google account.  Using Google Sign-In isn't 
+required to participate in enjoying MH but is required for certain restricted activities like scheduling movies.  Pressing the Sign-In button above for the first time will have Google show 
+you exactly what sort of information is shared with MH before you commit to signing-in.  At any point you can go into your Google account and deauthorize MH from having your profile 
+information in the future.</p>
+
+</td>
+</tr>
+</table>
+</center>
+
+
     <script>
+
       function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
         var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log("ID: " + profile.getId());
         console.log("Name: " + profile.getName());
         console.log("Image URL: " + profile.getImageUrl());
         console.log("Email: " + profile.getEmail());
 
-        // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
 	var jqxhr = $.ajax( "/screening_room/google_login_completion?id_token="+id_token )
@@ -37,21 +58,3 @@
 
     </script>
 
-<center>
-<table>
-<tr>
-<td height="300" width="800" valign="bottom" align="center">
-<p>Proceed with Google Sign-In to continue</p>
-<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-<p>&nbsp;</p>
-<p>Why are we using <a href="https://developers.google.com/identity/" target="_blank" >Google Sign-In</a>?  Google Sign-In is easier and more secure than asking MH users to create new accounts with username/passwords that have to be verified individually. 
-The sort of information provided to MH is the same as what is sent if you sent an email from Gmail: name, email address, profile image and your user ID. It lets the site know that you 
-really are that Google user and helps to let MH remember your preferences/settings across multiple devices that are logged into the same Google account.  Using Google Sign-In isn't 
-required to participate in enjoying MH but is required for certain restricted activities like scheduling movies.  Pressing the Sign-In button above for the first time will have Google show 
-you exactly what sort of information is shared with MH before you commit to signing-in.  At any point you can go into your Google account and deauthorize MH from having your profile 
-information in the future.</p>
-
-</td>
-</tr>
-</table>
-</center>
