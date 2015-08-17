@@ -20,14 +20,18 @@
         console.log("ID Token: " + id_token);
 	var jqxhr = $.ajax( "/screening_room/google_login_completion?id_token="+id_token )
 	  .done(function() {
-	    // alert( "success" );
-	    document.location = '/screening_room/schedule_movie/<%= @screening_room %>';
+	<% if (Rails.env.to_s == "development") %>
+	    alert( "success" );
+	<% end %>
+	    window.location = '/screening_room/schedule_movie/<%= @screening_room %>';
 	  })
 	  .fail(function() {
 	    alert( "error" );
 	  })
 	  .always(function() {
-	    // alert( "complete" );
+	<% if (Rails.env.to_s == "development") %>
+	    alert( "complete" );
+	<% end %>
 	  });
       };
 
