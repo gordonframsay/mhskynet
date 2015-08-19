@@ -1,0 +1,3 @@
+class DarkRoomController < ApplicationController
+
+end
