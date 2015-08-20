@@ -10,7 +10,8 @@
 
 
 <% f = Freegeoip.new
- all_sessions = Session.all.map { |s|
+ all_sessions = Session.all
+ session_data = all_sessions.map { |s|
   session_data = s.decoded_session_data
   if session_data["source_ip"]
    f.find(session_data["source_ip"])
@@ -19,18 +20,23 @@
   end
   [s.id, s.updated_at, session_data["source_ip"], f.state, f.city, f.country, session_data["user_agent"], (session_data["poisoned_session"])?"Yes":"No"] 
  }
- all_sessions.sort! {|x,y| (x[4]+" "+x[3]+x[5]) <=> (y[4]+" "+y[3]+x[5]) } %>
+ if (params[:sort] == "updated_at")
+  session_data.sort! {|x,y| x[1] <=> y[1] }
+ else
+  session_data.sort! {|x,y| (x[5]+" "+x[3]+" "+x[4]) <=> (x[5]+" "+y[3]+" "+y[4]) }
+ end
+%>
 <table>
 <tr>
 <th>Session ID</th>
-<th>Last Visit</th>
+<th><a href="?sort=updated_at">Last Visit</a></th>
 <th>IP Address</th>
 <th>State, City</th>
 <th>Country</th>
 <th>User Agent</th>
 <th>Poisoned?</th>
 <th>&nbsp;</th>
-<% all_sessions.each do |s| %>
+<% session_data.each do |s| %>
 <tr>
 <td><%= s[0] %></td>
 <td><%= s[1].in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></td>
