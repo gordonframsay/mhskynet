@@ -40,7 +40,7 @@
 
 <table class="form_table">
 <tr>
- <th>Screning Room #</th>
+ <th>Screning Room # (use 9 for private viewing.  Email Gordon for the current password.)</th>
  <td><%= f.select :screening_room, (1..10).to_a %></td>
 </tr>
 <tr>
@@ -84,6 +84,10 @@
  <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %><br />
 	(Note, other information such as your IP address is already recorded, but only these notes will be public.)</td>
 </tr>
+<tr>
+ <th><a id="terms_link">Agreed to Terms</a></th>
+ <td><%= f.check_box(:terms) %></td>
+</tr>
 </table>
 <p>&nbsp;</p>
 <center>
@@ -106,6 +110,8 @@ the illegal sharing and/or viewing of protected works.)</p></div></center>
 <%= render :partial => 'screening_room_nav' %>
 
 <%= render :partial => "shared/media_help" %>
+
+<%= render :partial => "shared/terms_help" %>
 
 <script>
     function get_youtube_movie_data(movie_id) {
@@ -134,6 +140,9 @@ the illegal sharing and/or viewing of protected works.)</p></div></center>
 $( document ).ready(function() {
  $( "#identifier_help" ).click(function() {
   $('#media_help_modal').modal();
+ });
+ $( "#terms_link" ).click(function() {
+  $('#media_terms_modal').modal();
  });
  $( "#queued_movie_identifier" ).change(function() {
   if (($("#queued_movie_service").val() == "youtube") && ($("#queued_movie_identifier").val().length == 11)) {
