@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.string   "session_id"
     t.integer  "screening_room",                           default: 1
     t.binary   "marshalled_google_user_token"
+    t.integer  "terms",                        limit: 2
   end
 
   create_table "radio_songs", force: true do |t|
