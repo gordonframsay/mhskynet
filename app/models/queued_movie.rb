@@ -14,7 +14,7 @@ class QueuedMovie < ActiveRecord::Base
  validates_numericality_of :duration, :only_integer => true, :greater_than_or_equal_to => 0
  validates_numericality_of :screening_room, :only_integer => true, :greater_than_or_equal_to => 1
  validates_numericality_of :live_event, :only_integer => true
- validates_acceptance_of :terms
+ validates_numericality_of :terms, :equal_to => 1, :message => "must be accepted."
 
  def formatted_duration
   hours = duration / (60 * 60)
