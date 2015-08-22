@@ -123,6 +123,16 @@ class ScreeningRoomController < ApplicationController
    @queued_movie.duration = (60 * 60 * @hours) + (60 * @minutes) + @seconds
    @queued_movie.session_id = session.id
    @queued_movie.marshalled_google_user_token = Marshal.dump(session[:decoded_google_id_token])
+   #
+   # People often use the wrong URLs when sharing from Google Drive... *grumble*
+   # https://drive.google.com/open?id=0B-tf8af5rnI7UzVkOGRTS3dHZFk
+   # https://drive.google.com/file/d/0B-tf8af5rnI7UzVkOGRTS3dHZFk/view?usp=sharing
+   #
+   if (@queued_movie.service == "html5")
+    @queued_movie.identifier = "http://www.googledrive.com/host/"+$1 if @queued_movie.identifier.match(/^https:\/\/drive.google.com\/open\?id=(.*)$/)
+    @queued_movie.identifier = "http://www.googledrive.com/host/"+$1 if @queued_movie.identifier.match(/^https:\/\/drive.google.com\/file\/d\/([^\/]+)\/view\?usp=sharing$/)
+   end
+   # TODO: Add maybe validation via Curl or something to see if HTML5 media exists?
    if @queued_movie.save
     flash[:notice] = "Media Queued!"
     redirect_to "/screening_room/history/"+@screening_room.to_s
