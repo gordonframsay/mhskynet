@@ -110,6 +110,7 @@ class ScreeningRoomController < ApplicationController
   @start_minute = the_time.min
   @start_am_pm = the_time.strftime("%p")
   if request.post?
+   @queued_movie.terms = params[:queued_movie][:terms].to_i if params[:queued_movie][:terms]
    if params[:id]
     @queued_movie = QueuedMovie.find(params[:id])
     @queued_movie.update(params[:queued_movie].permit!)
