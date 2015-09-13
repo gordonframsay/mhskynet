@@ -17,7 +17,7 @@
 </center>
 
       <center>
-       <a name="movie">
+       <a name="movie"></a>
 	<table>
 	<tr>
 	<td valign="top">
@@ -139,18 +139,39 @@ function timeFormated(seconds)
 <% if (@movie_service == "html5") %>
 <script>
       var v = document.getElementsByTagName("video")[0];
+      var time_check = 0;
+
+      function zero_pad(text) {
+       text = text + '';
+       if (text.length == 1) {
+        return "0"+text;
+       } else {
+        return text;
+       }
+      }
+
+      function update_time_check() {
+       time_check = time_check + 1;
+       seconds = zero_pad(Math.round(time_check % 60));
+       minutes = zero_pad(Math.round(((time_check - seconds) / 60) % (60)));
+       hours = Math.round(((time_check - seconds - (minutes * 60)) / (60 * 60)));
+       $("#time_check").text("Time Check: "+hours+":"+minutes+":"+seconds);
+      }
 
       function movie_sign() {
         document.title = "<%= "▶ ︎" +@page_title %>";
         elem = document.getElementById("movie_play_status");
         elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
         v.play();
+        setInterval(function () { update_time_check()}, 1000);
       }
 
       $( document ).ready(function() {
 	<% if (@movie_time > Time.now) %>
         setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
+        time_check = <%= (Time.now - @movie_time).round %>;
+        setInterval(function () { update_time_check()}, 1000);
         v.play();
 	<% unless @live_event %>
         v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>; });
