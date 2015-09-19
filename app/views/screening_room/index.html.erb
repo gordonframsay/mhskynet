@@ -26,7 +26,7 @@
 <% end %>
 <% if (@movie_service == "html5") %>
         <div id="player" style="float: left;width: <%= @movie_width %>px;padding-top: 20px;padding-left: 10px;">
-	 <video src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls>
+	 <video src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
 	  Your browser does not support the <code>video</code> element.
 	 </video>
 <% end %>
@@ -163,8 +163,29 @@ function timeFormated(seconds)
         elem = document.getElementById("movie_play_status");
         elem.innerHTML = "Current Movie: <i><%= @movie_title %></i> - Started At: <i><%= @movie_time.in_time_zone("America/Los_Angeles").strftime("%b %e %l:%M %p") %> PST</i>";
         v.play();
-        setInterval(function () { update_time_check()}, 1000);
+        setInterval(function () { update_time_check() }, 1000);
       }
+
+	function failed(e) {
+	   // video playback failed - show a message saying why
+	   switch (e.target.error.code) {
+	     case e.target.error.MEDIA_ERR_ABORTED:
+	       alert('You aborted the video playback.');
+	       break;
+	     case e.target.error.MEDIA_ERR_NETWORK:
+	       $('#movie_failed_modal').modal();
+	       break;
+	     case e.target.error.MEDIA_ERR_DECODE:
+	       alert('The video playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+	       break;
+	     case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+	       $('#movie_failed_modal').modal();
+	       break;
+	     default:
+	       alert('An unknown error occurred.');
+	       break;
+	   }
+	}
 
       $( document ).ready(function() {
 	<% if (@movie_time > Time.now) %>
@@ -389,6 +410,23 @@ $(function() {
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary" id="next_movie_button">Reload Page for Next Movie</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="movie_failed_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">The Movie Might be Inaccessible</h4>
+      </div>
+      <div class="modal-body">
+        <p>Your browser either does not support this video format or the file is inaccessible.  Contact the poster of the video for help.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
