@@ -140,6 +140,7 @@ function timeFormated(seconds)
 <script>
       var v = document.getElementsByTagName("video")[0];
       var time_check = 0;
+      var seek_complete = false;
 
       function zero_pad(text) {
        text = text + '';
@@ -195,7 +196,12 @@ function timeFormated(seconds)
         setInterval(function () { update_time_check()}, 1000);
         v.play();
 	<% unless @live_event %>
-        v.addEventListener("canplay",function() { v.currentTime = <%= (Time.now - @movie_time).round %>; });
+        v.addEventListener("canplay",function() {
+	 if (! seek_complete) {
+	  v.currentTime = <%= (Time.now - @movie_time).round %>;
+	  seek_complete = true;
+         };
+	});
         <% end %>
         v.addEventListener("ended",function() { setTimeout(function(){ $('#next_movie_modal').modal(); }, 5000); });
 	<% end %>
