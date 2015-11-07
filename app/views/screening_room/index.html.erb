@@ -194,7 +194,7 @@ function timeFormated(seconds)
 	<% else %>
         time_check = <%= (Time.now - @movie_time).round %>;
         setInterval(function () { update_time_check()}, 1000);
-        v.play();
+	setTimeout(function(){ v.play(); }, 5000);
 	<% unless @live_event %>
         v.addEventListener("canplay",function() {
 	 if (! seek_complete) {
@@ -401,6 +401,8 @@ $(function() {
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+    <center><span <%= "style=\"display:none\"".html_safe unless @superuser %> >Watchers: <span id="currently_watching">?</span></span></center>
+
 <%= render :partial => 'screening_room_nav' %>
 
 <div class="modal fade" id="next_movie_modal">
@@ -438,10 +440,21 @@ $(function() {
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
 <script>
+
+ function update_watchers() {
+  $.get( "/screening_room/currently_watching", function( data ) {
+   $( "#currently_watching" ).html( data );
+  });
+ }
+
  $( document ).ready(function() {
+  update_watchers();
+  setInterval(function(){ update_watchers(); }, 60000);
   $('#next_movie_button').on('click', function (e) {
    location.reload();
   })
  });
 </script>
+

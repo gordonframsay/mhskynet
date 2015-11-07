@@ -161,6 +161,21 @@ class ScreeningRoomController < ApplicationController
   end
  end
 
+ def currently_watching
+  cache_key = "screening_room_watchers_"+(@screening_room.to_s)
+  viewers = Rails.cache.read(cache_key)
+  viewers = {} unless (viewers.class == Hash)
+  # NOTE: Update timestamp
+  viewers[session.id] = Time.now
+  # NOTE: Expire old timestamps
+  viewers.keys.each do |k|
+   viewers.delete(k) if (viewers[k] < (Time.now - 90))
+  end
+  # NOTE: Record new hash and return results
+  Rails.cache.write(cache_key, viewers)
+  render :text => viewers.keys.length.to_s
+ end
+
  private
 
  def protect_screening_room
