@@ -9,11 +9,15 @@ class GameController < ApplicationController
 
  def add_room
   @room = GameRoom.new
+  @room.game_id = params[:game_id]
   if request.post?
    @room = GameRoom.new(params[:room].permit(@room.attributes.keys - ["id","created_at","updated_at"]))
    if @room.save
     flash[:notice] = "Saved!"
     @room = GameRoom.new
+    redirect_to "/game/"+params[:game_id]+"/"+(@room.id.to_s)
+   else
+    flash[:notice] = "Please fix before continuing: "+@room.errors.full_messages.to_sentence
    end
   end
  end
@@ -23,6 +27,9 @@ class GameController < ApplicationController
   if request.post?
    if @room.update(params[:room].permit(@room.attributes.keys - ["id","created_at","updated_at"]))
     flash[:notice] = "Saved!"
+    redirect_to "/game/"+params[:game_id]+"/"+(@room.id.to_s)
+   else
+    flash[:notice] = "Please fix before continuing: "+@room.errors.full_messages.to_sentence
    end
   end
  end
