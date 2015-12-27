@@ -20,20 +20,26 @@
   <td align="center">
 	<% if @game_room.north_room_id %>
 	<a href="<%= @game_room.north_room_id %>"><span class="glyphicon glyphicon-arrow-up"></span><br />Go North</a>
+	<% else %>
+	<span class="glyphicon glyphicon-ban-circle"></span>
 	<% end %>
   </td>
   <td>&nbsp;</td>
  </tr>
  <tr>
-  <td height="50">
+  <td height="50" width="100">
 	<% if @game_room.west_room_id %>
 	<a href="<%= @game_room.west_room_id %>"><span class="glyphicon glyphicon-arrow-left"></span> Go West</a>&nbsp;
+	<% else %>
+	<span class="glyphicon glyphicon-ban-circle"></span>
 	<% end %>
   </td>
-  <td>&nbsp;</td>
-  <td>
+  <td align="center"><span class="glyphicon glyphicon-screenshot"></span></td>
+  <td align="right" width="100">
 	<% if @game_room.east_room_id %>
 	<a href="<%= @game_room.east_room_id %>">Go East <span class="glyphicon glyphicon-arrow-right"></span></a>&nbsp;
+	<% else %>
+	<span class="glyphicon glyphicon-ban-circle"></span>
 	<% end %>
   </td>
  </tr>
@@ -42,6 +48,8 @@
   <td align="center">
 	<% if @game_room.south_room_id %>
 	<a href="<%= @game_room.south_room_id %>">Go South<br /><span class="glyphicon glyphicon-arrow-down"></span></a>
+	<% else %>
+	<span class="glyphicon glyphicon-ban-circle"></span>
 	<% end %>
   </td>
   <td>&nbsp;</td>
