@@ -4,6 +4,5 @@ class GameRoom < ActiveRecord::Base
  validates_presence_of	:title
  validates_presence_of	:description
  validates_presence_of	:image_url
- validates_presence_of	:description
 
 end
