@@ -16,36 +16,35 @@
 
 <table>
  <tr>
-  <td></td>
-  <td>
+  <td>&nbsp;</td>
+  <td align="center">
 	<% if @game_room.north_room_id %>
-	<a href="<%= @game_room.north_room_id %>">Go North</a>&nbsp;
+	<a href="<%= @game_room.north_room_id %>"><span class="glyphicon glyphicon-arrow-up"></span><br />Go North</a>
 	<% end %>
   </td>
-  <td></td>
+  <td>&nbsp;</td>
  </tr>
  <tr>
-  <td>
+  <td height="50">
 	<% if @game_room.west_room_id %>
-	<a href="<%= @game_room.west_room_id %>">Go West</a>&nbsp;
+	<a href="<%= @game_room.west_room_id %>"><span class="glyphicon glyphicon-arrow-left"></span> Go West</a>&nbsp;
 	<% end %>
   </td>
-  <td></td>
+  <td>&nbsp;</td>
   <td>
 	<% if @game_room.east_room_id %>
-	<a href="<%= @game_room.east_room_id %>">Go East</a>&nbsp;
+	<a href="<%= @game_room.east_room_id %>">Go East <span class="glyphicon glyphicon-arrow-right"></span></a>&nbsp;
 	<% end %>
   </td>
  </tr>
  <tr>
-  <td></td>
-  <td>
+  <td>&nbsp;</td>
+  <td align="center">
 	<% if @game_room.south_room_id %>
-	<a href="<%= @game_room.south_room_id %>">Go South</a>&nbsp;
+	<a href="<%= @game_room.south_room_id %>">Go South<br /><span class="glyphicon glyphicon-arrow-down"></span></a>
 	<% end %>
-
   </td>
-  <td></td>
+  <td>&nbsp;</td>
  </tr>
 <table>
 
