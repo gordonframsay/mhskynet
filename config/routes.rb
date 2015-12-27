@@ -12,11 +12,15 @@ Rails.application.routes.draw do
 
    get 'screening_room/edit(/:id)' => 'screening_room#edit', :via => [:get, :post]
    get 'screening_room/delete(/:id)' => 'screening_room#delete'
+
+   get 'hang_man/game(/:id)' => 'hang_man#game'
+   post 'hang_man/game(/:id)' => 'hang_man#game'
+
+   get 'game/:game_id(/:room_id)' => 'game#index'
+   post 'game/:game_id(/:room_id)' => 'game#index'
  
    get ':controller(/:action(/:id))', :via => [:get, :post]
    post ':controller(/:action(/:id))', :via => [:get, :post]
  
-   get 'hang_man/game(/:id)' => 'hang_man#game'
-   post 'hang_man/game(/:id)' => 'hang_man#game'
 
 end

@@ -41,6 +41,20 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.string   "reason"
   end
 
+  create_table "game_rooms", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "game_id"
+    t.string   "title"
+    t.string   "image_url",   limit: 512
+    t.integer  "north_room"
+    t.integer  "east_room"
+    t.integer  "west_room"
+    t.integer  "south_room"
+    t.integer  "other_room"
+    t.text     "description"
+  end
+
   create_table "hang_man_games", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
