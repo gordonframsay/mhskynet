@@ -1,0 +1,32 @@
+<style>
+
+label { width: 150px }
+
+</style>
+
+<div style="padding: 0px 30px">
+<%= form_tag %>
+
+<% if (params[:from] && params[:dir]) %>
+<input type="hidden" name="from" value="<%= params[:from] %>" />
+<input type="hidden" name="dir" value="<%= params[:dir] %>" />
+<% end %>
+
+<%# TODO: There could be more than one game in the future %>
+<input type="hidden" name="room[game_id]" value="1" />
+
+<% (@room.attributes.keys - ["id","created_at","updated_at","game_id"]).each do |key| %>
+<% if key.match(/room_id/) %>
+<p><label><%= key.titleize %>: </label><%= select_tag("room["+key+"]", options_for_select([["(none)",""]] + GameRoom.all.order("id").map {|x| [x.title + " ("+x.id.to_s+")",x.id] }, @room.send(key))) %>
+<% elsif (key == "description") %>
+<p><label><%= key.titleize %>: </label><br />
+<label>&nbsp;</label><textarea rows="10" cols="80" name="room[<%= key %>]"><%= @room.send(key) %></textarea></p>
+<% else %>
+<p><label><%= key.titleize %>: </label><input name="room[<%= key %>]" value="<%= @room.send(key) %>" size="100" /></p>
+<% end %>
+<% end %>
+<p><input type="submit" /></p>
+
+</form>
+</div>
+

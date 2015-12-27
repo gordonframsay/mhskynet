@@ -22,6 +22,7 @@
 	<a href="<%= @game_room.north_room_id %>"><span class="glyphicon glyphicon-arrow-up"></span><br />Go North</a>
 	<% else %>
 	<span class="glyphicon glyphicon-ban-circle"></span>
+	<% if @superuser %><a href="/game/1/add_room?from=<%= @game_room.id.to_s %>&dir=north"><span class="glyphicon glyphicon-plus"></span><% end %>
 	<% end %>
   </td>
   <td>&nbsp;</td>
@@ -32,6 +33,7 @@
 	<a href="<%= @game_room.west_room_id %>"><span class="glyphicon glyphicon-arrow-left"></span> Go West</a>&nbsp;
 	<% else %>
 	<span class="glyphicon glyphicon-ban-circle"></span>
+	<% if @superuser %><a href="/game/1/add_room?from=<%= @game_room.id.to_s %>&dir=west"><span class="glyphicon glyphicon-plus"></span><% end %>
 	<% end %>
   </td>
   <td align="center"><span class="glyphicon glyphicon-screenshot"></span></td>
@@ -40,6 +42,7 @@
 	<a href="<%= @game_room.east_room_id %>">Go East <span class="glyphicon glyphicon-arrow-right"></span></a>&nbsp;
 	<% else %>
 	<span class="glyphicon glyphicon-ban-circle"></span>
+	<% if @superuser %><a href="/game/1/add_room?from=<%= @game_room.id.to_s %>&dir=east"><span class="glyphicon glyphicon-plus"></span><% end %>
 	<% end %>
   </td>
  </tr>
@@ -50,6 +53,7 @@
 	<a href="<%= @game_room.south_room_id %>">Go South<br /><span class="glyphicon glyphicon-arrow-down"></span></a>
 	<% else %>
 	<span class="glyphicon glyphicon-ban-circle"></span>
+	<% if @superuser %><a href="/game/1/add_room?from=<%= @game_room.id.to_s %>&dir=south"><span class="glyphicon glyphicon-plus"></span><% end %>
 	<% end %>
   </td>
   <td>&nbsp;</td>
