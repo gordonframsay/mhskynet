@@ -1,6 +1,6 @@
 class GameController < ApplicationController
 
- before_filter :check_login
+ before_filter :check_login, :only => [:add_room, :edit_room]
 
  def index
   @game_room = GameRoom.find(params[:room_id])
