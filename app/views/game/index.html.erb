@@ -5,9 +5,14 @@
 	<h2>MH Skynet - Game - <%= @game_room.title %></h2>
     </div>
 
-<% if @game_room.image_url %>
 <center>
+<% if @game_room.image_url %>
 <p><img src="<%= @game_room.image_url %>" border="0" width="1024" /></p>
+<% end %>
+
+<% if @game_room.description %>
+<p><%= @game_room.description %></p>
+<% end %>
 
 <% if @game_room.east_room_id %>
 <a href="<%= @game_room.east_room_id %>">Go East</a>&nbsp;
@@ -26,7 +31,6 @@
 <% end %>
 
 </center>
-<% end %>
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
