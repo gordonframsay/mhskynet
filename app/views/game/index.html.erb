@@ -7,7 +7,7 @@
 
 <center>
 <% if @game_room.image_url %>
-<p><img src="<%= @game_room.image_url %>" border="0" width="1024" /></p>
+<p><a href="<%= @game_room.image_url %>" target="_blank" ><img src="<%= @game_room.image_url %>" border="0" width="1024" /></a></p>
 <% end %>
 
 <% if @game_room.description %>

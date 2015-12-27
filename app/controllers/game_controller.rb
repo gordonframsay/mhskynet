@@ -14,7 +14,6 @@ class GameController < ApplicationController
    @room = GameRoom.new(params[:room].permit(@room.attributes.keys - ["id","created_at","updated_at"]))
    if @room.save
     flash[:notice] = "Saved!"
-    @room = GameRoom.new
     redirect_to "/game/"+params[:game_id]+"/"+(@room.id.to_s)
    else
     flash[:notice] = "Please fix before continuing: "+@room.errors.full_messages.to_sentence
@@ -31,16 +30,6 @@ class GameController < ApplicationController
    else
     flash[:notice] = "Please fix before continuing: "+@room.errors.full_messages.to_sentence
    end
-  end
- end
-
- # TODO: Could be DRYer.  See the Admin controller.
- private
-
- def check_login
-  unless session[:superuser]
-   redirect_to '/account/admin_login'
-   return false
   end
  end
 

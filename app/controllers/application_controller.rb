@@ -137,4 +137,13 @@ class ApplicationController < ActionController::Base
    return true
   end
 
+ private
+
+ def check_login
+  unless session[:superuser]
+   redirect_to '/account/admin_login'
+   return false
+  end
+ end
+
 end

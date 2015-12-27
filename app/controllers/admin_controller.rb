@@ -45,13 +45,4 @@ class AdminController < ApplicationController
   redirect_to :action => 'blocked_ips'
  end
 
- private
-
- def check_login
-  unless session[:superuser]
-   redirect_to '/account/admin_login'
-   return false
-  end
- end
-
 end
