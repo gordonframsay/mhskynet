@@ -30,6 +30,14 @@
 <a href="<%= @game_room.south_room_id %>">Go South</a>&nbsp;
 <% end %>
 
+<% if @superuser %>
+<p>&nbsp;</p>
+
+<p><a href="/game/1/edit_room/<%= @game_room.id.to_s %>" >Edit Room</a></p>
+
+<p><a href="/game/1/add_room" >Add Room</a></p>
+<% end %>
+
 </center>
 
 <div id="disqus_thread"></div>

@@ -1,0 +1,7 @@
+<h3>Rooms:</h3>
+
+<p>
+<% GameRoom.all.order("id").each do |r| %>
+<%= r.id.to_s %> - <a href="/game/1/edit_room/<%= r.id.to_s %> "><%= r.title %></a><br />
+<% end %>
+</p>
