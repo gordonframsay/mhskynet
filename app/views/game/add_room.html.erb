@@ -1,0 +1,16 @@
+    <%= render :partial => 'shared/navigation' %>
+
+    <div style="padding: 0px 30px">
+        <h2>MH Skynet - Game - Add Room</h2>
+    </div>
+
+<div style="padding: 0px 30px">
+<%= form_tag %>
+
+<% (@room.attributes.keys - ["id","created_at","updated_at"]).each do |key| %>
+<p><%= key.titleize %>: <input name="room[<%= key %>]" value="<%= @room.send(key) %>" /></p>
+<% end %>
+<p><input type="submit" /></p>
+
+</div>
+</form>

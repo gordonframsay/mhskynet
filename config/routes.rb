@@ -16,6 +16,10 @@ Rails.application.routes.draw do
    get 'hang_man/game(/:id)' => 'hang_man#game'
    post 'hang_man/game(/:id)' => 'hang_man#game'
 
+   get 'game/:game_id/add_room' => 'game#add_room'
+   post 'game/:game_id/add_room' => 'game#add_room'
+   get 'game/:game_id/edit_room/:room_id' => 'game#edit_room'
+   post 'game/:game_id/edit_room/:room_id' => 'game#edit_room'
    get 'game/:game_id(/:room_id)' => 'game#index'
    post 'game/:game_id(/:room_id)' => 'game#index'
  
