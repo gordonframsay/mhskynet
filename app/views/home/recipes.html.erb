@@ -1,0 +1,123 @@
+
+    <%= render :partial => 'shared/navigation' %>
+
+    <div style="padding: 0px 30px">
+	<h2>MH Skynet</h2>
+    </div>
+
+   <div style="padding: 10px 30px" id="movie_status"><i>Loading...</i></div>
+
+   <script>
+     var last_movie_status = "";
+     var movie_sign_time = 100000000;
+     var movie_sign_time_timeout;
+
+     function update_movie_status(animate_on_update) {
+      $.get( "/screening_room/currently_playing", function( data ) {
+       if (animate_on_update && (data != last_movie_status)) {
+        $( "#movie_status" ).html( data );
+        $( "#movie_status" ).effect("highlight");
+       } else {
+        $( "#movie_status" ).html( data );
+       }
+       last_movie_status = data;
+      });
+     }
+
+    function home_movie_sign() {
+     $( "body" ).effect("highlight", {color: "#808080" }, 2000);
+    }
+
+    function update_movie_sign(clear_old_timeout) {
+     $.get( "/screening_room/currently_playing_moviesign", function( data ) {
+      if (clear_old_timeout) {
+       window.clearTimeout(movie_sign_time_timeout);
+      }
+      if (data > 0) {
+       movie_sign_time_timeout = setTimeout(function(){home_movie_sign()},data)
+       movie_sign_time = data;
+      }
+     });
+    }
+
+     $( document ).ready(function() {
+      update_movie_sign(false);
+      setInterval(function(){ update_movie_sign(true); }, 60000);
+      update_movie_status(false);
+      setInterval(function(){ update_movie_status(true); }, 60000);
+     });
+   </script>
+
+    <div style="padding: 0px 30px; height:700px">
+	<a href="/recipes.jpg" target="_blank">
+	<img src="/recipes.jpg" border="0" width="1000" style="position: absolute; top: 150px; left: 100px;" />
+	</a>
+    </div>
+
+
+
+    <div id="disqus_thread" style="padding: 0px 30px"></div>
+    <script type="text/javascript">
+
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'mhskynet'; // required: replace example with your forum shortname
+        var disqus_identifier = 'recipes';
+        var disqus_url = 'http://www.mhsky.net/recipes';
+        var disqus_disable_mobile = false;
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<!--
+// This works for new comments posted (not received)
+            page: {
+                url: b,
+                title: b,
+                slug: b,
+                category_id: b,
+                identifier: b,
+                language: b,
+                api_key: b,
+                remote_auth_s3: b,
+                author_s3: b
+            },
+            experiment: {
+                enable_scroll_container: b,
+                force_auto_styles: b,
+                sort_order: b
+            },
+            discovery: {
+                disable_all: b,
+                disable_promoted: b,
+                sponsored_comment_id: b
+            },
+            strings: b,
+            sso: {},
+            callbacks: {
+                preData: [],
+                preInit: [],
+                onInit: [],
+                afterRender: [],
+                onReady: [],
+                onNewComment: [],
+                preReset: [],
+                onPaginate: [],
+                onIdentify: [],
+                beforeComment: []
+            }
+
+function disqus_config() {
+    this.callbacks.onNewComment = [function(comment) { 
+      alert(comment.id);
+    }];
+}
+-->
+
+    <%= render :partial => 'shared/footer' %>
