@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
    get 'archive' => 'home#archive'
 
+   get 'recipes' => 'home#recipes'
+
    get 'suggestions' => 'suggestions#index'
 
    get 'screening_room/change_time_zone' => 'screening_room#change_time_zone', :via => [:get, :post]
