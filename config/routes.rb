@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
    root 'home#index'
+
+   get 'archive' => 'home#archive'
+
    get 'suggestions' => 'suggestions#index'
 
    get 'screening_room/change_time_zone' => 'screening_room#change_time_zone', :via => [:get, :post]
