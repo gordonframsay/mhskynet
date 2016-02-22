@@ -1,5 +1,7 @@
 class MandelbrotController < ApplicationController
 
+ before_filter :set_title
+
  def index
   @x = (params[:center_x])?(params[:center_x].to_d):-0.746
   @y = (params[:center_y])?(params[:center_y].to_d):0.21065

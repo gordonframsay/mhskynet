@@ -146,4 +146,8 @@ class ApplicationController < ActionController::Base
   end
  end
 
+ def set_title
+  @page_title =  @page_title + " - "  + params[:action].titleize unless (params[:action] == "index")
+ end
+
 end
