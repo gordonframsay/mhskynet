@@ -39,6 +39,7 @@ class ApplicationController < ActionController::Base
     @movie_time = m.start_time
     @movie_service = m.service
     @live_event = m.live_event?
+    @play_movie_now = m.auto_play_now?
    else
     @live_event = true
     @movie_title = "Live Shark Cam (Reef View) | California Academy of Sciences"

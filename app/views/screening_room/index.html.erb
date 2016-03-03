@@ -265,14 +265,16 @@ function timeFormated(seconds)
       }
 
       function onPlayerReady(event) {
-	<% if (@movie_time > Time.now) %>
+        <% if (@play_movie_now) %>
+        movie_sign();
+	<% elsif (@movie_time > Time.now) %>
         setTimeout(function(){ movie_sign(); }, <%= (1000 * (@movie_time - Time.now)).round %>);
 	<% else %>
-	<% unless @live_event %>
-        event.target.seekTo(<%= (Time.now - @movie_time).round %>);
-        time_check = <%= (Time.now - @movie_time).round %>;
-        setInterval(function () { update_time_check()}, 1000);
-        update_time_check();
+          <% unless @live_event %>
+         event.target.seekTo(<%= (Time.now - @movie_time).round %>);
+         time_check = <%= (Time.now - @movie_time).round %>;
+         setInterval(function () { update_time_check()}, 1000);
+         update_time_check();
 	<% end %>
         event.target.playVideo();
 	<% end %>
