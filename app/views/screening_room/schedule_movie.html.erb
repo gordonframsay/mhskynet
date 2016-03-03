@@ -80,6 +80,10 @@
  <td><%= f.check_box :live_event %> (This is unusual, don't check unless certain. This skips the seeking step when going to play)</td>
 </tr>
 <tr>
+ <th>Force Immediate Play?</th>
+ <td><%= f.check_box :auto_play_now %> (Again,this is unusual, don't check unless certain. It plays immediately on page load regardless of scheduled time.)</td>
+</tr>
+<tr>
  <th>Who Posted this and why?</th>
  <td><%= f.text_area :notes, {:rows => 3, :cols => 60} %><br />
 	(Note, other information such as your IP address is already recorded, but only these notes will be public.)</td>
