@@ -1,7 +1,12 @@
 These are static players that require no server technology to function.  In fact, you don't even need a server 
 at all!  All you need is an internet connection and a web browser.  Open the schedule page (youtube or html5, 
-depending on the movie type), fill out the form and submit.  The only requirement is that the schedule and 
-player files be in the same directory.
+depending on the movie type), fill out the form and submit.  The only requirement is that the scheduler and 
+player files be in the same directory. (Update the form action attribute if the files are in different paths 
+or renamed.)
+
+To view the same thing with others, either share the link to the player URL with all the parameter stuff there 
+(e.g. http://www.mhsky.net/static_players/youtube_player.html?movie_title=Dynamite+and+TNT+-+Periodic+Table+of+Videos&movie_identifier=pWuYtvzxuLE&movie_time=Mon%2C+11+Apr+2016+03%3A30%3A00+GMT )
+Or, simply have others use the schedule page with the same movie and time information.
 
 For HTML5 movies, you can even use a local file url (e.g. file:///Users/gordon/videos/mymovie.mp4 ), but of 
 course you'll need to share the movie file with others, one way or another, if you want to watch it together.
