@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Youtube Movie Player</title>
+  <title>HTML 5 Movie Player</title>
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -16,8 +16,8 @@
 <script>
 
   var disqus_shortname = 'mhskynet';
-  var disqus_identifier = 'youtube_static_screening_room_1';
-  var disqus_url = 'http://www.mhsky.net/static_players/youtube_player.html';
+  var disqus_identifier = 'html5_static_screening_room_1';
+  var disqus_url = 'http://www.mhsky.net/static_players/html5_player.html';
 
 </script>
 
@@ -44,7 +44,10 @@
 	<table>
 	<tr>
 	<td valign="top">
-        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;"></div>
+        <div id="player" style="float: left;width: 780px;padding-top: 20px;padding-left: 10px;">
+         <video width="780" height="650" controls onerror="failed(event)" id="html_video_tag">
+          Your browser does not support the <code>video</code> element.
+         </video>
 	</div>
 	</td>
 	<td align="center">
@@ -58,7 +61,7 @@
 <div id="status" style="display:none">(status)</div>
 <div id="console" style="display:none">(console)</div>
 
-<!-- Youtube API stuff -->
+<!-- HTML 5 stuff -->
     <script>
 
  function getParameterByName(name, url) {
@@ -75,31 +78,17 @@
  var movie_time = Date.parse(getParameterByName('movie_time'));
  var movie_identifier = getParameterByName('movie_identifier');
 
+ 
  document.title = movie_title;
  $("#movie_time").text(getParameterByName('movie_time'));
  $("#movie_title").text(getParameterByName('movie_title'));
+ $("#html_video_tag").attr('src', movie_identifier);
+ $("#html_video_tag")[0].load();
 
 
-      var tag = document.createElement('script');
+      var v = document.getElementsByTagName("video")[0];
       var time_check = 0;
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      var player;
-
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '650',
-          width: '780',
-          videoId: movie_identifier,
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
+      var seek_complete = false;
 
       function zero_pad(text) {
        text = text + '';
@@ -119,29 +108,50 @@
       }
 
       function movie_sign() {
-        document.title = "▶  "+movie_title;
         elem = document.getElementById("movie_play_status");
-        elem.innerHTML = "Now Playing: "+movie_title;
-        setInterval(function () { update_time_check()}, 1000);
-        player.playVideo();
+        elem.innerHTML = "Current Movie: <i>"+movie_title+"</i> - Started At: <i>"+getParameterByName('movie_time')+"</i>";
+        v.play();
+        setInterval(function () { update_time_check() }, 1000);
       }
 
-      function onPlayerStateChange(event) {
-      }
+        function failed(e) {
+           // video playback failed - show a message saying why
+           switch (e.target.error.code) {
+             case e.target.error.MEDIA_ERR_ABORTED:
+               alert('You aborted the video playback.');
+               break;
+             case e.target.error.MEDIA_ERR_NETWORK:
+               alert("Your browser either does not support this video format or the file is inaccessible.  Contact the poster of the video for help.");
+               break;
+             case e.target.error.MEDIA_ERR_DECODE:
+               alert('The video playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+               break;
+             case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+               $('#movie_failed_modal').modal();
+               break;
+             default:
+               alert('An unknown error occurred.');
+               break;
+           }
+        }
 
-      function onPlayerReady(event) {
+      $( document ).ready(function() {
         if (movie_time > (new Date().getTime())) {
          setTimeout(function(){ movie_sign(); }, (movie_time - (new Date().getTime())));
-	} else {
-         event.target.seekTo(((new Date().getTime()) - movie_time) / 1000);
+        } else {
          time_check = (((new Date().getTime()) - movie_time) / 1000);
          setInterval(function () { update_time_check()}, 1000);
-         update_time_check();
-         event.target.playVideo();
-	}
-      }
+         setTimeout(function(){ v.play(); }, 5000);
+         v.addEventListener("canplay",function() {
+          if (! seek_complete) {
+           v.currentTime = (((new Date().getTime()) - movie_time) / 1000);
+           seek_complete = true;
+          };
+         });
+        };
+      });
 
-    </script>
+</script>
 
     <script type="text/javascript">
 
@@ -156,5 +166,6 @@
         })();
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 </body>
 </html>
