@@ -153,10 +153,10 @@ class ScreeningRoomController < ApplicationController
  # Simple status for AJAX
  def currently_playing
   if (@movie_time > Time.now)
-   render :text => "<a href=\"/screening_room\" >Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+   render :text => "<a href=\"/screening_room\" >Theater 1 Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
   else
    if ((@movie_time + @movie_length) > Time.now)
-    render :text => "<a href=\"/screening_room\" >Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+    render :text => "<a href=\"/screening_room\" >Theater 1 Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
    end
   end
  end
@@ -168,10 +168,10 @@ class ScreeningRoomController < ApplicationController
    render :text => "&nbsp;"
   else
    if (m.start_time > Time.now)
-    render :text => "<a href=\"/screening_room/2\" >Next Movie: <i>"+m.title+"</i> -  Starts At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+    render :text => "<a href=\"/screening_room/2\" >Theater 2 Next Movie: <i>"+m.title+"</i> -  Starts At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
    else
     if ((m.start_time + m.duration) > Time.now)
-     render :text => "<a href=\"/screening_room/2\" >Now Playing: <i>"+m.title+"</i> -  Started At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+     render :text => "<a href=\"/screening_room/2\" >Theater 2 Now Playing: <i>"+m.title+"</i> -  Started At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
     end
    end
   end
