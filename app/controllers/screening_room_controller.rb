@@ -161,6 +161,22 @@ class ScreeningRoomController < ApplicationController
   end
  end
 
+ # TODO: Could be DRYer, see above.
+ def currently_playing_2
+  m = QueuedMovie.where(["screening_room = ?", 2]).order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
+  unless m
+   render :text => "&nbsp;"
+  else
+   if (m.start_time > Time.now)
+    render :text => "<a href=\"/screening_room/2\" >Next Movie: <i>"+m.title+"</i> -  Starts At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+   else
+    if ((m.start_time + m.duration) > Time.now)
+     render :text => "<a href=\"/screening_room/2\" >Now Playing: <i>"+m.title+"</i> -  Started At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+    end
+   end
+  end
+ end
+
  def currently_watching
   cache_key = "screening_room_watchers_"+(@screening_room.to_s)
   viewers = Rails.cache.read(cache_key)

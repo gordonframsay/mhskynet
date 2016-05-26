@@ -5,10 +5,12 @@
 	<h2>MH Skynet</h2>
     </div>
 
-   <div style="padding: 10px 30px" id="movie_status"><i>Loading...</i></div>
+   <div style="padding: 10px 30px 0 30px" id="movie_status"><i>Loading...</i></div>
+   <div style="padding: 10px 30px 0 30px;clear: left" id="movie_status_2"><i>Loading 2...</i></div>
 
    <script>
      var last_movie_status = "";
+     var last_movie_status_2 = "";
      var movie_sign_time = 100000000;
      var movie_sign_time_timeout;
 
@@ -21,6 +23,13 @@
         $( "#movie_status" ).html( data );
        }
        last_movie_status = data;
+      });
+     }
+
+     function update_movie_status_2() {
+      $.get( "/screening_room/currently_playing_2", function( data ) {
+       $( "#movie_status_2" ).html( data );
+       last_movie_status_2 = data;
       });
      }
 
@@ -42,16 +51,17 @@
 
      $( document ).ready(function() {
       update_movie_sign(false);
-      setInterval(function(){ update_movie_sign(true); }, 60000);
+      setInterval(function(){ update_movie_sign(true); update_movie_status_2(); }, 60000);
       update_movie_status(false);
-      setInterval(function(){ update_movie_status(true); }, 60000);
+      update_movie_status_2();
+      setInterval(function(){ update_movie_status(true); update_movie_status_2(); }, 60000);
      });
    </script>
 
-    <div style="padding: 0px 30px; height:700px">
+    <div style="padding: 0px 60px; height:700px">
 	<a href="/home_header.jpg" target="_blank">
-	<img src="/airport_concourse_sign_only.gif" border="0" style="position: absolute; left: 395px; top: 353px; z-index: 10;"/>
-	<img src="/home_header.jpg" border="0" width="1000" style="position: absolute; top: 150px; left: 100px;" />
+	<img src="/airport_concourse_sign_only.gif" border="0" style="position: absolute; left: 395px; top: 383px; z-index: 10;"/>
+	<img src="/home_header.jpg" border="0" width="1000" style="position: absolute; top: 180px; left: 100px;" />
 	</a>
     </div>
 
