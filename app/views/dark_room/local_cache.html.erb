@@ -6,12 +6,12 @@
 
     <div style="padding: 0px 30px">
 
-	<form method="GET">
+	<%= form_tag(nil, multipart: true) do %>
 
-	<p>URL: <input name="id"></p>
+	<p>Picture: <%= file_field_tag 'picture' %></p>
 
 	<p><input type="submit" /></p>
 
-	</form>
+	<% end %>
 
     </div>
