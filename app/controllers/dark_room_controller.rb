@@ -1,23 +1,15 @@
 class DarkRoomController < ApplicationController
 
- def index
-  @page_title =  @page_title + " - Dark Room"
- end
+ before_filter :set_page_title
 
  def mirror
   if params[:id]
    c = Curl::Easy.perform(params[:id])
    the_data = c.body
    # TODO: The suffix to mime-type mapping isn't very DRY see local_cache below.
-   suffix = "jpg" if (c.content_type == "image/jpeg")
-   suffix = "gif" if (c.content_type == "image/gif")
-   suffix = "png" if (c.content_type == "image/png")
-   if (the_data.length > 1000000) # NOTE: Larger than 1MB isn't supported by Disqus
-    flash[:notice] = "Larger than 1MB is not supported."
-    return false
-   end
-   hash = Digest::MD5.hexdigest(the_data)
-   Rails.cache.write("local_cache_"+hash, the_data) unless Rails.cache.exist?("local_cache_"+hash)
+   suffix = MIME::Types[c.content_type].first.preferred_extension
+   hash = store_file(the_data)
+   return false unless hash
    redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
   end
  end
@@ -31,23 +23,33 @@ class DarkRoomController < ApplicationController
    name.gsub!(/^\.+(.*)$/,'\1')
    suffix = name.gsub('/','').gsub(/^.*\.(...)$/,'\1').downcase
    the_data = the_file.read
-   if (the_data.length > 1000000) # NOTE: Larger than 1MB isn't supported by Disqus
-    flash[:notice] = "Larger than 1MB is not supported."
-    return false
-   end
-   hash = Digest::MD5.hexdigest(the_data)
-   Rails.cache.write("local_cache_"+hash, the_data) unless Rails.cache.exist?("local_cache_"+hash)
+   hash = store_file(the_data)
+   return false unless hash
    redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
   end
   if params[:id]
    suffix = (params[:format])
    the_data = Rails.cache.read("local_cache_"+params[:id])
-   content_type = "application/octet-stream"
-   content_type = "image/jpeg" if (suffix == "jpg")
-   content_type = "image/gif"  if (suffix == "gif")
-   content_type = "image/png"  if (suffix == "png")
+   content_type = Mime::Type.lookup_by_extension(suffix).to_s
    send_data the_data, :type => content_type, :disposition => 'inline'
   end
+ end
+
+ private
+
+ def store_file(the_data)
+  if (the_data.length > 200000) # NOTE: This is a bit arbitrary
+   flash[:notice] = "Larger than 1MB is not supported."
+   return false
+  end
+  hash = Digest::MD5.hexdigest(the_data)
+  Rails.cache.write("local_cache_"+hash, the_data) unless Rails.cache.exist?("local_cache_"+hash)
+  return hash
+ end
+
+ def set_page_title
+  @page_title =  @page_title + " - Dark Room"
+  @page_title += " - "+(params[:action].titleize) if (params[:action] != "index")
  end
 
 end
