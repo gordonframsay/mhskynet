@@ -7,7 +7,18 @@ class DarkRoomController < ApplicationController
  def mirror
   if params[:id]
    c = Curl::Easy.perform(params[:id])
-   send_data c.body, :type => c.content_type, :disposition => 'inline'
+   the_data = c.body
+   # TODO: The suffix to mime-type mapping isn't very DRY see local_cache below.
+   suffix = "jpg" if (c.content_type == "image/jpeg")
+   suffix = "gif" if (c.content_type == "image/gif")
+   suffix = "png" if (c.content_type == "image/png")
+   if (the_data.length > 1000000) # NOTE: Larger than 1MB isn't supported by Disqus
+    flash[:notice] = "Larger than 1MB is not supported."
+    return false
+   end
+   hash = Digest::MD5.hexdigest(the_data)
+   Rails.cache.write("local_cache_"+hash, the_data) unless Rails.cache.exist?("local_cache_"+hash)
+   redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
   end
  end
 
@@ -20,8 +31,12 @@ class DarkRoomController < ApplicationController
    name.gsub!(/^\.+(.*)$/,'\1')
    suffix = name.gsub('/','').gsub(/^.*\.(...)$/,'\1').downcase
    the_data = the_file.read
+   if (the_data.length > 1000000) # NOTE: Larger than 1MB isn't supported by Disqus
+    flash[:notice] = "Larger than 1MB is not supported."
+    return false
+   end
    hash = Digest::MD5.hexdigest(the_data)
-   Rails.cache.write("local_cache_"+hash, the_data)
+   Rails.cache.write("local_cache_"+hash, the_data) unless Rails.cache.exist?("local_cache_"+hash)
    redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
   end
   if params[:id]
