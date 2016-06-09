@@ -21,11 +21,16 @@ class DarkRoomController < ApplicationController
    # A couple sanity checks on the name:
    name = the_file.original_filename.gsub('/','')
    name.gsub!(/^\.+(.*)$/,'\1')
-   suffix = name.gsub('/','').gsub(/^.*\.(...)$/,'\1').downcase
+   suffix = name.gsub('/','').gsub(/^.*\.([a-zA-Z0-9]+)$/,'\1').downcase
    the_data = the_file.read
    hash = store_file(the_data)
    return false unless hash
-   redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
+   if ["gif","jpg","jpeg","png"].include?(suffix)
+    redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
+   else
+    url = "http://"+request.host+"/local_cache/"+hash+"."+suffix
+    render :inline => "Use this URL to access the file: <a href=\""+url+"\">"+url+"</a>"
+   end
   end
   if params[:id]
    suffix = (params[:format])
