@@ -26,9 +26,16 @@
 <% end %>
 <% if (@movie_service == "html5") %>
         <div id="player" style="float: left;width: <%= @movie_width %>px;padding-top: 20px;padding-left: 10px;">
+	 <% if @movie_identifier.match(/m3u8/) %>
+	 <video width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
+	  <source src="<%= @movie_identifier %>" type="application/x-mpegURL">
+	  Your browser does not support the <code>video</code> element.
+	 </video>
+	 <% else %>
 	 <video src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
 	  Your browser does not support the <code>video</code> element.
 	 </video>
+	 <% end %>
 <% end %>
 <% if (@movie_service == "vimeo") %>
         <div id="player" style="float: left;width: <%= @movie_width %>px;padding-top: 20px;padding-left: 10px;">
