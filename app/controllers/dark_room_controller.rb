@@ -43,7 +43,7 @@ class DarkRoomController < ApplicationController
  private
 
  def store_file(the_data)
-  if (the_data.length > 200000) # NOTE: This is a bit arbitrary
+  if (the_data.length > 1024000) # NOTE: This is a bit arbitrary
    flash[:notice] = "Larger than 1MB is not supported."
    return false
   end
