@@ -36,6 +36,7 @@ class DarkRoomController < ApplicationController
    suffix = (params[:format])
    the_data = Rails.cache.read("local_cache_"+params[:id])
    content_type = Mime::Type.lookup_by_extension(suffix).to_s
+   content_type = "application/x-mpegURL" if (suffix == "m3u8")
    send_data the_data, :type => content_type, :disposition => 'inline'
   end
  end
