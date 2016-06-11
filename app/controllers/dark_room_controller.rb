@@ -1,8 +1,6 @@
 class DarkRoomController < ApplicationController
 
  before_filter :set_page_title
- before_filter :cors
-
 
  def mirror
   if params[:id]
