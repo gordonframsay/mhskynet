@@ -1,6 +1,8 @@
 class DarkRoomController < ApplicationController
 
  before_filter :set_page_title
+ before_filter :cors
+
 
  def mirror
   if params[:id]
@@ -28,7 +30,7 @@ class DarkRoomController < ApplicationController
    if ["gif","jpg","jpeg","png"].include?(suffix)
     redirect_to '/dark_room/local_cache/'+hash+'.'+suffix
    else
-    url = "http://"+request.host+"/local_cache/"+hash+"."+suffix
+    url = "http://"+request.host+"/dark_room/local_cache/"+hash+"."+suffix
     render :inline => "Use this URL to access the file: <a href=\""+url+"\">"+url+"</a>"
    end
   end

@@ -17,6 +17,14 @@ class ApplicationController < ActionController::Base
 
  private
 
+  def cors
+   headers['Access-Control-Allow-Origin'] = '*'
+   headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+   headers['Access-Control-Request-Method'] = '*'
+   headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+#   headers['Access-Control-Allow-Headers'] = '*'
+  end
+
   def get_config(key_name)
    site_default = SiteDefault.where(["key_name = ?", key_name]).first
    raise "Key not found: "+key_name unless site_default
