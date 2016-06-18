@@ -44,8 +44,8 @@ class DarkRoomController < ApplicationController
  private
 
  def store_file(the_data)
-  if (the_data.length > 1024000) # NOTE: This is a bit arbitrary
-   flash[:notice] = "Larger than 1MB is not supported."
+  if (the_data.length > 10000000) # NOTE: This is a bit arbitrary
+   flash[:notice] = "Larger than 10MB is not supported."
    return false
   end
   hash = Digest::MD5.hexdigest(the_data)
