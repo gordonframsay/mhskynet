@@ -41,6 +41,12 @@ class DarkRoomController < ApplicationController
   if params[:id]
    suffix = (params[:format])
    the_data = Rails.cache.read("local_cache_"+params[:id])
+   if the_data.nil?
+    logger.warn "Image "+params[:id]+" not found. (cache might have expired.)"
+    render :inline => "Not found", :status => 404, :content_type => 'text/plain'
+    return false
+   end
+   logger.warn "Image "+params[:id]+" referrer: "+request.referer if request.referer
    content_type = Mime::Type.lookup_by_extension(suffix).to_s
    content_type = "application/x-mpegURL" if (suffix == "m3u8")
    send_data the_data, :type => content_type, :disposition => 'inline'
