@@ -22,7 +22,13 @@ class DarkRoomController < ApplicationController
    name = the_file.original_filename.gsub('/','')
    name.gsub!(/^\.+(.*)$/,'\1')
    suffix = name.gsub('/','').gsub(/^.*\.([a-zA-Z0-9]+)$/,'\1').downcase
-   the_data = the_file.read
+   the_data = nil
+   # Let's rotate orientation as needed and strip EXIF info.
+   if ["jpg","jpeg"].include?(suffix)
+    the_data = MiniMagick::Image.read(the_file.read).auto_orient.strip.to_blob
+   else
+    the_data = the_file.read
+   end
    hash = store_file(the_data)
    return false unless hash
    if ["gif","jpg","jpeg","png"].include?(suffix)
