@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 ruby "2.1.6"
 gem 'puma'
 
-gem "rmagick"
+gem "mini_magick"
 
 gem "pg"
 gem 'rails_12factor', group: :production
