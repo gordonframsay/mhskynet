@@ -32,11 +32,11 @@ class ScreeningRoomController < ApplicationController
  end
 
  def set_sizes
-  if request.post?
+  if (params[:movie_width] && params[:movie_height] && params[:forum_width])
    session[:movie_width] = params[:movie_width].to_i
    session[:movie_height] = params[:movie_height].to_i
    session[:forum_width] = params[:forum_width].to_i
-   flash[:notice] = "Sizing saved!"
+   redirect_to '/screening_room/'+params[:id]
   end
   @movie_width = (session[:movie_width])?(session[:movie_width]):780
   @movie_height = (session[:movie_height])?(session[:movie_height]):650

@@ -1,6 +1,6 @@
 <script>
 
-      var lights_out = false;
+      var lights_out = <%= (params[:lights_out])?"true":"false" %>;
 
       function redirect_to_new_bg() {
        DISQUS.reset({
@@ -26,18 +26,34 @@
        setTimeout(redirect_to_new_bg, 1100);
       }
 
+      function auto_resize() {
+       var width  = $( window ).width();
+       var height = $( window ).height();
+
+       var reset_height = height - 55;
+       var reset_width = Math.round((width - 20) * (3.75/5.0));
+       var reset_forum_width = Math.round((width - 20) * (1.25/5.0));
+
+       window.location.replace("/screening_room/set_sizes/<%= @screening_room %>?movie_width="+reset_width+"&movie_height="+reset_height+"&forum_width="+reset_forum_width);
+      }
+
 </script>
 
 <center>
 <%# TODO: Need a better/more dynamic way to link out to the associated forum. %>
-    <div style="float:left; width: 300px; padding-left: 10px;"><span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/">Discussion</a> <span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> <span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();"><span id="lights_on_off_indicator">Lights Out</span</a></div>
-    <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check"></div>
-    <div id="movie_play_status" style="width:700px">
-    Current Movie: <i><%= @movie_title %></i> - 
+    <div style="float:left; width: 350px; padding-left: 10px;">
+	<span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/" target="_blank">Discussion</a>
+	<span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> 
+	<span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();"><span id="lights_on_off_indicator">Lights Out</span></a>
+	<span class="glyphicon glyphicon-resize-full"></span> <a onclick="auto_resize();">Resize to fit</a>
+    </div>
+    <div style="float:right; width: 200px; text-align: right; padding-right: 10px" id="time_check"></div>
+    <div id="movie_play_status" style="width:500px">
+    Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
-    Starts At: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i> (movie will start playing automatically)
+    Starts: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i> (will play automatically)
 <% else %>
-    Started At: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i>
+    Starts: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i>
 <% end %>
     </div>
 <!--
