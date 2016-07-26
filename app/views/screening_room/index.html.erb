@@ -14,11 +14,11 @@
 
       function lights_out_on() {
        if (lights_out == false) {
-        $('#lights_on_off_indicator').text("Light On");
+        $('#lights_on_off_indicator').text("Lights On");
         $('body').animate({backgroundColor: '#000000'}, 1000);
         $('div,span,a').animate({color: '#FFFFFF'}, 1000);
        } else {
-        $('#lights_on_off_indicator').text("Light Off");
+        $('#lights_on_off_indicator').text("Lights Off");
         $('body').animate({backgroundColor: '#FFFFFF'}, 1000);
         $('div,span,a').animate({color: '#000000'}, 1000);
        }
@@ -44,8 +44,8 @@
     <div style="float:left; width: 350px; padding-left: 10px;">
 	<span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/" target="_blank">Discussion</a>
 	<span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> 
-	<span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();"><span id="lights_on_off_indicator">Lights Out</span></a>
 	<span class="glyphicon glyphicon-resize-full"></span> <a onclick="auto_resize();">Resize to fit</a>
+	<span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();"><span id="lights_on_off_indicator">Lights Out</span></a>
     </div>
     <div style="float:right; width: 200px; text-align: right; padding-right: 10px" id="time_check"></div>
     <div id="movie_play_status" style="width:500px">
