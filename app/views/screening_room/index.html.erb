@@ -1,22 +1,36 @@
 <script>
+
+      var lights_out = false;
+
       function redirect_to_new_bg() {
-       <% if (params[:background] == "black") %>
-       window.location.replace("?");
-       <% else %>
-       window.location.replace("?background=black&text_color=white");
-       <% end %>
+       DISQUS.reset({
+        reload: true,
+        config: function () {  
+          this.page.identifier = "the_screening_room_<%= @screening_room %>";
+          this.page.url = "<%= request.original_fullpath %>";
+        }
+       });
       }
 
       function lights_out_on() {
-       $('body').animate({backgroundColor: <% if (params[:background] != "black") %>'#000000'<% else %>'#FFFFFF'<% end %>}, 1000);
-       $('div,span,a').animate({color: <% if (params[:background] != "black") %>'#FFFFFF'<% else %>'#000000'<% end %>}, 1000);
+       if (lights_out == false) {
+        $('#lights_on_off_indicator').text("Light On");
+        $('body').animate({backgroundColor: '#000000'}, 1000);
+        $('div,span,a').animate({color: '#FFFFFF'}, 1000);
+       } else {
+        $('#lights_on_off_indicator').text("Light Off");
+        $('body').animate({backgroundColor: '#FFFFFF'}, 1000);
+        $('div,span,a').animate({color: '#000000'}, 1000);
+       }
+       lights_out = ! lights_out;
        setTimeout(redirect_to_new_bg, 1100);
       }
+
 </script>
 
 <center>
 <%# TODO: Need a better/more dynamic way to link out to the associated forum. %>
-    <div style="float:left; width: 300px; padding-left: 10px;"><span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/">Discussion</a> <span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> <span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();">Lights O<%= (params[:background] == "black")?"n":"ut"%></a></div>
+    <div style="float:left; width: 300px; padding-left: 10px;"><span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/">Discussion</a> <span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> <span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();"><span id="lights_on_off_indicator">Lights Out</span</a></div>
     <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check"></div>
     <div id="movie_play_status" style="width:700px">
     Current Movie: <i><%= @movie_title %></i> - 

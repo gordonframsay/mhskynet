@@ -38,22 +38,7 @@
   <meta http-equiv="x-ua-compatible" content="IE=EmulateIE8" />
 </head>
 
-
 <body>
-<% if params[:background] %>
-<style>
-
-body,div,span {
-    background-color: <%= params[:background] %>;
-}
-
-body {
- <% if params[:text_color] %>
-    color: <%= params[:text_color] %>;
- <% end %>
-}
-</style>
-<% end %>
 
 <%= render :partial => 'shared/notice' %>
 
