@@ -20,8 +20,8 @@ class ApplicationController < ActionController::Base
   def cors
    headers['Access-Control-Allow-Origin'] = '*'
    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-   headers['Access-Control-Request-Method'] = '*'
-   headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+#   headers['Access-Control-Request-Method'] = '*'
+#   headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
 #   headers['Access-Control-Allow-Headers'] = '*'
   end
 
@@ -50,8 +50,8 @@ class ApplicationController < ActionController::Base
     @play_movie_now = m.auto_play_now?
    else
     @live_event = true
-    @movie_title = "Live Shark Cam (Reef View) | California Academy of Sciences"
-    @movie_identifier = "jyWHDIECRYQ"
+    @movie_title = "Kitten Academy Live Stream"
+    @movie_identifier = "_o74BnFSr8g"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
