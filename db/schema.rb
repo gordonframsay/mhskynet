@@ -46,12 +46,12 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.datetime "updated_at"
     t.integer  "game_id"
     t.string   "title"
-    t.string   "image_url",   limit: 512
-    t.integer  "north_room"
-    t.integer  "east_room"
-    t.integer  "west_room"
-    t.integer  "south_room"
-    t.integer  "other_room"
+    t.string   "image_url",     limit: 512
+    t.integer  "north_room_id"
+    t.integer  "east_room_id"
+    t.integer  "west_room_id"
+    t.integer  "south_room_id"
+    t.integer  "other_room_id"
     t.text     "description"
   end
 
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.integer  "screening_room",                           default: 1
     t.binary   "marshalled_google_user_token"
     t.integer  "terms",                        limit: 2
+    t.integer  "auto_play_now",                limit: 2,   default: 0
   end
 
   create_table "radio_songs", force: true do |t|
