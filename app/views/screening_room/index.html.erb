@@ -39,27 +39,25 @@
 
 </script>
 
-<center>
 <%# TODO: Need a better/more dynamic way to link out to the associated forum. %>
-    <div style="float:left; width: 350px; padding-left: 10px;">
-	<span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/" target="_blank">Discussion</a>
-	<span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> 
+    <div style="float:right; width: 350px; text-align: right; padding-right: 10px">
+	<span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/" target="_blank">Discussion Only</a>
 	<span class="glyphicon glyphicon-resize-full"></span> <a onclick="auto_resize();">Resize to fit</a>
 	<span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();"><span id="lights_on_off_indicator">Lights Out</span></a>
-    </div>
-    <div style="float:right; width: 200px; text-align: right; padding-right: 10px" id="time_check"></div>
-    <div id="movie_play_status" style="width:500px">
+      <div id="time_check">
+      </div>
+     </div>
+    <div id="movie_play_status" style="width:500px; padding-left: 20px;">
     Movie: <i><%= @movie_title %></i> - 
 <% if (@movie_time > Time.now) %>
     Starts: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i> (will play automatically)
 <% else %>
-    Starts: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i>
+    Started: <i><%= @movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z") %></i>
 <% end %>
     </div>
 <!--
        <a id="resize_link">Resize</a>
 -->
-</center>
 
       <center>
        <a name="movie"></a>
@@ -96,7 +94,7 @@
 	</div>
 	</td>
 	<td align="center">
-        <div id="disqus_thread" style="width: <%= @forum_width %>px; padding-left: 20px; padding-top: 0px;overflow: scroll; height: <%= @movie_height %>px;"></div>
+        <div id="disqus_thread" style="width: <%= @forum_width %>px; padding-left: 20px; padding-top: 5px;overflow: scroll; height: <%= @movie_height %>px;"></div>
 	</td>
 	</tr>
 	</table>
