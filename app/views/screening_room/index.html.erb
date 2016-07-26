@@ -1,7 +1,22 @@
+<script>
+      function redirect_to_new_bg() {
+       <% if (params[:background] == "black") %>
+       window.location.replace("?");
+       <% else %>
+       window.location.replace("?background=black&text_color=white");
+       <% end %>
+      }
+
+      function lights_out_on() {
+       $('body').animate({backgroundColor: <% if (params[:background] != "black") %>'#000000'<% else %>'#FFFFFF'<% end %>}, 1000);
+       $('div,span,a').animate({color: <% if (params[:background] != "black") %>'#FFFFFF'<% else %>'#000000'<% end %>}, 1000);
+       setTimeout(redirect_to_new_bg, 1100);
+      }
+</script>
 
 <center>
 <%# TODO: Need a better/more dynamic way to link out to the associated forum. %>
-    <div style="float:left; width: 300px; padding-left: 10px;"><span class="glyphicon glyphicon-phone-alt"></span> Mobile? <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/">Tap here for forum.</a> <a href="<%= @movie.url(true) if @movie %>">Here for video.</a></div>
+    <div style="float:left; width: 300px; padding-left: 10px;"><span class="glyphicon glyphicon-phone-alt"></span> <a href="https://disqus.com/home/discussion/mhskynet/mh_skynet_the_choice_is_yours/">Discussion</a> <span class="glyphicon glyphicon-film"></span> <a href="<%= @movie.url(true) if @movie %>">Video</a> <span class="glyphicon glyphicon-lamp"></span> <a onclick="lights_out_on();">Lights O<%= (params[:background] == "black")?"n":"ut"%></a></div>
     <div style="float:right; width: 300px; text-align: right; padding-right: 10px" id="time_check"></div>
     <div id="movie_play_status" style="width:700px">
     Current Movie: <i><%= @movie_title %></i> - 
@@ -27,10 +42,12 @@
 <% if (@movie_service == "html5") %>
         <div id="player" style="float: left;width: <%= @movie_width %>px;padding-top: 20px;padding-left: 10px;">
 	 <% if @movie_identifier.match(/m3u8/) %>
-	 <video width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
+	 <video width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)" class="video-js vjs-default-skin" id="movie-video" >
 	  <source src="<%= @movie_identifier %>" type="application/x-mpegURL">
 	  Your browser does not support the <code>video</code> element.
 	 </video>
+	<script src="/video-player/video.js"></script>
+	<script src="/video-player/videojs-contrib-hls.min.js"></script>
 	 <% else %>
 	 <video src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
 	  Your browser does not support the <code>video</code> element.
@@ -145,7 +162,7 @@ function timeFormated(seconds)
 
 <% if (@movie_service == "html5") %>
 <script>
-      var v = document.getElementsByTagName("video")[0];
+      var v = videojs('movie-video');
       var time_check = 0;
       var seek_complete = false;
 
