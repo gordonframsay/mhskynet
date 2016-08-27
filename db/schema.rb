@@ -33,6 +33,22 @@ ActiveRecord::Schema.define(version: 20150718223934) do
     t.string   "reason"
   end
 
+  create_table "cached_files", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "md5_hash",       limit: 32
+    t.string   "original_url"
+    t.integer  "is_upload",      limit: 2
+    t.inet     "ip_address"
+    t.string   "title"
+    t.string   "mime_type"
+    t.binary   "data"
+    t.integer  "active",         limit: 2,  default: 1
+    t.integer  "accessed_count",            default: 0
+  end
+
+  add_index "cached_files", ["md5_hash"], name: "cached_files_md5_hash_index", using: :btree
+
   create_table "cached_ips", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
