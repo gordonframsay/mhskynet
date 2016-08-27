@@ -18,6 +18,8 @@ gem 'curb'
 gem 'google-api-client'
 gem "activerecord-session_store"
 
+gem 'exception_notification'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.16'
 # Use sqlite3 as the database for Active Record

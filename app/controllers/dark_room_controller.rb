@@ -2,6 +2,11 @@ class DarkRoomController < ApplicationController
 
  before_filter :set_page_title
 
+
+ def test_exception
+  raise "THIS IS A TEST EXCEPTION"
+ end
+
  def mirror
   if params[:id]
    c = Curl::Easy.perform(params[:id])
