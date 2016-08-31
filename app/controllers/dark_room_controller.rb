@@ -64,7 +64,7 @@ class DarkRoomController < ApplicationController
    return false
   end
   hash = Digest::MD5.hexdigest(the_data)
-  CachedFile.new(:md5_hash => hash, :original_url => original_url, :is_upload => (is_upload)?1:0, :ip_address => request.remote_ip, :title => original_url, :original_url => original_url, :mime_type => mime_type, :data => the_data).save!
+  CachedFile.new(:md5_hash => hash, :original_url => original_url, :is_upload => (is_upload)?1:0, :ip_address => request.remote_ip, :title => original_url[0..254], :original_url => original_url, :mime_type => mime_type, :data => the_data).save!
   return hash
  end
 
