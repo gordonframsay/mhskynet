@@ -52,6 +52,7 @@ GEM
     concurrent-ruby (1.0.2)
     curb (0.9.3)
     debug_inspector (0.0.2)
+    duo_web (1.0.0)
     erubis (2.7.0)
     exception_notification (4.2.1)
       actionmailer (>= 4.0, < 6)
@@ -195,6 +196,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   curb
+  duo_web
   exception_notification
   geocoder
   google-api-client

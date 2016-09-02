@@ -15,6 +15,9 @@ gem 'jwt'
 gem 'geocoder'
 gem 'curb'
 
+gem 'duo_web'
+
+
 gem 'google-api-client'
 gem "activerecord-session_store"
 
