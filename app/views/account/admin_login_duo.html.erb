@@ -1,0 +1,16 @@
+<script src="/duo_web/Duo-Web-v2.min.js"></script>
+<script>
+  Duo.init({
+    'host': '<%= @api_host %>',
+    'sig_request': '<%= @sig_request %>',
+    'post_action': '/account/admin_login_duo_callback'
+  });
+</script>
+
+<center>
+<h1>Admin Login</h1>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<iframe id="duo_iframe" width="620" height="330" frameborder="0"></iframe>
+</center>
