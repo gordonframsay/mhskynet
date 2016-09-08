@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
    else
     @live_event = true
     @movie_title = "Kitten Academy Live Stream"
-    @movie_identifier = "_o74BnFSr8g"
+    @movie_identifier = "H0euSoQ4Ue8"
     @movie_length = 100000000
     @movie_time = Time.gm(2015,7,10,20)
     @movie_service = "youtube"
@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
 
   def before_filter_check_ip
    return true if ((params[:controller] == "admin") || @superuser)
-   logger.error("Visit from "+(request.remote_ip.to_s)+" - "+(session.id.to_s)+" "+request.user_agent)
+   logger.error("Visit from "+(request.remote_ip.to_s)+" - "+(session.id.to_s)+" "+((request.user_agent)?(request.user_agent):"(No user agent)"))
    session[:source_ip] = request.remote_ip.to_s
    session[:user_agent] = request.user_agent 
    if (session[:poisoned_session] || (tmp = BlockedIp.where(["address = ?", request.remote_ip]).first))
