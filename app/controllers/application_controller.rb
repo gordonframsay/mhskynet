@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
    else
     @live_event = true
     @movie_title = "Kitten Academy Live Stream"
-    @movie_identifier = "FFwbII94meY"
+    @movie_identifier = "MZevUJOE9IQ"
     @movie_length = 100000000
     @movie_time = Time.gm(2017,6,20,0)
     @movie_service = "youtube"
