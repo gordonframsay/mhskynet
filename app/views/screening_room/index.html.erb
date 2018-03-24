@@ -74,8 +74,7 @@
 	  <source src="<%= @movie_identifier %>" type="application/x-mpegURL">
 	  Your browser does not support the <code>video</code> element.
 	 </video>
-	<script src="/video-player/video.js"></script>
-	<script src="/video-player/videojs-contrib-hls.min.js"></script>
+	 <script src="http://vjs.zencdn.net/6.6.3/video.js"></script>
 	 <% else %>
 	 <video src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
 	  Your browser does not support the <code>video</code> element.
