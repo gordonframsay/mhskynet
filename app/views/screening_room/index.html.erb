@@ -189,7 +189,7 @@ function timeFormated(seconds)
 
 <% if (@movie_service == "html5") %>
 <script>
-      var v = videojs('movie-video');
+      var v = videojs(document.querySelector('.video-js'));
       var time_check = 0;
       var seek_complete = false;
 
