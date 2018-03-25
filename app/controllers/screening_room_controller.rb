@@ -26,6 +26,7 @@ class ScreeningRoomController < ApplicationController
   @page_title =  @page_title + " - "  + @movie_title
   @page_title = "▶︎ " + @page_title if (@movie_time < Time.now)
   @meta_refresh_times = []
+  # TODO: Better defaults.
   @movie_width = (session[:movie_width])?(session[:movie_width]):780
   @movie_height = (session[:movie_height])?(session[:movie_height]):650
   @forum_width =  (session[:forum_width])?(session[:forum_width]):500
@@ -36,7 +37,7 @@ class ScreeningRoomController < ApplicationController
    session[:movie_width] = params[:movie_width].to_i
    session[:movie_height] = params[:movie_height].to_i
    session[:forum_width] = params[:forum_width].to_i
-   redirect_to '/screening_room/'+params[:id]
+   redirect_to ((params[:id])?('/screening_room/'+params[:id]):'/screening_room/')
   end
   @movie_width = (session[:movie_width])?(session[:movie_width]):780
   @movie_height = (session[:movie_height])?(session[:movie_height]):650
