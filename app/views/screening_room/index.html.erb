@@ -70,13 +70,12 @@
 <% if (@movie_service == "html5") %>
         <div id="player" style="float: left;width: <%= @movie_width %>px;padding-top: 20px;padding-left: 10px;">
 	 <% if @movie_identifier.match(/m3u8/) %>
-	 <video width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)" class="video-js vjs-default-skin" id="movie-video" >
+	 <video id="my-player" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)" class="video-js vjs-default-skin" >
 	  <source src="<%= @movie_identifier %>" type="application/x-mpegURL">
 	  Your browser does not support the <code>video</code> element.
 	 </video>
-	 <script src="http://vjs.zencdn.net/6.6.3/video.js"></script>
 	 <% else %>
-	 <video src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
+	 <video id="my-player" src="<%= @movie_identifier %>" width="<%= @movie_width %>" height="<%= @movie_height %>" controls onerror="failed(event)">
 	  Your browser does not support the <code>video</code> element.
 	 </video>
 	 <% end %>
@@ -189,7 +188,7 @@ function timeFormated(seconds)
 
 <% if (@movie_service == "html5") %>
 <script>
-      var v = videojs(document.querySelector('.video-js'));
+      var v = document.getElementById('my-player');
       var time_check = 0;
       var seek_complete = false;
 
@@ -245,15 +244,16 @@ function timeFormated(seconds)
 	<% else %>
         time_check = <%= (Time.now - @movie_time).round %>;
         setInterval(function () { update_time_check()}, 1000);
-	setTimeout(function(){ v.play(); }, 5000);
-	<% unless @live_event %>
-        v.addEventListener("canplay",function() {
-	 if (! seek_complete) {
-	  v.currentTime = <%= (Time.now - @movie_time).round %>;
-	  seek_complete = true;
-         };
-	});
-        <% end %>
+	setTimeout(function(){
+         v.currentTime = <%= (Time.now - @movie_time).round %>;
+         promise = v.play();
+         if (promise !== undefined) {
+          promise.catch(error => {
+           alert("Your browser has auto-play disabled, but don't fret! Close this window and hit play now!");
+          }).then(() => {
+           // Auto-play started
+          });
+         }}, 5000);
         v.addEventListener("ended",function() { setTimeout(function(){ $('#next_movie_modal').modal(); }, 5000); });
 	<% end %>
       });
