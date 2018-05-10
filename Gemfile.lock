@@ -126,7 +126,7 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     os (0.9.6)
-    pg (1.0.0)
+    pg (0.21.0)
     public_suffix (3.0.2)
     puma (3.11.4)
     rack (2.0.5)
@@ -213,7 +213,7 @@ DEPENDENCIES
   mini_magick
   net-dns
   oauth2
-  pg
+  pg (~> 0.18)
   puma
   rails (= 5.0.0.1)
   rails_12factor

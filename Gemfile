@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Uncomment this when pushing changes to this file to Heroku:
-ruby "2.3.1"
+#ruby "2.3.1"
 gem 'puma'
 
 
@@ -10,7 +10,7 @@ gem "magnet"
 
 gem "mini_magick"
 
-gem "pg"
+gem "pg", "~> 0.18" 
 gem 'rails_12factor', group: :production
 gem "oauth2"
 gem "net-dns"
