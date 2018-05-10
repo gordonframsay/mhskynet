@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+
+gem "magnet"
+
 # Uncomment this when pushing changes to this file to Heroku:
 ruby "2.3.1"
 gem 'puma'
