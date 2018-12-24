@@ -86,7 +86,7 @@
 	</div>
 <% end %>
 <% if (@movie_service == "dailymotion") %>
-        <div id="player" style="float: left;width: <%= @movie_width %>px;padding-top: 20px;padding-left: 10px;">
+        <div id="player" style="float: left;width: <%= @movie_width %>px;height: <%= ((@movie_width / 4.0) * 3).round %>px;padding-top: 20px;padding-left: 10px;">
 	</div>
 <% end %>
 	</div>
