@@ -128,7 +128,7 @@ GEM
     os (0.9.6)
     pg (0.21.0)
     public_suffix (3.0.2)
-    puma (3.11.4)
+    puma (3.12.3)
     rack (2.0.5)
     rack-test (0.6.3)
       rack (>= 1.0)
