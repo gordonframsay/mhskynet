@@ -37,7 +37,7 @@ class LiveChatController < ApplicationController
    @entries = Message.order("created_at desc").limit(50).reverse
    render :layout => false
   else
-   render :text => "f"
+   render :plain => "f"
   end
   session[:last_live_chat_check] = Time.now
  end
@@ -50,7 +50,7 @@ class LiveChatController < ApplicationController
 
  def new_message
   Message.new(:author_id => session[:user_id], :message => params[:message]).save!
-  render :text => "t"
+  render :plain => "t"
  end
 
 end
