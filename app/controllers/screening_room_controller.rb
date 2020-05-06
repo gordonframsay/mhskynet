@@ -2,8 +2,8 @@ class ScreeningRoomController < ApplicationController
 
  require 'jwt'
 
- before_filter :protect_screening_room
- before_filter :validate_google_log_in, :only => :schedule_movie
+ before_action :protect_screening_room
+ before_action :validate_google_log_in, :only => :schedule_movie
 
  def google_sign_in
  end
