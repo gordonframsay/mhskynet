@@ -1,6 +1,6 @@
 class AccountController < ApplicationController
 
- before_filter :config_duo_web
+ before_action :config_duo_web
  skip_before_action :verify_authenticity_token
 
  def admin_login
