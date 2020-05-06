@@ -1,6 +1,6 @@
 class DarkRoomController < ApplicationController
 
- before_filter :set_page_title
+ before_action :set_page_title
 
  def mirror
   if params[:id]

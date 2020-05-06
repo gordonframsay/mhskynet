@@ -4,10 +4,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :domain_check
-  before_filter :app_defaults
-  before_filter :before_filter_check_ip
-  before_filter :movie_prep
+  before_action :domain_check
+  before_action :app_defaults
+  before_action :before_action_check_ip
+  before_action :movie_prep
 
  # For testing with Google APIs
  def oauth2callback
@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
    Session.clean_up
   end
 
-  def before_filter_check_ip
+  def before_action_check_ip
    return true if ((params[:controller] == "admin") || @superuser)
    logger.error("Visit from "+(request.remote_ip.to_s)+" - "+(session.id.to_s)+" "+((request.user_agent)?(request.user_agent):"(No user agent)"))
    session[:source_ip] = request.remote_ip.to_s
