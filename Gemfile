@@ -1,8 +1,10 @@
 source 'https://rubygems.org'
 
+# NOTE: ceder-14 was using this, but not available under Heroku-18:
+#ruby "2.3.1"
 
 # Uncomment this when pushing changes to this file to Heroku:
-#ruby "2.3.1"
+ruby "2.5.8"
 gem 'puma'
 
 
