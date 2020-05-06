@@ -18,7 +18,7 @@ class ScreeningRoomController < ApplicationController
  def google_login_completion
   session[:google_id_token] = params[:id_token]
   logger.error("Google ID Token: "+params[:id_token])
-  render :text => "OK"
+  render :plain => "OK"
   return false
  end
 
@@ -54,7 +54,7 @@ class ScreeningRoomController < ApplicationController
 
  def currently_playing_moviesign
   movie_sign = ((@movie_time - Time.now - 300) * 1000).round
-  render :text => (movie_sign > 0)?(movie_sign.to_s):"0"
+  render :plain => (movie_sign > 0)?(movie_sign.to_s):"0"
  end
 
  def history
@@ -154,10 +154,10 @@ class ScreeningRoomController < ApplicationController
  # Simple status for AJAX
  def currently_playing
   if (@movie_time > Time.now)
-   render :text => "<a href=\"/screening_room\" >Theater 1 Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+   render :plain => "<a href=\"/screening_room\" >Theater 1 Next Movie: <i>"+@movie_title+"</i> -  Starts At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
   else
    if ((@movie_time + @movie_length) > Time.now)
-    render :text => "<a href=\"/screening_room\" >Theater 1 Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+    render :plain => "<a href=\"/screening_room\" >Theater 1 Now Playing: <i>"+@movie_title+"</i> -  Started At: <i>"+@movie_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
    end
   end
  end
@@ -166,13 +166,13 @@ class ScreeningRoomController < ApplicationController
  def currently_playing_2
   m = QueuedMovie.where(["screening_room = ?", 2]).order("start_time").reject {|x| (x.start_time + x.duration) < Time.now }.first
   unless m
-   render :text => "&nbsp;"
+   render :plain => "&nbsp;"
   else
    if (m.start_time > Time.now)
-    render :text => "<a href=\"/screening_room/2\" >Theater 2 Next Movie: <i>"+m.title+"</i> -  Starts At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+    render :plain => "<a href=\"/screening_room/2\" >Theater 2 Next Movie: <i>"+m.title+"</i> -  Starts At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
    else
     if ((m.start_time + m.duration) > Time.now)
-     render :text => "<a href=\"/screening_room/2\" >Theater 2 Now Playing: <i>"+m.title+"</i> -  Started At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
+     render :plain => "<a href=\"/screening_room/2\" >Theater 2 Now Playing: <i>"+m.title+"</i> -  Started At: <i>"+m.start_time.in_time_zone(@movie_time_zone).strftime("%b %e %l:%M %p %Z")+"</i></a>"
     end
    end
   end
@@ -190,7 +190,7 @@ class ScreeningRoomController < ApplicationController
   end
   # NOTE: Record new hash and return results
   Rails.cache.write(cache_key, viewers)
-  render :text => viewers.keys.length.to_s
+  render :plain => viewers.keys.length.to_s
  end
 
  private

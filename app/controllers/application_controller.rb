@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
  # For testing with Google APIs
  def oauth2callback
   logger.warn(params.inspect)
-  render :text => "nothing"
+  render :plain => "nothing"
  end
 
  private
